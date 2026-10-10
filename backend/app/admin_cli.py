@@ -91,7 +91,8 @@ def main() -> None:
     create_cmd = commands.add_parser("create", help="new admin or content editor")
     create_cmd.add_argument("--login", required=True)
     create_cmd.add_argument("--name", required=True)
-    create_cmd.add_argument("--role", choices=[r.value for r in AdminRole], default="editor")
+    # Handover point staff are created in the admin panel, where the point is chosen.
+    create_cmd.add_argument("--role", choices=["admin", "editor"], default="editor")
     for name in ("password", "reset-2fa"):
         commands.add_parser(name).add_argument("--login", required=True)
     commands.add_parser("list")

@@ -1,7 +1,8 @@
 """Run the bot with long polling: python -m app.bot
 
 Production runs it the same way as its own service (deploy/docker-compose.yml): polling needs
-no public webhook endpoint, and the same process sends the daily reminders.
+no public webhook endpoint, and the same process sends the daily reminders and tidies the
+market (expired handovers).
 """
 
 import asyncio
@@ -15,6 +16,7 @@ from aiogram.types import BotCommand, MenuButtonWebApp, WebAppInfo
 from app.bot.handlers import router
 from app.config import get_settings
 from app.i18n import SUPPORTED_LANGUAGES, t
+from app.market import market_loop
 from app.reminders import reminder_loop
 
 
@@ -49,11 +51,16 @@ async def main() -> None:
     dispatcher = Dispatcher()
     dispatcher.include_router(router)
     await configure(bot)
-    reminders = asyncio.create_task(reminder_loop(bot))
+    background = [
+        asyncio.create_task(reminder_loop(bot)),
+        # Expired market handovers and loose photo uploads.
+        asyncio.create_task(market_loop(bot)),
+    ]
     try:
         await dispatcher.start_polling(bot)
     finally:
-        reminders.cancel()
+        for task in background:
+            task.cancel()
 
 
 if __name__ == "__main__":

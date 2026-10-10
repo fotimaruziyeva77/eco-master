@@ -67,7 +67,8 @@ Content, moderation, statistics and the audit log (TZ 8.12) live at **/admin/**
 (locally http://localhost:5180/admin/). Sign-in is a login and password plus a code from an
 authenticator app (Google Authenticator, Authy, 2FAS...); the app is connected on the first sign-in.
 
-- **Administrator**: everything. **Content editor**: content and the daily schedule only.
+- **Administrator**: everything. **Content editor**: content, the daily schedule and market
+  moderation. **Handover point staff**: only the handover desk of their point (see Market).
 - Local development: `python -m app.seed --demo` creates a test admin (login `admin`, password
   in `backend/app/seed.py`; only with `ENV=dev`).
 - Production: create the first administrator on the server (the password is asked at a hidden
@@ -83,6 +84,33 @@ authenticator app (Google Authenticator, Authy, 2FAS...); the app is connected o
   to the audit log.
 - The admin page is a separate build entry (`frontend/admin/index.html`), so the Mini App
   never loads its code. A web server must answer `/admin/*` with `dist/admin/index.html`.
+
+## Market (phase 9)
+
+Children show things they made from waste, or give away things they no longer need. Added on
+the project lead's decision on 2026-10-10: TZ v0.2 (sections 11.3 and 16) had left photo uploads
+and a market for a later version because of moderation and children's privacy, so the design
+below keeps those risks small. Photo uploads belong in the lawyer's review (TZ 11.4).
+
+- **Moderation first.** A new or changed listing is seen by nobody but its author until an
+  administrator or content editor approves it (admin panel → "E'lonlar moderatsiyasi").
+  Rejections carry a reason that the child gets from the bot in their language. Three reports
+  from different users take a listing down until a moderator decides.
+- **No contacts.** Only nicknames are shown; there is no chat. Phone numbers, @usernames and
+  links in titles or descriptions are refused, so are words from the profanity list.
+- **Photos.** 1–3 per listing, shrunk on the phone, then decoded and re-encoded on the server
+  (WebP, at most 1280 px), so no GPS position or camera data is stored. They live in PostgreSQL
+  (`listing_photos`), so backups, restores and account deletion cover them. They are served
+  through signed, expiring links (`/api/media/...`): photos of listings not in the market open
+  only for their author and moderators.
+- **Handover only at a point.** "Handover points" (schools, eco-centres) are content in the
+  admin panel. When the owner agrees to give an item away, both children get six-digit codes;
+  the owner brings the item and says their code, the new owner collects it with theirs.
+  Children never meet. Staff of a point get an admin account with the role "Topshirish joyi
+  xodimi" and see only their point's desk ("Topshirish pulti"). Items not brought within
+  7 days, or not collected within 14, are released automatically (the bot process does this).
+- **No points** for listings (project lead's decision); "Zo'r!" likes only.
+- Limits: 3 listings in review and 5 new listings a day per child, 3 open requests at a time.
 
 ## Production
 
@@ -120,7 +148,8 @@ from Let's Encrypt) and a daily database backup. Sized for TZ 13: up to 5,000 us
    The bot sets its commands and menu button itself on start.
 
 **Backups (TZ 11.1).** Every day at 03:00 Tashkent time into `deploy/backups/` (readable by
-root only), kept for 14 days. Copy that folder to another machine or storage as well. A
+root only), kept for 14 days. Market photos are in the database too, so the dumps grow with the
+market: keep an eye on the disk. Copy that folder to another machine or storage as well. A
 backup right away, e.g. before an update, and the monthly check that the newest backup
 restores (into a scratch database, the live one is not touched):
 

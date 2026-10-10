@@ -1,4 +1,4 @@
-import { Check, ClipboardList, Lightbulb, ListChecks, ShieldAlert, ShieldCheck, Waypoints } from "lucide-react";
+import { Check, ClipboardList, Lightbulb, ListChecks, MapPin, ShieldAlert, ShieldCheck, Waypoints } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { SAFETY_ICON } from "../components/ProjectCard";
@@ -241,6 +241,23 @@ export function Preview({ kind, values, lang, fields }: Props) {
         {section(t("lesson.homework"), <p className="text-2">{text("homework") || placeholder}</p>)}
         {section(t("lesson.appTask"), <p className="text-2">{text("app_task") || placeholder}</p>)}
       </article>
+    );
+  }
+
+  if (kind === "pickup_point") {
+    // As the market shows it under a listing that is given away.
+    return (
+      <section className="card point-card" lang={lang}>
+        <span className="icon-tile icon-tile--sky" aria-hidden="true">
+          <MapPin size={22} />
+        </span>
+        <div className="stack" style={{ gap: 4 }}>
+          <span className="hint small">{t("market.point")}</span>
+          <strong>{text("name") || placeholder}</strong>
+          <span className="text-2">{text("address") || placeholder}</span>
+          <span className="hint small">{t("market.hours", { hours: text("hours") || "—" })}</span>
+        </div>
+      </section>
     );
   }
 

@@ -7,7 +7,7 @@ import type { User } from "../api/client";
 import { useUser } from "../state/user";
 import { insideTelegram, useTelegramBackButton } from "../telegram";
 
-// No photos are collected (TZ 11.2), so everyone gets a friendly animal picked from their id.
+// No profile photos are collected (TZ 11.2), so everyone gets a friendly animal picked from their id.
 const AVATAR_EMOJI = ["🦊", "🐼", "🐢", "🦉", "🐝", "🦋", "🐞", "🐬", "🦔", "🐸", "🐨", "🦁"];
 const AVATAR_BG = ["#d1fae5", "#fef3c7", "#e0f2fe", "#ede9fe", "#fce7f3", "#ecfccb"];
 

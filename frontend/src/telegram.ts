@@ -9,6 +9,11 @@ export function getInitData(): string {
   return tg?.initData ?? "";
 }
 
+/** The startapp parameter of the link that opened the app (e.g. "market"). */
+export function startParam(): string | undefined {
+  return tg?.initDataUnsafe?.start_param;
+}
+
 /** Language of the Telegram client — only a hint for the UI before login. */
 export function telegramLanguageCode(): string | undefined {
   return tg?.initDataUnsafe?.user?.language_code;

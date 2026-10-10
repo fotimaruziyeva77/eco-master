@@ -61,6 +61,7 @@ async def test_types_and_form_description(admin):
         "tips",
         "cards",
         "lessons",
+        "pickup-points",
         "categories",
     ]
     projects = next(t for t in types if t["key"] == "projects")

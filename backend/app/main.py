@@ -11,7 +11,9 @@ from app.api import (
     games,
     health,
     lessons,
+    market,
     me,
+    media,
     onboarding,
     rating,
     share,
@@ -48,6 +50,8 @@ def create_app() -> FastAPI:
         rating,
         lessons,
         share,
+        market,
+        media,
         events,
         admin,
     )

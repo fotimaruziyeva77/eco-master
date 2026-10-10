@@ -30,6 +30,18 @@ export type LessonSummary = Schemas["LessonSummaryOut"];
 export type Lesson = Schemas["LessonOut"];
 export type ShareKind = Schemas["ShareIn"]["kind"];
 export type ShareResult = Schemas["ShareOut"];
+export type ListingCard = Schemas["ListingCardOut"];
+export type ListingPage = Schemas["ListingPageOut"];
+export type Listing = Schemas["ListingOut"];
+export type ListingInput = Schemas["ListingIn"];
+export type ListingKind = Listing["kind"];
+export type ListingStatus = Listing["status"];
+export type RequestStatus = Schemas["ListingRequestOut"]["status"];
+export type MyListing = Schemas["MyListingOut"];
+export type MyRequest = Schemas["MyRequestOut"];
+export type PickupPoint = Schemas["PickupPointOut"];
+export type Photo = Schemas["PhotoOut"];
+export type ReportReason = Schemas["ListingReportIn"]["reason"];
 
 /** One language of a lesson body (TZ 8.9); the API types it as a free-form object. */
 export type LessonBody = {
@@ -73,7 +85,7 @@ export class ApiError extends Error {
 
 async function send(path: string, init: RequestInit = {}): Promise<Response> {
   const headers = new Headers(init.headers);
-  headers.set("Content-Type", "application/json");
+  if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
   if (sessionToken) headers.set("Authorization", `Bearer ${sessionToken}`);
 
   let response: Response;
@@ -177,4 +189,35 @@ export const api = {
   share: (kind: ShareKind, objectId?: string) =>
     post<ShareResult>("/share", { kind, object_id: objectId ?? null }),
   events: (events: Schemas["EventsIn"]["events"]) => post<void>("/events", { events }),
+
+  market: (params: { kind?: ListingKind | null; point?: number | null; offset?: number }) => {
+    const q = new URLSearchParams();
+    if (params.kind) q.set("kind", params.kind);
+    if (params.point) q.set("point", String(params.point));
+    if (params.offset) q.set("offset", String(params.offset));
+    return request<ListingPage>(`/market?${q}`);
+  },
+  marketPoints: () => request<PickupPoint[]>("/market/points"),
+  listing: (id: number) => request<Listing>(`/market/${id}`),
+  myListings: () => request<MyListing[]>("/market/mine"),
+  myRequests: () => request<MyRequest[]>("/market/requests"),
+  /** One photo, already resized on the phone; the server re-encodes it without metadata. */
+  uploadPhoto: (photo: Blob) =>
+    send("/market/photos", {
+      method: "POST",
+      body: photo,
+      headers: { "Content-Type": photo.type || "image/jpeg" },
+    }).then((r) => r.json() as Promise<Photo>),
+  createListing: (body: ListingInput) => post<Listing>("/market", body),
+  updateListing: (id: number, body: ListingInput) =>
+    request<Listing>(`/market/${id}`, { method: "PUT", body: JSON.stringify(body) }),
+  deleteListing: (id: number) => request<void>(`/market/${id}`, { method: "DELETE" }),
+  like: (id: number) => post<Schemas["LikeOut"]>(`/market/${id}/like`),
+  unlike: (id: number) => request<Schemas["LikeOut"]>(`/market/${id}/like`, { method: "DELETE" }),
+  reportListing: (id: number, reason: ReportReason) => post<{ ok: boolean }>(`/market/${id}/report`, { reason }),
+  askFor: (id: number) => post<Listing>(`/market/${id}/request`),
+  withdrawRequest: (id: number) => request<Listing>(`/market/${id}/request`, { method: "DELETE" }),
+  acceptRequest: (requestId: number) => post<Listing>(`/market/requests/${requestId}/accept`),
+  declineRequest: (requestId: number) => post<Listing>(`/market/requests/${requestId}/decline`),
+  cancelHandover: (id: number) => post<Listing>(`/market/${id}/cancel`),
 };

@@ -8,7 +8,7 @@ from sqlalchemy import delete, select
 from sqlalchemy.dialects.postgresql import insert
 
 from app.admin.audit import audit
-from app.admin.deps import CurrentAdmin
+from app.admin.deps import ContentStaff
 from app.admin.schemas import ScheduleDayOut, ScheduleOptionOut, ScheduleOut, ScheduleSetIn
 from app.deps import SessionDep
 from app.models import ContentStatus, DailyTask, DailyTaskSchedule, Tip, TipSchedule
@@ -31,7 +31,7 @@ def short(text: dict) -> str:
 @router.get("/{kind}")
 async def get_schedule(
     kind: Kind,
-    admin: CurrentAdmin,
+    admin: ContentStaff,
     session: SessionDep,
     start: Annotated[date | None, Query()] = None,
     days: Annotated[int, Query(ge=1, le=92)] = 35,
@@ -80,7 +80,7 @@ async def get_schedule(
 
 @router.put("/{kind}/{day}", status_code=status.HTTP_204_NO_CONTENT)
 async def set_day(
-    kind: Kind, day: date, body: ScheduleSetIn, admin: CurrentAdmin, session: SessionDep
+    kind: Kind, day: date, body: ScheduleSetIn, admin: ContentStaff, session: SessionDep
 ) -> Response:
     """Pin an item to a date, or clear it (item_id null) to fall back to the rotation."""
     model, schedule, column = KINDS[kind]

@@ -67,4 +67,22 @@ def require_admin_role(admin: CurrentAdmin) -> AdminUser:
     return admin
 
 
+def require_content_role(admin: CurrentAdmin) -> AdminUser:
+    """Content and market moderation: administrators and content editors."""
+    if admin.role not in (AdminRole.ADMIN, AdminRole.EDITOR):
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "admin_only")
+    return admin
+
+
+def require_handover_role(admin: CurrentAdmin) -> AdminUser:
+    """The handover desk: administrators, and the staff of a handover point."""
+    if admin.role == AdminRole.ADMIN:
+        return admin
+    if admin.role == AdminRole.POINT and admin.pickup_point_id is not None:
+        return admin
+    raise HTTPException(status.HTTP_403_FORBIDDEN, "admin_only")
+
+
 AdminOnly = Annotated[AdminUser, Depends(require_admin_role)]
+ContentStaff = Annotated[AdminUser, Depends(require_content_role)]
+HandoverStaff = Annotated[AdminUser, Depends(require_handover_role)]

@@ -86,7 +86,11 @@ export function percent(rate: number | null | undefined): string {
   return rate === null || rate === undefined ? "—" : `${Math.round(rate * 100)}%`;
 }
 
-export const ROLE_LABEL: Record<string, string> = { admin: "Administrator", editor: "Kontent muharriri" };
+export const ROLE_LABEL: Record<string, string> = {
+  admin: "Administrator",
+  editor: "Kontent muharriri",
+  point: "Topshirish joyi xodimi",
+};
 export const PATH_LABEL: Record<string, string> = { student: "O'quvchi", teacher: "O'qituvchi", general: "Ota-ona" };
 
 export const STATUS_LABEL: Record<ContentStatus, string> = {

@@ -25,6 +25,16 @@ export type Flags = S["FlagsOut"];
 export type AuditPage = S["AuditPageOut"];
 export type AuditRow = S["AuditRowOut"];
 export type AdminRole = AdminMe["role"];
+export type MarketCounts = S["MarketCountsOut"];
+export type MarketRow = S["MarketRowOut"];
+export type MarketListing = S["MarketListingOut"];
+export type MarketDecision = S["MarketDecisionIn"];
+export type MarketReason = MarketDecision["reason"];
+export type HandoverPoint = S["HandoverPointOut"];
+export type HandoverDesk = S["HandoverDeskOut"];
+export type HandoverItem = S["HandoverItemOut"];
+export type HandoverMatch = S["HandoverMatchOut"];
+export type MarketFilter = "pending" | "reported" | "approved" | "rejected" | "hidden" | "handover" | "all";
 
 /** Values of a content form: {"uz": ..., "ru": ..., "en": ...} for multilingual fields. */
 export type Values = Record<string, unknown>;
@@ -136,13 +146,41 @@ export const adminApi = {
   audit: (beforeId?: number | null) => get<AuditPage>(`/audit${query({ before_id: beforeId })}`),
 
   admins: () => get<AdminRow[]>("/admins"),
-  createAdmin: (body: { login: string; name: string; role: AdminRole; password: string }) =>
-    send<AdminRow>("POST", "/admins", body),
-  updateAdmin: (id: number, body: { name?: string; role?: AdminRole; is_active?: boolean }) =>
-    send<AdminRow>("PATCH", `/admins/${id}`, body),
+  createAdmin: (body: {
+    login: string;
+    name: string;
+    role: AdminRole;
+    password: string;
+    pickup_point_id?: number | null;
+  }) => send<AdminRow>("POST", "/admins", body),
+  updateAdmin: (
+    id: number,
+    body: { name?: string; role?: AdminRole; is_active?: boolean; pickup_point_id?: number | null },
+  ) => send<AdminRow>("PATCH", `/admins/${id}`, body),
   reset2fa: (id: number) => send<AdminRow>("POST", `/admins/${id}/reset-2fa`),
   setAdminPassword: (id: number, password: string) =>
     send<AdminRow>("POST", `/admins/${id}/password`, { password }),
+
+  marketCounts: () => get<MarketCounts>("/market/counts"),
+  market: (filter: MarketFilter, q: string) => get<MarketRow[]>(`/market${query({ filter, q })}`),
+  marketItem: (id: number) => get<MarketListing>(`/market/${id}`),
+  approveListing: (id: number) => send<MarketListing>("POST", `/market/${id}/approve`),
+  rejectListing: (id: number, body: MarketDecision) =>
+    send<MarketListing>("POST", `/market/${id}/reject`, body),
+  hideListing: (id: number, body: MarketDecision) =>
+    send<MarketListing>("POST", `/market/${id}/hide`, body),
+  dismissReports: (id: number) => send<MarketListing>("POST", `/market/${id}/dismiss-reports`),
+
+  handoverPoints: () => get<HandoverPoint[]>("/handover/points"),
+  handoverDesk: (pointId: number | null) => get<HandoverDesk>(`/handover${query({ point_id: pointId })}`),
+  handoverLookup: (code: string, pointId: number | null) =>
+    send<HandoverMatch>("POST", "/handover/lookup", { code, point_id: pointId }),
+  handoverReceive: (requestId: number, code: string) =>
+    send<HandoverItem>("POST", `/handover/${requestId}/receive`, { code }),
+  handoverGive: (requestId: number, code: string) =>
+    send<HandoverItem>("POST", `/handover/${requestId}/give`, { code }),
+  handoverReturn: (listingId: number) =>
+    send<{ ok: boolean }>("POST", `/handover/stored/${listingId}/return`),
 };
 
 /** Plain links: the browser sends the session cookie with these downloads. */
@@ -169,6 +207,12 @@ const MESSAGES: Record<string, string> = {
   publish_blocked: "Nashr qilib bo'lmaydi: quyidagi xatolarni tuzating.",
   invalid: "Ba'zi maydonlar noto'g'ri to'ldirilgan.",
   bad_origin: "So'rov rad etildi (boshqa saytdan).",
+  in_use: "O'chirib bo'lmaydi: bu yozuv ishlatilmoqda. Arxivlang.",
+  point_required: "Topshirish joyini tanlang.",
+  code_not_found: "Bu kod bilan kutilayotgan buyum topilmadi. Raqamlarni tekshiring.",
+  wrong_code: "Kod mos kelmadi.",
+  too_many_lookups: "Juda ko'p urinish. Bir daqiqadan keyin qayta urinib ko'ring.",
+  listing_not_found: "E'lon topilmadi.",
 };
 
 export function errorText(error: unknown): string {

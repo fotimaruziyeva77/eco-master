@@ -1,4 +1,4 @@
-import { Gamepad2, House, Sprout, Trophy, UserRound, type LucideIcon } from "lucide-react";
+import { Gamepad2, House, Sprout, Store, Trophy, type LucideIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router";
 
@@ -9,7 +9,8 @@ const ITEMS: { to: string; icon: LucideIcon; label: string; end: boolean }[] = [
   { to: "/learn", icon: Sprout, label: "nav.learn", end: false },
   { to: "/games", icon: Gamepad2, label: "nav.games", end: false },
   { to: "/rating", icon: Trophy, label: "nav.rating", end: false },
-  { to: "/profile", icon: UserRound, label: "nav.profile", end: false },
+  // The profile opens from the avatar in the top bar (phase 9: the market took its place).
+  { to: "/market", icon: Store, label: "nav.market", end: false },
 ];
 
 export function BottomNav() {

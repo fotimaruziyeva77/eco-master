@@ -1,10 +1,11 @@
-import { lazy, Suspense, type ComponentType } from "react";
-import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router";
+import { lazy, Suspense, useEffect, type ComponentType } from "react";
+import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from "react-router";
 
 import { BottomNav } from "./components/BottomNav";
 import { InlineLoading } from "./components/common";
 import { HomeScreen } from "./screens/HomeScreen";
 import { CelebrationProvider } from "./state/celebration";
+import { startParam } from "./telegram";
 
 // Home ships with the app; other screens load on first visit — a smaller first load (TZ 13).
 const named = <K extends string>(load: () => Promise<Record<K, ComponentType>>, name: K) =>
@@ -21,6 +22,10 @@ const ProfileScreen = named(() => import("./screens/ProfileScreen"), "ProfileScr
 const ProjectScreen = named(() => import("./screens/ProjectScreen"), "ProjectScreen");
 const RatingScreen = named(() => import("./screens/RatingScreen"), "RatingScreen");
 const LessonScreen = named(() => import("./screens/teachers/LessonScreen"), "LessonScreen");
+const ListingFormScreen = named(() => import("./screens/market/ListingFormScreen"), "ListingFormScreen");
+const ListingScreen = named(() => import("./screens/market/ListingScreen"), "ListingScreen");
+const MarketScreen = named(() => import("./screens/market/MarketScreen"), "MarketScreen");
+const MyMarketScreen = named(() => import("./screens/market/MyMarketScreen"), "MyMarketScreen");
 const TeachersScreen = named(() => import("./screens/teachers/TeachersScreen"), "TeachersScreen");
 
 function ScreenLoading() {
@@ -31,10 +36,18 @@ function ScreenLoading() {
   );
 }
 
-const TAB_PATHS = new Set(["/", "/learn", "/games", "/rating", "/profile"]);
+const TAB_PATHS = new Set(["/", "/learn", "/games", "/rating", "/market", "/profile"]);
+let startHandled = false;
 
 function Layout() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  useEffect(() => {
+    // Opened from a market message of the bot (startapp=market): straight to "my listings".
+    if (startHandled) return;
+    startHandled = true;
+    if (startParam() === "market") navigate("/market/mine");
+  }, [navigate]);
   return (
     <Suspense fallback={<ScreenLoading />}>
       <Routes>
@@ -52,6 +65,11 @@ function Layout() {
         <Route path="/terms" element={<TermsScreen />} />
         <Route path="/teachers" element={<TeachersScreen />} />
         <Route path="/teachers/:slug" element={<LessonScreen />} />
+        <Route path="/market" element={<MarketScreen />} />
+        <Route path="/market/new" element={<ListingFormScreen />} />
+        <Route path="/market/mine" element={<MyMarketScreen />} />
+        <Route path="/market/:id" element={<ListingScreen />} />
+        <Route path="/market/:id/edit" element={<ListingFormScreen />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       {TAB_PATHS.has(pathname) && <BottomNav />}

@@ -9,7 +9,10 @@ import { AuditPage } from "./pages/AuditPage";
 import { ContentEditPage } from "./pages/ContentEditPage";
 import { ContentListPage } from "./pages/ContentListPage";
 import { FlagsPage } from "./pages/FlagsPage";
+import { HandoverPage } from "./pages/HandoverPage";
 import { LoginPage } from "./pages/LoginPage";
+import { MarketItemPage } from "./pages/MarketItemPage";
+import { MarketPage } from "./pages/MarketPage";
 import { ReportsPage } from "./pages/ReportsPage";
 import { SchedulePage } from "./pages/SchedulePage";
 import { StatsPage } from "./pages/StatsPage";
@@ -21,7 +24,19 @@ import { AdminContext, Loading, ToastProvider, useAdmin } from "./ui";
 /** Pages outside the content editor's role (TZ 8.12: editors manage content only). */
 function AdminOnly({ children }: { children: ReactNode }) {
   const { me } = useAdmin();
-  return me.role === "admin" ? children : <Navigate to="/content/projects" replace />;
+  return me.role === "admin" ? children : <Navigate to="/" replace />;
+}
+
+/** Content and market moderation: administrators and content editors. */
+function ContentStaff({ children }: { children: ReactNode }) {
+  const { me } = useAdmin();
+  return me.role === "point" ? <Navigate to="/handover" replace /> : children;
+}
+
+/** The handover desk: administrators and the staff of a handover point. */
+function DeskStaff({ children }: { children: ReactNode }) {
+  const { me } = useAdmin();
+  return me.role === "editor" ? <Navigate to="/" replace /> : children;
 }
 
 export function AdminApp() {
@@ -40,7 +55,7 @@ export function AdminApp() {
   if (me === undefined) return <Loading />;
   if (me === null) return <LoginPage onSignedIn={setMe} />;
 
-  const home = me.role === "admin" ? "/stats" : "/content/projects";
+  const home = me.role === "admin" ? "/stats" : me.role === "point" ? "/handover" : "/content/projects";
   return (
     <AdminContext.Provider value={{ me, signOut }}>
       <ToastProvider>
@@ -49,10 +64,13 @@ export function AdminApp() {
             <Routes>
               <Route path="/" element={<Navigate to={home} replace />} />
               <Route path="/stats" element={<AdminOnly><StatsPage /></AdminOnly>} />
-              <Route path="/content/:type" element={<ContentListPage />} />
-              <Route path="/content/:type/new" element={<ContentEditPage />} />
-              <Route path="/content/:type/:id" element={<ContentEditPage />} />
-              <Route path="/schedule" element={<SchedulePage />} />
+              <Route path="/content/:type" element={<ContentStaff><ContentListPage /></ContentStaff>} />
+              <Route path="/content/:type/new" element={<ContentStaff><ContentEditPage /></ContentStaff>} />
+              <Route path="/content/:type/:id" element={<ContentStaff><ContentEditPage /></ContentStaff>} />
+              <Route path="/schedule" element={<ContentStaff><SchedulePage /></ContentStaff>} />
+              <Route path="/market" element={<ContentStaff><MarketPage /></ContentStaff>} />
+              <Route path="/market/:id" element={<ContentStaff><MarketItemPage /></ContentStaff>} />
+              <Route path="/handover" element={<DeskStaff><HandoverPage /></DeskStaff>} />
               <Route path="/users" element={<AdminOnly><UsersPage /></AdminOnly>} />
               <Route path="/users/:id" element={<AdminOnly><UserPage /></AdminOnly>} />
               <Route path="/reports" element={<AdminOnly><ReportsPage /></AdminOnly>} />

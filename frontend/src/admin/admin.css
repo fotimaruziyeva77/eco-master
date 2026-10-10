@@ -847,3 +847,68 @@
     grid-template-columns: minmax(90px, 130px) minmax(0, 1fr) 54px;
   }
 }
+
+/* ------------------------------------------------------------------- market */
+
+.a-thumb {
+  display: block;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: var(--primary-soft);
+}
+
+.a-thumb--lg {
+  width: 96px;
+  height: 96px;
+  border-radius: 14px;
+}
+
+.a-market-photos {
+  display: grid;
+  gap: 10px;
+}
+
+.a-market-photos img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  background: var(--primary-soft);
+}
+
+.a-dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 6px 14px;
+  margin: 0;
+}
+
+.a-dl dt {
+  color: var(--hint);
+  font-size: 13px;
+}
+
+.a-dl dd {
+  margin: 0;
+}
+
+.a-code-input {
+  width: 180px;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.a-handover-match {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px;
+  border: 2px solid var(--primary);
+  border-radius: 16px;
+  background: var(--primary-soft);
+}

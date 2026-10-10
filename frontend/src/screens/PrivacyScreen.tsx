@@ -5,10 +5,10 @@ import { SubpageHeader } from "../components/ui";
 import { useBack } from "../hooks/useBack";
 
 const DOCUMENTS = {
-  privacy: { icon: ShieldCheck, sections: ["collect", "notCollect", "why", "who", "delete", "contact"] },
+  privacy: { icon: ShieldCheck, sections: ["collect", "notCollect", "why", "who", "market", "delete", "contact"] },
   terms: {
     icon: FileText,
-    sections: ["about", "who", "safety", "nickname", "points", "content", "changes", "contact"],
+    sections: ["about", "who", "safety", "nickname", "points", "market", "content", "changes", "contact"],
   },
 } satisfies Record<string, { icon: LucideIcon; sections: string[] }>;
 

@@ -15,6 +15,8 @@ dependencies = [
     "tzdata>=2024.2",
     "fpdf2>=2.8",
     "argon2-cffi>=25.1",
+    # Market photos: decoded and re-encoded without metadata.
+    "Pillow>=11",
 ]
 
 [project.optional-dependencies]

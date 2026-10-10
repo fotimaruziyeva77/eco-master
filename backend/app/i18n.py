@@ -161,6 +161,142 @@ BOT_TEXTS.update(
 )
 
 
+# Market (phase 9). {reason} is replaced with a market_reason_* text, {note} with market_note.
+BOT_TEXTS.update(
+    {
+        "market_note": {
+            "uz": "\n\nModerator izohi: {note}",
+            "ru": "\n\nКомментарий модератора: {note}",
+            "en": "\n\nModerator's note: {note}",
+        },
+        "market_reason_personal_info": {
+            "uz": "rasmda yoki matnda shaxsiy ma'lumot bor (ism, manzil, telefon, maktab)",
+            "ru": "на фото или в тексте есть личные данные (имя, адрес, телефон, школа)",
+            "en": "the photo or text shows personal details (name, address, phone, school)",
+        },
+        "market_reason_face": {
+            "uz": "rasmda odamning yuzi ko'rinib turibdi",
+            "ru": "на фото видно лицо человека",
+            "en": "a person's face can be seen in the photo",
+        },
+        "market_reason_not_eco": {
+            "uz": "bu narsa bozor mavzusiga mos emas",
+            "ru": "эта вещь не подходит для рынка",
+            "en": "this item does not fit the market",
+        },
+        "market_reason_forbidden": {
+            "uz": "bunday narsalarni bozorga qo'yib bo'lmaydi",
+            "ru": "такие вещи нельзя выставлять на рынок",
+            "en": "such items are not allowed in the market",
+        },
+        "market_reason_bad_photo": {
+            "uz": "rasm xira yoki buyum yaxshi ko'rinmaydi",
+            "ru": "фото нечёткое или вещь плохо видно",
+            "en": "the photo is blurry or the item is hard to see",
+        },
+        "market_reason_reports": {
+            "uz": "boshqa foydalanuvchilar shikoyat qildi, moderator tekshiradi",
+            "ru": "на неё пожаловались, модератор проверит",
+            "en": "other users reported it; a moderator will check it",
+        },
+        "market_reason_other": {
+            "uz": "bozor qoidalariga mos kelmadi",
+            "ru": "не соответствует правилам рынка",
+            "en": "it does not follow the market rules",
+        },
+        "market_approved": {
+            "uz": "✅ «{title}» bozorga chiqdi! Endi uni hamma ko'ra oladi.",
+            "ru": "✅ «{title}» теперь на Эко-рынке — его видят все!",
+            "en": "✅ «{title}» is now in the market for everyone to see!",
+        },
+        "market_rejected": {
+            "uz": "«{title}» bozorga chiqmadi: {reason}.{note}\n\n"
+            "Tuzatib, qaytadan yuborishingiz mumkin.",
+            "ru": "«{title}» не прошло проверку: {reason}.{note}\n\nИсправьте и отправьте снова.",
+            "en": "«{title}» was not approved: {reason}.{note}\n\n"
+            "You can fix it and send it again.",
+        },
+        "market_hidden": {
+            "uz": "«{title}» bozordan olib tashlandi: {reason}.{note}",
+            "ru": "«{title}» убрано с рынка: {reason}.{note}",
+            "en": "«{title}» was taken down from the market: {reason}.{note}",
+        },
+        "market_new_request": {
+            "uz": "🙋 {name} «{title}»ni olmoqchi. Ilovada rozilik bering yoki rad eting.",
+            "ru": "🙋 {name} хочет забрать «{title}». Ответьте в приложении.",
+            "en": "🙋 {name} would like «{title}». Answer in the app.",
+        },
+        "market_accepted": {
+            "uz": "🎉 «{title}» siz uchun band qilindi! Egasi uni topshirish joyiga olib "
+            "kelgach, xabar beramiz.",
+            "ru": "🎉 «{title}» забронировано для тебя! Сообщим, когда вещь будет в пункте "
+            "передачи.",
+            "en": "🎉 «{title}» is reserved for you! We'll let you know when it's at the "
+            "handover point.",
+        },
+        "market_bring": {
+            "uz": "📦 «{title}»ni {days} kun ichida topshirish joyiga olib boring:\n"
+            "{point}\nIsh vaqti: {hours}\n\nXodimga shu kodni ayting: <b>{code}</b>",
+            "ru": "📦 Принеси «{title}» в пункт передачи в течение {days} дней:\n"
+            "{point}\nВремя работы: {hours}\n\nСкажи сотруднику код: <b>{code}</b>",
+            "en": "📦 Bring «{title}» to the handover point within {days} days:\n"
+            "{point}\nOpening hours: {hours}\n\nTell the staff this code: <b>{code}</b>",
+        },
+        "market_ready": {
+            "uz": "📦 «{title}» topshirish joyida sizni kutmoqda:\n{point}\nIsh vaqti: {hours}\n\n"
+            "Xodimga shu kodni ayting: <b>{code}</b>\n{days} kun ichida olib keting.",
+            "ru": "📦 «{title}» ждёт тебя в пункте передачи:\n{point}\nВремя работы: {hours}\n\n"
+            "Скажи сотруднику код: <b>{code}</b>\nЗабери в течение {days} дней.",
+            "en": "📦 «{title}» is waiting for you at the handover point:\n{point}\n"
+            "Opening hours: {hours}\n\nTell the staff this code: <b>{code}</b>\n"
+            "Collect it within {days} days.",
+        },
+        "market_received": {
+            "uz": "👍 «{title}» topshirish joyida qabul qilindi. Rahmat!",
+            "ru": "👍 «{title}» принято в пункте передачи. Спасибо!",
+            "en": "👍 «{title}» was received at the handover point. Thank you!",
+        },
+        "market_given": {
+            "uz": "💚 «{title}» yangi egasiga topshirildi. Buyum ikkinchi hayot topdi — rahmat!",
+            "ru": "💚 «{title}» передано новому владельцу. У вещи вторая жизнь — спасибо!",
+            "en": "💚 «{title}» went to its new owner. It has a second life now — thank you!",
+        },
+        "market_declined": {
+            "uz": "«{title}» boshqa bolaga beriladigan bo'ldi. Bozorda yana qiziq narsalar ko'p!",
+            "ru": "«{title}» достанется другому. На рынке есть и другие интересные вещи!",
+            "en": "«{title}» is going to someone else. There's plenty more in the market!",
+        },
+        "market_withdrawn": {
+            "uz": "«{title}» endi berilmaydi.",
+            "ru": "«{title}» больше не отдаётся.",
+            "en": "«{title}» is no longer being given away.",
+        },
+        "market_cancelled": {
+            "uz": "«{title}» bo'yicha kelishuv bekor qilindi.",
+            "ru": "Договорённость о «{title}» отменена.",
+            "en": "The handover of «{title}» was cancelled.",
+        },
+        "market_requester_left": {
+            "uz": "«{title}»ni olmoqchi bo'lgan bola fikridan qaytdi. Buyum yana bozorda.",
+            "ru": "Тот, кто хотел забрать «{title}», передумал. Вещь снова на рынке.",
+            "en": "The person who wanted «{title}» changed their mind. It's back in the market.",
+        },
+        "market_expired": {
+            "uz": "⏰ «{title}» belgilangan muddatda topshirish joyiga keltirilmadi, "
+            "kelishuv bekor qilindi.",
+            "ru": "⏰ «{title}» не принесли в пункт передачи вовремя, договорённость отменена.",
+            "en": "⏰ «{title}» was not brought to the handover point in time; "
+            "the handover was cancelled.",
+        },
+        "market_not_collected": {
+            "uz": "⏰ «{title}» topshirish joyidan o'z vaqtida olib ketilmadi, bron bekor qilindi.",
+            "ru": "⏰ «{title}» не забрали из пункта передачи вовремя, бронь отменена.",
+            "en": "⏰ «{title}» was not collected in time; the reservation was cancelled.",
+        },
+    }
+)
+
+
 def t(key: str, lang: str, **values: object) -> str:
     texts = BOT_TEXTS[key]
     text = texts.get(lang) or texts[DEFAULT_LANGUAGE]

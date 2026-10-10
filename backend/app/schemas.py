@@ -6,7 +6,15 @@ from pydantic import BaseModel, ConfigDict, Field, computed_field, field_validat
 
 from app.analytics import CLIENT_EVENT_PROPS
 from app.levels import level_for
-from app.models import Difficulty, OnboardingStep, SafetyLevel, UserPath
+from app.models import (
+    Difficulty,
+    ListingKind,
+    ListingStatus,
+    OnboardingStep,
+    RequestStatus,
+    SafetyLevel,
+    UserPath,
+)
 from app.sharing import ShareKind
 from app.timeutil import local_today
 
@@ -405,3 +413,154 @@ class ClientEventIn(BaseModel):
 
 class EventsIn(BaseModel):
     events: list[ClientEventIn] = Field(min_length=1, max_length=20)
+
+
+# ---------------------------------------------------------------------- market
+
+
+class PickupPointOut(BaseModel):
+    id: int
+    name: I18nText
+    address: I18nText
+    hours: I18nText
+
+
+class PhotoOut(BaseModel):
+    id: int
+    url: str
+    thumb_url: str
+    width: int
+    height: int
+
+
+class ListingIn(BaseModel):
+    kind: ListingKind
+    title: str = Field(max_length=60)
+    description: str = Field(default="", max_length=400)
+    # Waste category code for handmade things, item type for unneeded ones.
+    category: str = Field(min_length=1, max_length=32)
+    condition: Literal["new", "good", "used"] | None = None
+    giveaway: bool = False
+    pickup_point_id: int | None = None
+    photo_ids: list[int] = Field(min_length=1, max_length=3)
+
+    @field_validator("title")
+    @classmethod
+    def _tidy_title(cls, value: str) -> str:
+        value = " ".join(value.split())
+        if len(value) < 3:
+            raise ValueError("at least 3 characters")
+        return value
+
+    @field_validator("description")
+    @classmethod
+    def _tidy_description(cls, value: str) -> str:
+        # Spaces tidied per line; at most one empty line in a row.
+        lines = [" ".join(line.split()) for line in value.strip().splitlines()]
+        kept = [line for i, line in enumerate(lines) if line or (i > 0 and lines[i - 1])]
+        return "\n".join(kept)
+
+
+class ListingCardOut(BaseModel):
+    id: int
+    kind: ListingKind
+    title: str
+    category: str
+    thumb_url: str | None
+    likes: int
+    liked: bool
+    giveaway: bool
+    # Already at the handover point: can be collected without waiting for the owner.
+    ready_at_point: bool
+    pickup_point_id: int | None
+
+
+class ListingPageOut(BaseModel):
+    items: list[ListingCardOut]
+    next_offset: int | None
+
+
+class ListingRequestOut(BaseModel):
+    """A request as its listing's owner sees it."""
+
+    id: int
+    requester_id: int
+    nickname: str | None
+    status: RequestStatus
+    created_at: datetime
+
+
+class HandoverOut(BaseModel):
+    """The handover in progress, as the owner or the requester sees it."""
+
+    request_id: int
+    status: RequestStatus
+    # Owner: code for bringing the item (while accepted). Requester: code for collecting it
+    # (once it is at the point).
+    code: str | None
+    deadline: datetime | None
+    other_nickname: str | None
+
+
+class ListingOut(BaseModel):
+    id: int
+    kind: ListingKind
+    title: str
+    description: str
+    category: str
+    condition: str | None
+    giveaway: bool
+    status: ListingStatus
+    ready_at_point: bool
+    likes: int
+    liked: bool
+    is_mine: bool
+    owner_id: int | None
+    owner_nickname: str | None
+    photos: list[PhotoOut]
+    point: PickupPointOut | None
+    created_at: datetime
+    published_at: datetime | None
+    # Owner only.
+    reject_reason: str | None = None
+    moderator_note: str | None = None
+    requests: list[ListingRequestOut] = []
+    # Owner or requester.
+    handover: HandoverOut | None = None
+    # Someone else's listing: their own request, if any.
+    my_request: RequestStatus | None = None
+    can_request: bool = False
+
+
+class MyListingOut(BaseModel):
+    id: int
+    kind: ListingKind
+    title: str
+    status: ListingStatus
+    thumb_url: str | None
+    likes: int
+    waiting_requests: int
+    handover_status: RequestStatus | None
+    ready_at_point: bool
+    created_at: datetime
+
+
+class MyRequestOut(BaseModel):
+    id: int
+    status: RequestStatus
+    listing_id: int
+    title: str
+    thumb_url: str | None
+    code: str | None
+    deadline: datetime | None
+    point: PickupPointOut | None
+    created_at: datetime
+
+
+class ListingReportIn(BaseModel):
+    reason: Literal["personal_info", "rude", "forbidden", "other"]
+
+
+class LikeOut(BaseModel):
+    likes: int
+    liked: bool

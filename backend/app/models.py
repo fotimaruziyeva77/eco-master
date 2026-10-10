@@ -14,6 +14,7 @@ from sqlalchemy import (
     Enum,
     ForeignKey,
     Index,
+    LargeBinary,
     SmallInteger,
     String,
     Text,
@@ -81,6 +82,8 @@ class ReportStatus(enum.StrEnum):
 class AdminRole(enum.StrEnum):
     ADMIN = "admin"
     EDITOR = "editor"
+    # Staff of a market handover point: sees only the handover desk of that point.
+    POINT = "point"
 
 
 class WordKind(enum.StrEnum):
@@ -376,6 +379,10 @@ class AdminUser(Base):
     # Last accepted 30-second step: the same code can not be used twice.
     totp_last_step: Mapped[int | None] = mapped_column(BigInteger)
     role: Mapped[AdminRole] = mapped_column(str_enum(AdminRole))
+    # The handover point a "point" account works at.
+    pickup_point_id: Mapped[int | None] = mapped_column(
+        ForeignKey("pickup_points.id", ondelete="SET NULL")
+    )
     is_active: Mapped[bool] = mapped_column(server_default=text("true"))
     failed_logins: Mapped[int] = mapped_column(server_default=text("0"))
     locked_until: Mapped[datetime | None]
@@ -414,4 +421,182 @@ class AnalyticsEvent(Base):
     __table_args__ = (
         Index("ix_analytics_events_name_created", "name", "created_at"),
         Index("ix_analytics_events_user_name", "user_id", "name"),
+    )
+
+
+# ------------------------------------------------------------------------ market
+
+
+class ListingKind(enum.StrEnum):
+    HANDMADE = "handmade"  # made by the user, usually from waste
+    UNNEEDED = "unneeded"  # something the user no longer needs, to give away
+
+
+class ListingStatus(enum.StrEnum):
+    PENDING = "pending"  # waiting for a moderator; nobody else sees it
+    APPROVED = "approved"  # in the market
+    REJECTED = "rejected"
+    RESERVED = "reserved"  # promised to a requester, to be brought to the handover point
+    AT_POINT = "at_point"  # at the handover point, waiting to be collected
+    GIVEN = "given"
+    HIDDEN = "hidden"  # taken down by a moderator
+
+
+class RequestStatus(enum.StrEnum):
+    PENDING = "pending"  # waiting for the owner
+    ACCEPTED = "accepted"  # the owner agreed; the item is on its way to the point
+    AT_POINT = "at_point"
+    DONE = "done"  # collected
+    DECLINED = "declined"
+    CANCELLED = "cancelled"
+    EXPIRED = "expired"  # never brought to the point in time
+
+
+class PickupPoint(ContentMixin, Base):
+    """Handover point (school, eco-centre): adults take market items in and hand them out,
+    so children never have to meet or contact each other."""
+
+    __tablename__ = "pickup_points"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[I18n]
+    address: Mapped[I18n]
+    hours: Mapped[I18n]
+
+
+class Listing(TimestampMixin, Base):
+    """A thing in the market. Visible to others only after a moderator approved it."""
+
+    __tablename__ = "listings"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    # NULL only for an item already at a handover point when its owner deleted the account.
+    owner_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), index=True
+    )
+    kind: Mapped[ListingKind] = mapped_column(str_enum(ListingKind))
+    title: Mapped[str] = mapped_column(String(60))
+    description: Mapped[str] = mapped_column(Text, server_default="")
+    # Waste category code for handmade things, item type (books, toys…) for unneeded ones.
+    category: Mapped[str] = mapped_column(String(32))
+    condition: Mapped[str | None] = mapped_column(String(16))
+    # Offered to others through a handover point; otherwise only shown.
+    giveaway: Mapped[bool] = mapped_column(server_default=text("false"))
+    pickup_point_id: Mapped[int | None] = mapped_column(ForeignKey("pickup_points.id"), index=True)
+    # The item is at the handover point with nobody to collect it (the requester did not come
+    # or withdrew): the next accepted request skips bringing it there.
+    stored_at_point: Mapped[bool] = mapped_column(server_default=text("false"))
+    status: Mapped[ListingStatus] = mapped_column(
+        str_enum(ListingStatus), server_default=ListingStatus.PENDING.value
+    )
+    reject_reason: Mapped[str | None] = mapped_column(String(32))
+    moderator_note: Mapped[str | None] = mapped_column(String(300))
+    likes_count: Mapped[int] = mapped_column(server_default=text("0"))
+    submitted_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    published_at: Mapped[datetime | None]
+    reviewed_at: Mapped[datetime | None]
+    reviewed_by: Mapped[int | None] = mapped_column(
+        ForeignKey("admin_users.id", ondelete="SET NULL")
+    )
+
+    __table_args__ = (Index("ix_listings_status_published", "status", "published_at"),)
+
+
+class ListingPhoto(Base):
+    """A listing photo, already re-encoded without metadata (app.media). Kept in the database,
+    so backups, restores and account deletion cover it like any other row."""
+
+    __tablename__ = "listing_photos"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    # Uploaded first and attached when the listing is saved; loose ones are removed after a day.
+    listing_id: Mapped[int | None] = mapped_column(
+        ForeignKey("listings.id", ondelete="CASCADE"), index=True
+    )
+    owner_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), index=True
+    )
+    position: Mapped[int] = mapped_column(SmallInteger, server_default=text("0"))
+    width: Mapped[int]
+    height: Mapped[int]
+    full: Mapped[bytes] = mapped_column(LargeBinary, deferred=True)
+    thumb: Mapped[bytes] = mapped_column(LargeBinary, deferred=True)
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+
+
+class ListingLike(Base):
+    __tablename__ = "listing_likes"
+
+    listing_id: Mapped[int] = mapped_column(
+        ForeignKey("listings.id", ondelete="CASCADE"), primary_key=True
+    )
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True, index=True
+    )
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+
+
+class ListingRequest(Base):
+    """«I would like it»: a request for a listing that is given away, and its handover."""
+
+    __tablename__ = "listing_requests"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    listing_id: Mapped[int] = mapped_column(
+        ForeignKey("listings.id", ondelete="CASCADE"), index=True
+    )
+    requester_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), index=True
+    )
+    status: Mapped[RequestStatus] = mapped_column(
+        str_enum(RequestStatus), server_default=RequestStatus.PENDING.value
+    )
+    # Said to the staff at the point: the owner's code when bringing the item,
+    # the requester's code when collecting it.
+    drop_code: Mapped[str | None] = mapped_column(String(6))
+    pick_code: Mapped[str | None] = mapped_column(String(6))
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    decided_at: Mapped[datetime | None]
+    dropped_at: Mapped[datetime | None]
+    given_at: Mapped[datetime | None]
+    handled_by: Mapped[int | None] = mapped_column(
+        ForeignKey("admin_users.id", ondelete="SET NULL")
+    )
+
+    __table_args__ = (
+        # One open request per person and listing, one handover per listing.
+        Index(
+            "uq_listing_requests_open",
+            "listing_id",
+            "requester_id",
+            unique=True,
+            postgresql_where=text("status IN ('pending', 'accepted', 'at_point')"),
+        ),
+        Index(
+            "uq_listing_requests_handover",
+            "listing_id",
+            unique=True,
+            postgresql_where=text("status IN ('accepted', 'at_point')"),
+        ),
+    )
+
+
+class ListingReport(Base):
+    """Complaint about a listing; enough of them take it down until a moderator decides."""
+
+    __tablename__ = "listing_reports"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    listing_id: Mapped[int] = mapped_column(
+        ForeignKey("listings.id", ondelete="CASCADE"), index=True
+    )
+    reporter_id: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"))
+    reason: Mapped[str] = mapped_column(String(32))
+    status: Mapped[ReportStatus] = mapped_column(
+        str_enum(ReportStatus), server_default=ReportStatus.OPEN.value, index=True
+    )
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    resolved_at: Mapped[datetime | None]
+    resolved_by: Mapped[int | None] = mapped_column(
+        ForeignKey("admin_users.id", ondelete="SET NULL")
     )

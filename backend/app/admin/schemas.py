@@ -5,7 +5,15 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from app.models import AdminRole, ContentStatus, ReportStatus, WordKind
+from app.models import (
+    AdminRole,
+    ContentStatus,
+    ListingKind,
+    ListingStatus,
+    ReportStatus,
+    RequestStatus,
+    WordKind,
+)
 
 # ----------------------------------------------------------------------- auth
 
@@ -39,6 +47,8 @@ class AdminMeOut(BaseModel):
     login: str
     name: str
     role: AdminRole
+    # Handover point staff: the point they work at.
+    pickup_point_id: int | None = None
 
 
 class PasswordChangeIn(BaseModel):
@@ -62,12 +72,14 @@ class AdminCreateIn(BaseModel):
     name: str = Field(min_length=1, max_length=64)
     role: AdminRole
     password: str = Field(max_length=128)
+    pickup_point_id: int | None = None
 
 
 class AdminUpdateIn(BaseModel):
     name: str | None = Field(default=None, min_length=1, max_length=64)
     role: AdminRole | None = None
     is_active: bool | None = None
+    pickup_point_id: int | None = None
 
 
 class PasswordSetIn(BaseModel):
@@ -338,3 +350,113 @@ class FastFlagOut(BaseModel):
 class FlagsOut(BaseModel):
     points: list[PointsFlagOut]
     fast: list[FastFlagOut]
+
+
+# --------------------------------------------------------------------- market
+
+
+class MarketCountsOut(BaseModel):
+    pending: int
+    reported: int
+
+
+class MarketRowOut(BaseModel):
+    id: int
+    title: str
+    kind: ListingKind
+    status: ListingStatus
+    giveaway: bool
+    owner_id: int | None
+    owner_nickname: str | None
+    thumb_url: str | None
+    reports_open: int
+    submitted_at: datetime
+    created_at: datetime
+
+
+class MarketPhotoOut(BaseModel):
+    id: int
+    url: str
+    thumb_url: str
+    width: int
+    height: int
+
+
+class MarketRequestRowOut(BaseModel):
+    id: int
+    requester_id: int
+    nickname: str | None
+    status: RequestStatus
+    created_at: datetime
+    decided_at: datetime | None
+    dropped_at: datetime | None
+    given_at: datetime | None
+
+
+class MarketReportRowOut(BaseModel):
+    id: int
+    reason: str
+    status: ReportStatus
+    created_at: datetime
+
+
+class MarketListingOut(MarketRowOut):
+    description: str
+    category: str
+    category_name: str
+    condition: str | None
+    point_name: str | None
+    stored_at_point: bool
+    reject_reason: str | None
+    moderator_note: str | None
+    likes: int
+    published_at: datetime | None
+    reviewed_at: datetime | None
+    reviewed_by: str | None
+    photos: list[MarketPhotoOut]
+    requests: list[MarketRequestRowOut]
+    reports: list[MarketReportRowOut]
+
+
+class MarketDecisionIn(BaseModel):
+    reason: Literal["personal_info", "face", "not_eco", "forbidden", "bad_photo", "other"]
+    # Goes to the child with the bot message: kind and simple words.
+    note: str | None = Field(default=None, max_length=300)
+
+
+class HandoverPointOut(BaseModel):
+    id: int
+    name: str
+
+
+class HandoverItemOut(BaseModel):
+    # None for an item waiting at the point with nobody to collect it.
+    request_id: int | None
+    listing_id: int
+    title: str
+    thumb_url: str | None
+    owner_nickname: str | None
+    requester_nickname: str | None
+    status: RequestStatus | None
+    since: datetime | None
+    deadline: datetime | None
+
+
+class HandoverDeskOut(BaseModel):
+    point: HandoverPointOut
+    # The owner will bring these.
+    waiting_drop: list[HandoverItemOut]
+    # At the point; the requester will collect them.
+    waiting_pick: list[HandoverItemOut]
+    # At the point with nobody to collect them yet.
+    stored: list[HandoverItemOut]
+
+
+class HandoverCodeIn(BaseModel):
+    code: str = Field(pattern=r"^[0-9]{6}$")
+    point_id: int | None = None
+
+
+class HandoverMatchOut(BaseModel):
+    action: Literal["receive", "give"]
+    item: HandoverItemOut

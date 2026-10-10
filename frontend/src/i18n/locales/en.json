@@ -28,7 +28,8 @@
     "learn": "Learn",
     "games": "Games",
     "rating": "Rating",
-    "profile": "Profile"
+    "profile": "Profile",
+    "market": "Market"
   },
   "levels": {
     "seed": "Seed",
@@ -231,7 +232,7 @@
     "collectTitle": "What we store",
     "collectText": "Your Telegram ID, the nickname you choose, your language and your activity in the app (points, completed tasks).",
     "notCollectTitle": "What we never ask for",
-    "notCollectText": "We don't ask for your real name, phone number, address or photos. Your Telegram name and photo are not stored.",
+    "notCollectText": "We don't ask for your real name, phone number or address. Your Telegram name and photo are not stored.",
     "whyTitle": "Why",
     "whyText": "To count your points, show the rating and, if you allow it, send reminders.",
     "whoTitle": "Who can see it",
@@ -239,7 +240,9 @@
     "deleteTitle": "Deleting your data",
     "deleteText": "You can delete your data at any time: Profile → \"Delete my data\".",
     "contactTitle": "Contact",
-    "contactText": "If you have questions, message the Ekoustoz bot."
+    "contactText": "If you have questions, message the Ekoustoz bot.",
+    "marketTitle": "Market",
+    "marketText": "If you add a listing, 1–3 photos of the item, its name and description are stored. Location and camera data are removed from the photos. A moderator checks every listing first; once approved, app users see it with your nickname. Items are handed over only at a handover point, through adults — your contacts are never shown to anyone. When you delete the listing or your account, the photos are deleted too."
   },
   "games": {
     "title": "Games",
@@ -374,11 +377,187 @@
     "changesTitle": "Changes",
     "changesText": "If these terms change, we'll let you know in the app or through the bot.",
     "contactTitle": "Contact",
-    "contactText": "If you have questions, message the Ekoustoz bot."
+    "contactText": "If you have questions, message the Ekoustoz bot.",
+    "marketTitle": "Market",
+    "marketText": "List only things you made yourself or your own things you no longer need — things from home only with your parents' permission. No people, names or addresses in photos, and no contacts in the text. Not allowed: food, medicine, cosmetics, sharp or dangerous things, batteries and electronics, animals, money and valuables. Things are given away for free and only through a handover point; selling or asking for money is not allowed. Listings that break the rules are removed."
   },
   "network": {
     "offline": "No internet. What you do is saved and sent when the connection is back.",
     "savedOffline": "Saved! Points will be added when you're back online.",
     "synced": "Back online — your saved progress has been sent."
+  },
+  "market": {
+    "title": "Eco market",
+    "subtitle": "Things made from waste and things no longer needed",
+    "filters": {
+      "all": "All",
+      "handmade": "Handmade",
+      "unneeded": "Unneeded"
+    },
+    "kind": {
+      "handmade": "I made it",
+      "unneeded": "No longer needed"
+    },
+    "kindHint": {
+      "handmade": "Something you made from waste: show it or give it away",
+      "unneeded": "You don't need it, someone else will: a book, a toy, clothes…"
+    },
+    "add": "Add a listing",
+    "mine": "My listings",
+    "myRequests": "My requests",
+    "empty": "Nothing here yet. Be the first to add something!",
+    "emptyMine": "You haven't added anything yet.",
+    "emptyRequests": "You haven't asked for anything yet.",
+    "more": "Show more",
+    "allPoints": "All handover points",
+    "readyAtPoint": "Waiting at the handover point",
+    "giveaway": "Free to take",
+    "showOnly": "Just showing",
+    "like": "Cool!",
+    "likesCount": "«Cool!»: {{count}}",
+    "anonymous": "Ekoustoz member",
+    "by": "By {{name}}",
+    "condition": {
+      "new": "New",
+      "good": "Good condition",
+      "used": "Used"
+    },
+    "itemType": {
+      "books": "Books",
+      "toys": "Toys",
+      "clothes": "Clothes",
+      "school": "School supplies",
+      "sports": "Sports gear",
+      "other": "Other"
+    },
+    "point": "Handover point",
+    "hours": "Opening hours: {{hours}}",
+    "status": {
+      "pending": "In review",
+      "approved": "In the market",
+      "rejected": "Not approved",
+      "reserved": "Reserved",
+      "at_point": "At the handover point",
+      "given": "Given away",
+      "hidden": "Hidden"
+    },
+    "statusText": {
+      "pending": "A moderator is checking it. Once approved, it appears in the market.",
+      "rejected": "Not approved: {{reason}}. Fix it and send it again.",
+      "hidden": "Taken down: {{reason}}."
+    },
+    "reason": {
+      "personal_info": "the photo or text shows personal details",
+      "face": "a person's face can be seen in the photo",
+      "not_eco": "this item does not fit the market",
+      "forbidden": "such items are not allowed",
+      "bad_photo": "the photo is blurry or the item is hard to see",
+      "reports": "others reported it; a moderator will check",
+      "other": "it does not follow the market rules"
+    },
+    "moderatorNote": "Moderator's note: {{note}}",
+    "waitingRequests": "Requests: {{count}}",
+    "requestCta": "I'd like it",
+    "requestHint": "If the owner agrees, it is handed over at the handover point.",
+    "requestSent": "Request sent. We'll let you know if the owner agrees.",
+    "requestWithdraw": "Cancel my request",
+    "requestStatus": {
+      "pending": "Waiting for the owner",
+      "accepted": "Reserved for you",
+      "at_point": "Waiting for you at the handover point",
+      "done": "Given to you",
+      "declined": "Going to someone else",
+      "cancelled": "Cancelled",
+      "expired": "Expired"
+    },
+    "requests": "Who would like it",
+    "accept": "Give",
+    "decline": "Decline",
+    "noRequests": "Nobody has asked yet.",
+    "handover": {
+      "bringTitle": "Bring it to the handover point",
+      "bringText": "Bring it by {{date}} and tell the staff this code:",
+      "waitTitle": "Wait for the owner to bring it",
+      "waitText": "When it is at the handover point, the bot will tell you.",
+      "pickTitle": "Ready to collect!",
+      "pickText": "Collect it by {{date}} and tell the staff this code:",
+      "atPointOwner": "It is at the handover point, waiting for its new owner.",
+      "for": "For: {{name}}",
+      "cancel": "Cancel the handover",
+      "safety": "Tell the code only to the staff at the handover point. You never need to meet other children."
+    },
+    "edit": "Edit",
+    "delete": "Delete listing",
+    "deleteText": "The listing and its photos will be deleted for good.",
+    "report": "Report",
+    "reportTitle": "What's wrong?",
+    "reportReason": {
+      "personal_info": "Personal details",
+      "rude": "Rude or bad",
+      "forbidden": "Not allowed item",
+      "other": "Something else"
+    },
+    "reported": "Thank you! A moderator will check it.",
+    "form": {
+      "newTitle": "New listing",
+      "editTitle": "Edit listing",
+      "kind": "What would you like to add?",
+      "photos": "Photos (1–3)",
+      "photosHint": "Photograph only the item: no faces, names or addresses.",
+      "addPhoto": "Add a photo",
+      "removePhoto": "Remove photo",
+      "uploading": "Uploading…",
+      "titleLabel": "Name",
+      "titlePlaceholder": "For example: cardboard teddy bear",
+      "description": "Short description",
+      "descriptionPlaceholder": "What is it made of? What condition is it in?",
+      "material": "Made from",
+      "itemType": "What it is",
+      "condition": "Condition",
+      "giveaway": "I can give it to someone",
+      "giveawayHint": "It is handed over at a handover point, with adults present.",
+      "point": "Handover point",
+      "pointHint": "This is where you will bring it.",
+      "noPoints": "No handover points are open yet: for now you can only show things.",
+      "submit": "Send to a moderator",
+      "save": "Save and send again",
+      "sent": "Sent! It appears in the market once a moderator approves it.",
+      "needPhoto": "Add at least one photo.",
+      "needTitle": "Write a name (at least 3 letters).",
+      "rulesLink": "Market rules"
+    },
+    "rules": {
+      "title": "Market rules",
+      "intro": "To keep the market safe for everyone:",
+      "rule1": "Photograph only the item: no people, faces, names, addresses or school names.",
+      "rule2": "Don't write phone numbers, @usernames or links — children don't contact each other directly.",
+      "rule3": "Things are handed over only at a handover point, through adults. Never meet anyone on your own.",
+      "rule4": "Not allowed: food, medicine, cosmetics, sharp or dangerous things, batteries and electronics, animals, money and valuables.",
+      "rule5": "A moderator checks every listing; only then can others see it.",
+      "rule6": "If something is wrong, tap «Report».",
+      "ok": "Got it"
+    },
+    "errors": {
+      "contact_not_allowed": "Phone numbers, @usernames and links are not allowed.",
+      "text_not_allowed": "The text has a bad word. Please write it differently.",
+      "too_many_pending": "You have 3 listings in review. Wait for the decision.",
+      "too_many_today": "That's enough listings for today. Continue tomorrow!",
+      "too_many_requests": "You can ask for up to 3 things at a time.",
+      "too_many_uploads": "Too many photos. Try again a bit later.",
+      "photo_too_small": "The photo is too small. Take it closer.",
+      "photo_too_large": "The photo is too large.",
+      "photo_format": "Only photos can be uploaded (JPG, PNG, WebP).",
+      "photo_unreadable": "Couldn't open the photo. Choose another one.",
+      "point_unavailable": "This handover point is closed now. Choose another one.",
+      "listing_locked": "It is being handed over — it can't be changed now.",
+      "item_at_point": "It is at the handover point — sort it out with the staff first.",
+      "already_requested": "You have already asked for it.",
+      "request_closed": "This request is no longer active.",
+      "nickname_required": "Choose a nickname first.",
+      "bad_photos": "Please add the photos again.",
+      "bad_category": "Choose one from the list.",
+      "condition_required": "Choose the condition.",
+      "unknown": "Something went wrong. Please try again."
+    }
   }
 }

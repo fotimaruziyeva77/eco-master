@@ -19,7 +19,7 @@ from app.admin.content import (
     read_values,
     write_values,
 )
-from app.admin.deps import CurrentAdmin
+from app.admin.deps import ContentStaff
 from app.admin.schemas import (
     ContentItemOut,
     ContentMetaOut,
@@ -117,12 +117,12 @@ def type_out(ctype: ContentType, counts: dict[str, int]) -> ContentTypeOut:
 
 
 @router.get("")
-async def content_types(admin: CurrentAdmin, session: SessionDep) -> list[ContentTypeOut]:
+async def content_types(admin: ContentStaff, session: SessionDep) -> list[ContentTypeOut]:
     return [type_out(t, await counts_by_status(session, t)) for t in CONTENT_TYPES.values()]
 
 
 @router.get("/{type_key}/meta")
-async def content_meta(type_key: str, admin: CurrentAdmin, session: SessionDep) -> ContentMetaOut:
+async def content_meta(type_key: str, admin: ContentStaff, session: SessionDep) -> ContentMetaOut:
     """Field descriptions the admin UI builds its form from."""
     ctype = content_type(type_key)
     ctx = await Ctx.load(session)
@@ -162,7 +162,7 @@ async def content_meta(type_key: str, admin: CurrentAdmin, session: SessionDep) 
 @router.get("/{type_key}")
 async def list_items(
     type_key: str,
-    admin: CurrentAdmin,
+    admin: ContentStaff,
     session: SessionDep,
     status_filter: Annotated[ContentStatus | None, Query(alias="status")] = None,
     q: Annotated[str | None, Query(max_length=100)] = None,
@@ -198,7 +198,7 @@ async def list_items(
 
 @router.get("/{type_key}/{item_id}")
 async def get_content(
-    type_key: str, item_id: int, admin: CurrentAdmin, session: SessionDep
+    type_key: str, item_id: int, admin: ContentStaff, session: SessionDep
 ) -> ContentItemOut:
     ctype = content_type(type_key)
     return item_out(ctype, await get_item(session, ctype, item_id), await Ctx.load(session))
@@ -216,7 +216,7 @@ async def save(session: AsyncSession, ctype: ContentType) -> None:
 
 @router.post("/{type_key}", status_code=status.HTTP_201_CREATED)
 async def create_content(
-    type_key: str, body: ContentValuesIn, admin: CurrentAdmin, session: SessionDep
+    type_key: str, body: ContentValuesIn, admin: ContentStaff, session: SessionDep
 ) -> ContentItemOut:
     """New items start as drafts."""
     ctype = content_type(type_key)
@@ -242,7 +242,7 @@ async def update_content(
     type_key: str,
     item_id: int,
     body: ContentValuesIn,
-    admin: CurrentAdmin,
+    admin: ContentStaff,
     session: SessionDep,
 ) -> ContentItemOut:
     ctype = content_type(type_key)
@@ -278,7 +278,7 @@ async def update_content(
 
 @router.post("/{type_key}/{item_id}/status")
 async def change_status(
-    type_key: str, item_id: int, body: StatusIn, admin: CurrentAdmin, session: SessionDep
+    type_key: str, item_id: int, body: StatusIn, admin: ContentStaff, session: SessionDep
 ) -> ContentItemOut:
     ctype = content_type(type_key)
     if not ctype.has_status:
@@ -310,7 +310,7 @@ async def change_status(
 
 @router.delete("/{type_key}/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_content(
-    type_key: str, item_id: int, admin: CurrentAdmin, session: SessionDep
+    type_key: str, item_id: int, admin: ContentStaff, session: SessionDep
 ) -> Response:
     """Only drafts can be deleted; anything that was live goes to the archive instead."""
     ctype = content_type(type_key)
@@ -321,6 +321,12 @@ async def delete_content(
         raise HTTPException(status.HTTP_409_CONFLICT, "only_drafts")
     title = ctype.row_title(read_values(ctype, item, await Ctx.load(session)))
     await session.delete(item)
+    try:
+        await session.flush()
+    except IntegrityError as exc:
+        # Still referred to, e.g. a handover point that market listings use.
+        await session.rollback()
+        raise HTTPException(status.HTTP_409_CONFLICT, "in_use") from exc
     audit(session, admin, "content.delete", ctype.key, item_id, title=title)
     await session.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
@@ -329,7 +335,7 @@ async def delete_content(
 @router.get("/lessons/{item_id}/pdf")
 async def lesson_pdf_preview(
     item_id: int,
-    admin: CurrentAdmin,
+    admin: ContentStaff,
     session: SessionDep,
     lang: Annotated[Language, Query()] = "uz",
 ) -> Response:

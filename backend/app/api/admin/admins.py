@@ -11,7 +11,7 @@ from app.admin.deps import AdminOnly
 from app.admin.schemas import AdminCreateIn, AdminOut, AdminUpdateIn, PasswordSetIn
 from app.admin.security import hash_password, password_problem
 from app.deps import SessionDep
-from app.models import AdminUser
+from app.models import AdminRole, AdminUser, PickupPoint
 
 router = APIRouter(prefix="/admins", tags=["admin"])
 
@@ -22,6 +22,7 @@ def admin_out(admin: AdminUser) -> AdminOut:
         login=admin.login,
         name=admin.name,
         role=admin.role,
+        pickup_point_id=admin.pickup_point_id,
         is_active=admin.is_active,
         totp_enabled=admin.totp_confirmed_at is not None,
         locked=admin.locked_until is not None and admin.locked_until > datetime.now(UTC),
@@ -42,6 +43,15 @@ def check_password(password: str) -> None:
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, problem)
 
 
+async def point_for(session, role: AdminRole, point_id: int | None) -> int | None:
+    """Handover point staff need their point; other roles have none."""
+    if role != AdminRole.POINT:
+        return None
+    if point_id is None or await session.get(PickupPoint, point_id) is None:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "point_required")
+    return point_id
+
+
 @router.get("")
 async def list_admins(admin: AdminOnly, session: SessionDep) -> list[AdminOut]:
     rows = await session.scalars(select(AdminUser).order_by(AdminUser.id))
@@ -56,6 +66,7 @@ async def create_admin(body: AdminCreateIn, admin: AdminOnly, session: SessionDe
         login=body.login,
         name=body.name.strip(),
         role=body.role,
+        pickup_point_id=await point_for(session, body.role, body.pickup_point_id),
         password_hash=hash_password(body.password),
     )
     session.add(new)
@@ -81,9 +92,15 @@ async def update_admin(
         raise HTTPException(status.HTTP_409_CONFLICT, "cannot_change_self")
     if "name" in changes:
         target.name = changes["name"].strip()
-    if "role" in changes and changes["role"] != target.role:
-        target.role = changes["role"]
-        target.session_version += 1
+    if "role" in changes or "pickup_point_id" in changes:
+        role = changes.get("role", target.role)
+        point_id = await point_for(
+            session, role, changes.get("pickup_point_id", target.pickup_point_id)
+        )
+        if role != target.role or point_id != target.pickup_point_id:
+            target.role = role
+            target.pickup_point_id = point_id
+            target.session_version += 1
     if "is_active" in changes and changes["is_active"] != target.is_active:
         target.is_active = changes["is_active"]
         target.session_version += 1

@@ -28,7 +28,8 @@
     "learn": "O'rganish",
     "games": "O'yinlar",
     "rating": "Reyting",
-    "profile": "Profil"
+    "profile": "Profil",
+    "market": "Bozor"
   },
   "levels": {
     "seed": "Urug'",
@@ -231,7 +232,7 @@
     "collectTitle": "Qanday ma'lumot saqlanadi",
     "collectText": "Telegram ID raqamingiz, siz tanlagan taxallus, til va ilovadagi faolligingiz (ball, bajarilgan topshiriqlar).",
     "notCollectTitle": "Nima so'ralmaydi",
-    "notCollectText": "Haqiqiy ism, telefon raqami, manzil va suratlar so'ralmaydi. Telegram'dagi ismingiz va rasmingiz saqlanmaydi.",
+    "notCollectText": "Haqiqiy ism, telefon raqami va manzil so'ralmaydi. Telegram'dagi ismingiz va rasmingiz saqlanmaydi.",
     "whyTitle": "Nima uchun",
     "whyText": "Ballaringizni hisoblash, reytingni ko'rsatish va siz ruxsat bergan bo'lsangiz, eslatma yuborish uchun.",
     "whoTitle": "Kim ko'radi",
@@ -239,7 +240,9 @@
     "deleteTitle": "Ma'lumotni o'chirish",
     "deleteText": "Istalgan vaqtda Profil → «Ma'lumotlarimni o'chirish» orqali ma'lumotlaringizni o'chirishingiz mumkin.",
     "contactTitle": "Bog'lanish",
-    "contactText": "Savollar bo'lsa, Ekoustoz botiga yozing."
+    "contactText": "Savollar bo'lsa, Ekoustoz botiga yozing.",
+    "marketTitle": "Bozor",
+    "marketText": "Bozorga e'lon bersangiz, buyumning 1–3 ta rasmi, nomi va tavsifi saqlanadi. Rasmlardan joylashuv va kamera ma'lumotlari o'chiriladi. E'lonni avval moderator tekshiradi; tasdiqlangan e'lonni ilova foydalanuvchilari taxallusingiz bilan ko'radi. Buyum faqat topshirish joyida, kattalar orqali beriladi — kontaktlaringiz hech kimga ko'rsatilmaydi. E'lon yoki hisobingiz o'chirilsa, rasmlar ham o'chadi."
   },
   "games": {
     "title": "O'yinlar",
@@ -374,11 +377,187 @@
     "changesTitle": "O'zgarishlar",
     "changesText": "Shartlar o'zgarsa, bu haqda ilova yoki bot orqali xabar beramiz.",
     "contactTitle": "Bog'lanish",
-    "contactText": "Savollar bo'lsa, Ekoustoz botiga yozing."
+    "contactText": "Savollar bo'lsa, Ekoustoz botiga yozing.",
+    "marketTitle": "Bozor",
+    "marketText": "Bozorga faqat o'zingiz yasagan yoki sizga tegishli, endi kerak bo'lmagan narsalarni qo'ying — uydagi narsalarni ota-onangiz ruxsati bilan. Rasmda odamlar, ism va manzil bo'lmasin, kontakt yozmang. Ovqat, dori, kosmetika, o'tkir va xavfli narsalar, batareya va elektronika, hayvonlar, pul va qimmatbaho buyumlar qo'yilmaydi. Buyumlar bepul, faqat topshirish joyida beriladi; sotish va pul so'rash mumkin emas. Qoidalar buzilsa, e'lon olib tashlanadi."
   },
   "network": {
     "offline": "Internet yo'q. Bajargan ishlaringiz saqlanadi va aloqa tiklanganda yuboriladi.",
     "savedOffline": "Saqlandi! Internet qaytganda ball qo'shiladi.",
     "synced": "Aloqa tiklandi — saqlangan ishlaringiz yuborildi."
+  },
+  "market": {
+    "title": "Eko-bozor",
+    "subtitle": "Chiqindidan yasalgan va keraksiz narsalar",
+    "filters": {
+      "all": "Hammasi",
+      "handmade": "Yasalganlar",
+      "unneeded": "Keraksizlar"
+    },
+    "kind": {
+      "handmade": "O'zim yasadim",
+      "unneeded": "Keraksiz narsa"
+    },
+    "kindHint": {
+      "handmade": "Chiqindidan yasagan buyumingiz: ko'rsating yoki boshqaga bering",
+      "unneeded": "Sizga kerak emas, lekin boshqaga asqotadi: kitob, o'yinchoq, kiyim…"
+    },
+    "add": "E'lon berish",
+    "mine": "Mening e'lonlarim",
+    "myRequests": "So'rovlarim",
+    "empty": "Hozircha bu yerda hech narsa yo'q. Birinchi bo'lib o'z buyumingizni qo'ying!",
+    "emptyMine": "Siz hali e'lon bermagansiz.",
+    "emptyRequests": "Siz hali hech narsa so'ramagansiz.",
+    "more": "Yana ko'rsatish",
+    "allPoints": "Barcha topshirish joylari",
+    "readyAtPoint": "Topshirish joyida tayyor",
+    "giveaway": "Beriladi",
+    "showOnly": "Faqat ko'rgazma",
+    "like": "Zo'r!",
+    "likesCount": "«Zo'r!»: {{count}}",
+    "anonymous": "Ekoustoz a'zosi",
+    "by": "Muallif: {{name}}",
+    "condition": {
+      "new": "Yangi",
+      "good": "Yaxshi holatda",
+      "used": "Ishlatilgan"
+    },
+    "itemType": {
+      "books": "Kitoblar",
+      "toys": "O'yinchoqlar",
+      "clothes": "Kiyim",
+      "school": "O'quv qurollari",
+      "sports": "Sport anjomlari",
+      "other": "Boshqa"
+    },
+    "point": "Topshirish joyi",
+    "hours": "Ish vaqti: {{hours}}",
+    "status": {
+      "pending": "Tekshiruvda",
+      "approved": "Bozorda",
+      "rejected": "Qaytarildi",
+      "reserved": "Band qilingan",
+      "at_point": "Topshirish joyida",
+      "given": "Berildi",
+      "hidden": "Yashirilgan"
+    },
+    "statusText": {
+      "pending": "Moderator tekshirmoqda. Tasdiqlangach, bozorda ko'rinadi.",
+      "rejected": "Moderator qaytardi: {{reason}}. Tuzatib, qayta yuboring.",
+      "hidden": "Bozordan olib tashlandi: {{reason}}."
+    },
+    "reason": {
+      "personal_info": "rasmda yoki matnda shaxsiy ma'lumot bor",
+      "face": "rasmda odamning yuzi ko'rinib turibdi",
+      "not_eco": "bu narsa bozor mavzusiga mos emas",
+      "forbidden": "bunday narsalarni qo'yib bo'lmaydi",
+      "bad_photo": "rasm xira yoki buyum yaxshi ko'rinmaydi",
+      "reports": "boshqalar shikoyat qildi, moderator tekshiradi",
+      "other": "bozor qoidalariga mos kelmadi"
+    },
+    "moderatorNote": "Moderator izohi: {{note}}",
+    "waitingRequests": "So'rovlar: {{count}}",
+    "requestCta": "Olmoqchiman",
+    "requestHint": "Egasi rozi bo'lsa, buyum topshirish joyida beriladi.",
+    "requestSent": "So'rov yuborildi. Egasi rozi bo'lsa, xabar beramiz.",
+    "requestWithdraw": "So'rovni bekor qilish",
+    "requestStatus": {
+      "pending": "So'rovingiz egasida",
+      "accepted": "Siz uchun band qilindi",
+      "at_point": "Topshirish joyida sizni kutmoqda",
+      "done": "Sizga berildi",
+      "declined": "Boshqa bolaga beriladigan bo'ldi",
+      "cancelled": "Bekor qilindi",
+      "expired": "Muddati o'tdi"
+    },
+    "requests": "Olmoqchi bo'lganlar",
+    "accept": "Berish",
+    "decline": "Rad etish",
+    "noRequests": "Hozircha hech kim so'ramagan.",
+    "handover": {
+      "bringTitle": "Topshirish joyiga olib boring",
+      "bringText": "{{date}} gacha olib boring va xodimga shu kodni ayting:",
+      "waitTitle": "Egasi olib kelishini kuting",
+      "waitText": "Buyum topshirish joyiga keltirilgach, bot orqali xabar beramiz.",
+      "pickTitle": "Olib ketishingiz mumkin!",
+      "pickText": "{{date}} gacha olib keting va xodimga shu kodni ayting:",
+      "atPointOwner": "Buyum topshirish joyida. Yangi egasi olib ketishini kutmoqda.",
+      "for": "Kim uchun: {{name}}",
+      "cancel": "Kelishuvni bekor qilish",
+      "safety": "Kodni faqat topshirish joyidagi xodimga ayting. Boshqa bolalar bilan alohida uchrashish shart emas."
+    },
+    "edit": "Tahrirlash",
+    "delete": "E'lonni o'chirish",
+    "deleteText": "E'lon va uning rasmlari butunlay o'chiriladi.",
+    "report": "Shikoyat qilish",
+    "reportTitle": "Nima noto'g'ri?",
+    "reportReason": {
+      "personal_info": "Shaxsiy ma'lumot bor",
+      "rude": "Haqoratli yoki yomon",
+      "forbidden": "Taqiqlangan narsa",
+      "other": "Boshqa sabab"
+    },
+    "reported": "Rahmat! Moderator tekshiradi.",
+    "form": {
+      "newTitle": "Yangi e'lon",
+      "editTitle": "E'lonni tahrirlash",
+      "kind": "Nima qo'ymoqchisiz?",
+      "photos": "Rasmlar (1–3 ta)",
+      "photosHint": "Faqat buyumni suratga oling: yuz, ism va manzil ko'rinmasin.",
+      "addPhoto": "Rasm qo'shish",
+      "removePhoto": "Rasmni olib tashlash",
+      "uploading": "Yuklanmoqda…",
+      "titleLabel": "Nomi",
+      "titlePlaceholder": "Masalan: Karton ayiqcha",
+      "description": "Qisqacha tavsif",
+      "descriptionPlaceholder": "Nimadan yasadingiz? Qanday holatda?",
+      "material": "Nimadan yasalgan",
+      "itemType": "Bu nima",
+      "condition": "Holati",
+      "giveaway": "Boshqa bolaga bera olaman",
+      "giveawayHint": "Buyum topshirish joyi orqali, kattalar ishtirokida beriladi.",
+      "point": "Topshirish joyi",
+      "pointHint": "Buyumni shu yerga olib borasiz.",
+      "noPoints": "Topshirish joylari hali ochilmagan: hozircha faqat ko'rgazmaga qo'yish mumkin.",
+      "submit": "Moderatorga yuborish",
+      "save": "Saqlash va qayta yuborish",
+      "sent": "Yuborildi! Moderator tekshirgach, bozorda ko'rinadi.",
+      "needPhoto": "Kamida bitta rasm qo'shing.",
+      "needTitle": "Nomini yozing (kamida 3 harf).",
+      "rulesLink": "Bozor qoidalari"
+    },
+    "rules": {
+      "title": "Bozor qoidalari",
+      "intro": "Bozor hamma uchun xavfsiz bo'lishi uchun:",
+      "rule1": "Faqat buyumni suratga oling: rasmda odamlar, yuzlar, ism, manzil va maktab nomi bo'lmasin.",
+      "rule2": "Telefon raqam, @username yoki havola yozmang — bolalar bir-biri bilan to'g'ridan-to'g'ri bog'lanmaydi.",
+      "rule3": "Buyum faqat topshirish joyida, kattalar orqali beriladi. Hech kim bilan alohida uchrashmang.",
+      "rule4": "Qo'yib bo'lmaydi: ovqat, dori, kosmetika, o'tkir va xavfli narsalar, batareya va elektronika, tirik hayvon, pul va qimmatbaho buyumlar.",
+      "rule5": "Har bir e'lonni moderator tekshiradi; shundan keyingina boshqalar ko'radi.",
+      "rule6": "Biror narsa noto'g'ri bo'lsa, «Shikoyat qilish»ni bosing.",
+      "ok": "Tushundim"
+    },
+    "errors": {
+      "contact_not_allowed": "Telefon raqam, @username yoki havola yozib bo'lmaydi.",
+      "text_not_allowed": "Matnda yomon so'z bor. Boshqacha yozing.",
+      "too_many_pending": "Tekshiruvda 3 ta e'loningiz bor. Ular ko'rib chiqilishini kuting.",
+      "too_many_today": "Bugun yetarlicha e'lon berdingiz. Ertaga davom eting!",
+      "too_many_requests": "Bir vaqtda 3 tagacha narsa so'rash mumkin.",
+      "too_many_uploads": "Juda ko'p rasm yuklandi. Birozdan keyin urinib ko'ring.",
+      "photo_too_small": "Rasm juda kichik. Yaqinroqdan suratga oling.",
+      "photo_too_large": "Rasm juda katta.",
+      "photo_format": "Faqat rasm yuklash mumkin (JPG, PNG, WebP).",
+      "photo_unreadable": "Rasmni ochib bo'lmadi. Boshqasini tanlang.",
+      "point_unavailable": "Bu topshirish joyi hozir ishlamaydi. Boshqasini tanlang.",
+      "listing_locked": "Buyum topshirilish jarayonida — hozir o'zgartirib bo'lmaydi.",
+      "item_at_point": "Buyum topshirish joyida turibdi — avval xodim bilan hal qiling.",
+      "already_requested": "Siz bu narsani allaqachon so'ragansiz.",
+      "request_closed": "Bu so'rov endi faol emas.",
+      "nickname_required": "Avval taxallus tanlang.",
+      "bad_photos": "Rasmlarni qaytadan qo'shing.",
+      "bad_category": "Turini ro'yxatdan tanlang.",
+      "condition_required": "Holatini tanlang.",
+      "unknown": "Xatolik yuz berdi. Qayta urinib ko'ring."
+    }
   }
 }

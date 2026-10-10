@@ -19,8 +19,8 @@ cd backend && .venv/Scripts/python -m pytest && .venv/Scripts/ruff check .
 cd frontend && npm run typecheck && npm test && npm run build && npm run size
 ```
 
-Oxirgi to'liq ishga tushirish (2026-10-10): backend — 293 test, frontend — 51 test, hammasi
-o'tdi; boshlang'ich JS — 121 KB (gzip), chegara 250 KB. Production stek (Docker Compose)
+Oxirgi to'liq ishga tushirish (2026-10-10): backend — 340 test, frontend — 51 test, hammasi
+o'tdi; boshlang'ich JS — 125 KB (gzip), chegara 250 KB. Production stek (Docker Compose)
 lokal smoke testdan o'tdi: migratsiyalar, xavfsizlik sarlavhalari, zaxira nusxa va tiklash.
 
 Backend testlari `backend/tests/` papkasida, frontend testlari `frontend/src/**/*.test.ts`.
@@ -199,7 +199,7 @@ Yarim tun atrofidagi holatlar `test_midnight.py` da soatni almashtirib tekshiril
 ### QM-19. Tezlik: birinchi ochilish 4G'da 3 s dan, 3G'da 5 s dan kam (13)
 
 - **Avtomatik:** `npm run size` — boshlang'ich JS 250 KB (gzip) dan oshsa, CI va Docker yig'ish
-  to'xtaydi (hozir 121 KB). Ekranlar va ru/en tarjimalari kerak bo'lganda yuklanadi; Caddy
+  to'xtaydi (hozir 125 KB). Ekranlar va ru/en tarjimalari kerak bo'lganda yuklanadi; Caddy
   zstd/gzip bilan siqadi, `/assets/*` bir yilga keshlanadi.
 - **Qo'lda:** ⚠️ production domenida: Chrome DevTools → Network → «Fast 4G» / «3G», keshsiz
   ochish → bosh sahifa ishlatishga tayyor bo'lguncha vaqt; takroriy ochish (keshdan) 1,5 s dan
@@ -234,6 +234,54 @@ Yarim tun atrofidagi holatlar `test_midnight.py` da soatni almashtirib tekshiril
   «Telegram'da ochish» tugmasi `t.me/<bot>/<app>` ga olib boradi.
 - **Natija:**
 
+## Bozor (9-faza, TZ'ga qo'shimcha)
+
+TZ v0.2 da rasm yuklash va bozor 1-versiyaga kirmagan edi (11.3, 16-bo'limlar). Loyiha rahbari
+2026-10-10 da qo'shishga qaror qildi; quyidagi mezonlar TZ'ga taklif sifatida qo'shiladi. Rasm
+yuklash yurist tekshiruviga (11.4) kiritilishi kerak.
+
+### QM-22. E'lon moderator tasdiqlamaguncha hech kimga ko'rinmaydi
+
+- **Avtomatik:** `test_market.py::test_new_listing_waits_for_a_moderator` (begona foydalanuvchi
+  ko'rmaydi, bozor bo'sh, tasdiqlanmagan e'lonning rasmi ochiq havola bilan ham ochilmaydi);
+  `test_changes_go_back_to_review`; `test_market_admin.py::test_editor_reviews_listings`.
+- **Qo'lda:** ikki telefon: birida e'lon berish, ikkinchisida bozorda ko'rinmasligini tekshirish;
+  admin tasdiqlagach paydo bo'lishi va muallifga bot xabari kelishi.
+- **Natija:**
+
+### QM-23. Rasmlarda joylashuv (GPS) va kamera ma'lumotlari saqlanmaydi
+
+- **Avtomatik:** `test_market.py::test_photo_keeps_only_pixels`, `test_only_real_photos_are_accepted`,
+  `test_photo_links_are_signed_and_expire`.
+- **Qo'lda:** ⚠️ joylashuv yoqilgan telefonda suratga olib yuklash; admin panelda rasmni yuklab
+  olib, EXIF ko'ruvchida GPS yo'qligini tekshirish.
+- **Natija:**
+
+### QM-24. Bolalar kontakt almashmaydi; buyum faqat topshirish joyida kod bilan beriladi
+
+- **Avtomatik:** `test_market.py::test_contacts_and_rude_words_are_refused`,
+  `test_handover_through_the_point` (ikki xil kod, noto'g'ri kod rad etiladi),
+  `test_market_admin.py::test_codes_work_only_at_their_point`,
+  `test_point_staff_see_only_their_desk`.
+- **Qo'lda:** ⚠️ haqiqiy topshirish joyida xodim bilan to'liq aylanish: e'lon → «Olmoqchiman» →
+  rozilik → egasi kod bilan olib keladi → oluvchi kod bilan olib ketadi; bot xabarlari keladi.
+- **Natija:**
+
+### QM-25. Shikoyat va moderator qarori
+
+- **Avtomatik:** `test_market.py::test_reports_take_a_listing_down` (3 xil foydalanuvchi →
+  yashiriladi), `test_market_admin.py::test_hiding_calls_off_a_handover`.
+- **Qo'lda:** admin panelda qaytarish sababini tanlab, bolaga uning tilida tushunarli xabar
+  borishini tekshirish.
+- **Natija:**
+
+### QM-26. Hisob o'chirilsa, e'lonlar va rasmlar o'chadi; boshlangan topshirish yakunlanadi
+
+- **Avtomatik:** `test_market.py::test_deleting_the_account`, `test_handovers_expire`,
+  `test_item_left_at_the_point_goes_to_the_next_one`, `test_loose_photos_are_removed`.
+- **Qo'lda:** shart emas.
+- **Natija:**
+
 ## Ishga tushirishdan oldin server tekshiruvlari
 
 - [ ] `https://<DOMAIN>/api/health` → `{"status":"ok"}`; uptime monitoring shu manzilga ulangan.
@@ -248,4 +296,6 @@ Yarim tun atrofidagi holatlar `test_midnight.py` da soatni almashtirib tekshiril
 - [ ] Kontent (`seed --content`) jamoa tomonidan ko'rib chiqildi va admin panelda nashr qilindi
       (`docs/content/README.md`).
 - [ ] BotFather: `/newapp` URL `https://<DOMAIN>`, `/setinline` yoqilgan.
+- [ ] Bozor: kamida bitta topshirish joyi nashr qilingan, uning xodimiga «Topshirish joyi xodimi»
+      hisobi ochilgan; moderatorlar navbati kuzatib boriladi.
 - [ ] Loglarda shaxsiy ma'lumot yo'q: `docker compose logs api bot` da faqat ichki ID'lar.

@@ -56,8 +56,9 @@ export interface paths {
          * Delete Me
          * @description Delete the account (TZ 8.8, QM-17).
          *
-         *     The profile, nickname and badges are removed; the activity log stays for statistics
-         *     with the user id cleared (foreign keys use ON DELETE SET NULL / CASCADE).
+         *     The profile, nickname, badges and market listings with their photos are removed; the
+         *     activity log stays for statistics with the user id cleared (foreign keys use ON DELETE
+         *     SET NULL / CASCADE). Market handovers already under way are finished without the user.
          */
         delete: operations["delete_me_api_me_delete"];
         options?: never;
@@ -601,6 +602,265 @@ export interface paths {
          *     (Bot API 8.0+) and an inline query for older clients.
          */
         post: operations["share_api_share_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/market/points": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Points
+         * @description Handover points where things change hands.
+         */
+        get: operations["points_api_market_points_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/market": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Browse
+         * @description Approved listings, newest first. Owners who were blocked disappear with their listings.
+         */
+        get: operations["browse_api_market_get"];
+        put?: never;
+        /**
+         * Create Listing
+         * @description A new listing waits for a moderator; nobody else sees it before that.
+         */
+        post: operations["create_listing_api_market_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/market/mine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** My Listings */
+        get: operations["my_listings_api_market_mine_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/market/requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * My Requests
+         * @description Things this user asked for, the newest first.
+         */
+        get: operations["my_requests_api_market_requests_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/market/{listing_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Listing */
+        get: operations["get_listing_api_market__listing_id__get"];
+        /**
+         * Update Listing
+         * @description Any change goes back to a moderator before others see it again.
+         */
+        put: operations["update_listing_api_market__listing_id__put"];
+        post?: never;
+        /** Delete Listing */
+        delete: operations["delete_listing_api_market__listing_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/market/photos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Upload Photo
+         * @description One photo as the request body (image/jpeg, png or webp). Saved with a listing later.
+         */
+        post: operations["upload_photo_api_market_photos_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/market/{listing_id}/like": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Like
+         * @description «Zo'r!» — no points, just a thumbs-up for the maker.
+         */
+        post: operations["like_api_market__listing_id__like_post"];
+        /** Unlike */
+        delete: operations["unlike_api_market__listing_id__like_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/market/{listing_id}/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Report
+         * @description Enough reports from different people take the listing down until a moderator decides.
+         */
+        post: operations["report_api_market__listing_id__report_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/market/{listing_id}/request": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Ask For
+         * @description «Olmoqchiman». An item already waiting at the point goes to the first one who asks.
+         */
+        post: operations["ask_for_api_market__listing_id__request_post"];
+        /**
+         * Withdraw Request
+         * @description The requester no longer wants it; an item already at the point waits for someone else.
+         */
+        delete: operations["withdraw_request_api_market__listing_id__request_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/market/requests/{request_id}/accept": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Accept */
+        post: operations["accept_api_market_requests__request_id__accept_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/market/requests/{request_id}/decline": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Decline */
+        post: operations["decline_api_market_requests__request_id__decline_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/market/{listing_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Cancel Handover
+         * @description The owner changed their mind before bringing the item to the point.
+         */
+        post: operations["cancel_handover_api_market__listing_id__cancel_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/media/{photo_id}/{size}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Photo */
+        get: operations["photo_api_media__photo_id___size__get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1227,6 +1487,256 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/market/counts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Counts */
+        get: operations["counts_api_admin_market_counts_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/market": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Listings
+         * @description The review queue (oldest first), reported listings, or everything by status.
+         */
+        get: operations["listings_api_admin_market_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/market/{listing_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Listing Detail */
+        get: operations["listing_detail_api_admin_market__listing_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/market/{listing_id}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Approve
+         * @description Into the market: a new or changed listing, or one taken down that turned out fine.
+         */
+        post: operations["approve_api_admin_market__listing_id__approve_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/market/{listing_id}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reject
+         * @description Not published; the child gets the reason and can fix the listing.
+         */
+        post: operations["reject_api_admin_market__listing_id__reject_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/market/{listing_id}/hide": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Hide
+         * @description Take a published listing down. A handover in progress is called off; an item already
+         *     at the point stays there until the staff returns it to its owner.
+         */
+        post: operations["hide_api_admin_market__listing_id__hide_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/market/{listing_id}/dismiss-reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Dismiss Reports
+         * @description The reports were unfounded; the listing stays as it is.
+         */
+        post: operations["dismiss_reports_api_admin_market__listing_id__dismiss_reports_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/handover/points": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Handover Points */
+        get: operations["handover_points_api_admin_handover_points_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/handover": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Desk */
+        get: operations["desk_api_admin_handover_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/handover/lookup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Lookup
+         * @description What a code the child said belongs to: an item to take in, or one to hand out.
+         */
+        post: operations["lookup_api_admin_handover_lookup_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/handover/{request_id}/receive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Receive
+         * @description The owner brought the item and said their code.
+         */
+        post: operations["receive_api_admin_handover__request_id__receive_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/handover/{request_id}/give": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Give
+         * @description The new owner came and said their code.
+         */
+        post: operations["give_api_admin_handover__request_id__give_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/handover/stored/{listing_id}/return": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Return To Owner
+         * @description An item nobody collected went back to its owner. Without an owner (the account was
+         *     deleted) the listing is removed.
+         */
+        post: operations["return_to_owner_api_admin_handover_stored__listing_id__return_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/dev/init-data": {
         parameters: {
             query?: never;
@@ -1285,6 +1795,8 @@ export interface components {
             role: components["schemas"]["AdminRole"];
             /** Password */
             password: string;
+            /** Pickup Point Id */
+            pickup_point_id?: number | null;
         };
         /** AdminMeOut */
         AdminMeOut: {
@@ -1295,6 +1807,8 @@ export interface components {
             /** Name */
             name: string;
             role: components["schemas"]["AdminRole"];
+            /** Pickup Point Id */
+            pickup_point_id?: number | null;
         };
         /** AdminOut */
         AdminOut: {
@@ -1305,6 +1819,8 @@ export interface components {
             /** Name */
             name: string;
             role: components["schemas"]["AdminRole"];
+            /** Pickup Point Id */
+            pickup_point_id?: number | null;
             /** Is Active */
             is_active: boolean;
             /** Totp Enabled */
@@ -1323,7 +1839,7 @@ export interface components {
          * AdminRole
          * @enum {string}
          */
-        AdminRole: "admin" | "editor";
+        AdminRole: "admin" | "editor" | "point";
         /** AdminStatsOut */
         AdminStatsOut: {
             /**
@@ -1371,6 +1887,8 @@ export interface components {
             role?: components["schemas"]["AdminRole"] | null;
             /** Is Active */
             is_active?: boolean | null;
+            /** Pickup Point Id */
+            pickup_point_id?: number | null;
         };
         /** AdminUserDetailOut */
         AdminUserDetailOut: {
@@ -1971,6 +2489,74 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** HandoverCodeIn */
+        HandoverCodeIn: {
+            /** Code */
+            code: string;
+            /** Point Id */
+            point_id?: number | null;
+        };
+        /** HandoverDeskOut */
+        HandoverDeskOut: {
+            point: components["schemas"]["HandoverPointOut"];
+            /** Waiting Drop */
+            waiting_drop: components["schemas"]["HandoverItemOut"][];
+            /** Waiting Pick */
+            waiting_pick: components["schemas"]["HandoverItemOut"][];
+            /** Stored */
+            stored: components["schemas"]["HandoverItemOut"][];
+        };
+        /** HandoverItemOut */
+        HandoverItemOut: {
+            /** Request Id */
+            request_id: number | null;
+            /** Listing Id */
+            listing_id: number;
+            /** Title */
+            title: string;
+            /** Thumb Url */
+            thumb_url: string | null;
+            /** Owner Nickname */
+            owner_nickname: string | null;
+            /** Requester Nickname */
+            requester_nickname: string | null;
+            status: components["schemas"]["RequestStatus"] | null;
+            /** Since */
+            since: string | null;
+            /** Deadline */
+            deadline: string | null;
+        };
+        /** HandoverMatchOut */
+        HandoverMatchOut: {
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "receive" | "give";
+            item: components["schemas"]["HandoverItemOut"];
+        };
+        /**
+         * HandoverOut
+         * @description The handover in progress, as the owner or the requester sees it.
+         */
+        HandoverOut: {
+            /** Request Id */
+            request_id: number;
+            status: components["schemas"]["RequestStatus"];
+            /** Code */
+            code: string | null;
+            /** Deadline */
+            deadline: string | null;
+            /** Other Nickname */
+            other_nickname: string | null;
+        };
+        /** HandoverPointOut */
+        HandoverPointOut: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+        };
         /** HomeOut */
         HomeOut: {
             user: components["schemas"]["UserOut"];
@@ -2073,6 +2659,157 @@ export interface components {
             /** Next Min Points */
             next_min_points: number | null;
         };
+        /** LikeOut */
+        LikeOut: {
+            /** Likes */
+            likes: number;
+            /** Liked */
+            liked: boolean;
+        };
+        /** ListingCardOut */
+        ListingCardOut: {
+            /** Id */
+            id: number;
+            kind: components["schemas"]["ListingKind"];
+            /** Title */
+            title: string;
+            /** Category */
+            category: string;
+            /** Thumb Url */
+            thumb_url: string | null;
+            /** Likes */
+            likes: number;
+            /** Liked */
+            liked: boolean;
+            /** Giveaway */
+            giveaway: boolean;
+            /** Ready At Point */
+            ready_at_point: boolean;
+            /** Pickup Point Id */
+            pickup_point_id: number | null;
+        };
+        /** ListingIn */
+        ListingIn: {
+            kind: components["schemas"]["ListingKind"];
+            /** Title */
+            title: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Category */
+            category: string;
+            /** Condition */
+            condition?: ("new" | "good" | "used") | null;
+            /**
+             * Giveaway
+             * @default false
+             */
+            giveaway: boolean;
+            /** Pickup Point Id */
+            pickup_point_id?: number | null;
+            /** Photo Ids */
+            photo_ids: number[];
+        };
+        /**
+         * ListingKind
+         * @enum {string}
+         */
+        ListingKind: "handmade" | "unneeded";
+        /** ListingOut */
+        ListingOut: {
+            /** Id */
+            id: number;
+            kind: components["schemas"]["ListingKind"];
+            /** Title */
+            title: string;
+            /** Description */
+            description: string;
+            /** Category */
+            category: string;
+            /** Condition */
+            condition: string | null;
+            /** Giveaway */
+            giveaway: boolean;
+            status: components["schemas"]["ListingStatus"];
+            /** Ready At Point */
+            ready_at_point: boolean;
+            /** Likes */
+            likes: number;
+            /** Liked */
+            liked: boolean;
+            /** Is Mine */
+            is_mine: boolean;
+            /** Owner Id */
+            owner_id: number | null;
+            /** Owner Nickname */
+            owner_nickname: string | null;
+            /** Photos */
+            photos: components["schemas"]["PhotoOut"][];
+            point: components["schemas"]["PickupPointOut"] | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Published At */
+            published_at: string | null;
+            /** Reject Reason */
+            reject_reason?: string | null;
+            /** Moderator Note */
+            moderator_note?: string | null;
+            /**
+             * Requests
+             * @default []
+             */
+            requests: components["schemas"]["ListingRequestOut"][];
+            handover?: components["schemas"]["HandoverOut"] | null;
+            my_request?: components["schemas"]["RequestStatus"] | null;
+            /**
+             * Can Request
+             * @default false
+             */
+            can_request: boolean;
+        };
+        /** ListingPageOut */
+        ListingPageOut: {
+            /** Items */
+            items: components["schemas"]["ListingCardOut"][];
+            /** Next Offset */
+            next_offset: number | null;
+        };
+        /** ListingReportIn */
+        ListingReportIn: {
+            /**
+             * Reason
+             * @enum {string}
+             */
+            reason: "personal_info" | "rude" | "forbidden" | "other";
+        };
+        /**
+         * ListingRequestOut
+         * @description A request as its listing's owner sees it.
+         */
+        ListingRequestOut: {
+            /** Id */
+            id: number;
+            /** Requester Id */
+            requester_id: number;
+            /** Nickname */
+            nickname: string | null;
+            status: components["schemas"]["RequestStatus"];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /**
+         * ListingStatus
+         * @enum {string}
+         */
+        ListingStatus: "pending" | "approved" | "rejected" | "reserved" | "at_point" | "given" | "hidden";
         /** LoginIn */
         LoginIn: {
             /** Login */
@@ -2086,6 +2823,158 @@ export interface components {
             token: string;
             setup?: components["schemas"]["TotpSetupOut"] | null;
         };
+        /** MarketCountsOut */
+        MarketCountsOut: {
+            /** Pending */
+            pending: number;
+            /** Reported */
+            reported: number;
+        };
+        /** MarketDecisionIn */
+        MarketDecisionIn: {
+            /**
+             * Reason
+             * @enum {string}
+             */
+            reason: "personal_info" | "face" | "not_eco" | "forbidden" | "bad_photo" | "other";
+            /** Note */
+            note?: string | null;
+        };
+        /** MarketListingOut */
+        MarketListingOut: {
+            /** Id */
+            id: number;
+            /** Title */
+            title: string;
+            kind: components["schemas"]["ListingKind"];
+            status: components["schemas"]["ListingStatus"];
+            /** Giveaway */
+            giveaway: boolean;
+            /** Owner Id */
+            owner_id: number | null;
+            /** Owner Nickname */
+            owner_nickname: string | null;
+            /** Thumb Url */
+            thumb_url: string | null;
+            /** Reports Open */
+            reports_open: number;
+            /**
+             * Submitted At
+             * Format: date-time
+             */
+            submitted_at: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Description */
+            description: string;
+            /** Category */
+            category: string;
+            /** Category Name */
+            category_name: string;
+            /** Condition */
+            condition: string | null;
+            /** Point Name */
+            point_name: string | null;
+            /** Stored At Point */
+            stored_at_point: boolean;
+            /** Reject Reason */
+            reject_reason: string | null;
+            /** Moderator Note */
+            moderator_note: string | null;
+            /** Likes */
+            likes: number;
+            /** Published At */
+            published_at: string | null;
+            /** Reviewed At */
+            reviewed_at: string | null;
+            /** Reviewed By */
+            reviewed_by: string | null;
+            /** Photos */
+            photos: components["schemas"]["MarketPhotoOut"][];
+            /** Requests */
+            requests: components["schemas"]["MarketRequestRowOut"][];
+            /** Reports */
+            reports: components["schemas"]["MarketReportRowOut"][];
+        };
+        /** MarketPhotoOut */
+        MarketPhotoOut: {
+            /** Id */
+            id: number;
+            /** Url */
+            url: string;
+            /** Thumb Url */
+            thumb_url: string;
+            /** Width */
+            width: number;
+            /** Height */
+            height: number;
+        };
+        /** MarketReportRowOut */
+        MarketReportRowOut: {
+            /** Id */
+            id: number;
+            /** Reason */
+            reason: string;
+            status: components["schemas"]["ReportStatus"];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** MarketRequestRowOut */
+        MarketRequestRowOut: {
+            /** Id */
+            id: number;
+            /** Requester Id */
+            requester_id: number;
+            /** Nickname */
+            nickname: string | null;
+            status: components["schemas"]["RequestStatus"];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Decided At */
+            decided_at: string | null;
+            /** Dropped At */
+            dropped_at: string | null;
+            /** Given At */
+            given_at: string | null;
+        };
+        /** MarketRowOut */
+        MarketRowOut: {
+            /** Id */
+            id: number;
+            /** Title */
+            title: string;
+            kind: components["schemas"]["ListingKind"];
+            status: components["schemas"]["ListingStatus"];
+            /** Giveaway */
+            giveaway: boolean;
+            /** Owner Id */
+            owner_id: number | null;
+            /** Owner Nickname */
+            owner_nickname: string | null;
+            /** Thumb Url */
+            thumb_url: string | null;
+            /** Reports Open */
+            reports_open: number;
+            /**
+             * Submitted At
+             * Format: date-time
+             */
+            submitted_at: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
         /** MeUpdate */
         MeUpdate: {
             /** Language */
@@ -2095,6 +2984,51 @@ export interface components {
             reminders_enabled?: boolean | null;
             /** Reminder Time */
             reminder_time?: string | null;
+        };
+        /** MyListingOut */
+        MyListingOut: {
+            /** Id */
+            id: number;
+            kind: components["schemas"]["ListingKind"];
+            /** Title */
+            title: string;
+            status: components["schemas"]["ListingStatus"];
+            /** Thumb Url */
+            thumb_url: string | null;
+            /** Likes */
+            likes: number;
+            /** Waiting Requests */
+            waiting_requests: number;
+            handover_status: components["schemas"]["RequestStatus"] | null;
+            /** Ready At Point */
+            ready_at_point: boolean;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** MyRequestOut */
+        MyRequestOut: {
+            /** Id */
+            id: number;
+            status: components["schemas"]["RequestStatus"];
+            /** Listing Id */
+            listing_id: number;
+            /** Title */
+            title: string;
+            /** Thumb Url */
+            thumb_url: string | null;
+            /** Code */
+            code: string | null;
+            /** Deadline */
+            deadline: string | null;
+            point: components["schemas"]["PickupPointOut"] | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
         };
         /** NicknameActionIn */
         NicknameActionIn: {
@@ -2146,6 +3080,36 @@ export interface components {
         PasswordSetIn: {
             /** Password */
             password: string;
+        };
+        /** PhotoOut */
+        PhotoOut: {
+            /** Id */
+            id: number;
+            /** Url */
+            url: string;
+            /** Thumb Url */
+            thumb_url: string;
+            /** Width */
+            width: number;
+            /** Height */
+            height: number;
+        };
+        /** PickupPointOut */
+        PickupPointOut: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: {
+                [key: string]: unknown;
+            };
+            /** Address */
+            address: {
+                [key: string]: unknown;
+            };
+            /** Hours */
+            hours: {
+                [key: string]: unknown;
+            };
         };
         /** PointsFlagOut */
         PointsFlagOut: {
@@ -2401,6 +3365,11 @@ export interface components {
          * @enum {string}
          */
         ReportStatus: "open" | "resolved" | "rejected";
+        /**
+         * RequestStatus
+         * @enum {string}
+         */
+        RequestStatus: "pending" | "accepted" | "at_point" | "done" | "declined" | "cancelled" | "expired";
         /** ResolveIn */
         ResolveIn: {
             /** Target User Id */
@@ -3634,6 +4603,536 @@ export interface operations {
             };
         };
     };
+    points_api_market_points_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PickupPointOut"][];
+                };
+            };
+        };
+    };
+    browse_api_market_get: {
+        parameters: {
+            query?: {
+                kind?: components["schemas"]["ListingKind"] | null;
+                point?: number | null;
+                giveaway?: boolean | null;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListingPageOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_listing_api_market_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ListingIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListingOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    my_listings_api_market_mine_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyListingOut"][];
+                };
+            };
+        };
+    };
+    my_requests_api_market_requests_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyRequestOut"][];
+                };
+            };
+        };
+    };
+    get_listing_api_market__listing_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listing_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListingOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_listing_api_market__listing_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listing_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ListingIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListingOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_listing_api_market__listing_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listing_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    upload_photo_api_market_photos_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PhotoOut"];
+                };
+            };
+        };
+    };
+    like_api_market__listing_id__like_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listing_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LikeOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    unlike_api_market__listing_id__like_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listing_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LikeOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    report_api_market__listing_id__report_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listing_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ListingReportIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    ask_for_api_market__listing_id__request_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listing_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListingOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    withdraw_request_api_market__listing_id__request_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listing_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListingOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    accept_api_market_requests__request_id__accept_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                request_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListingOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    decline_api_market_requests__request_id__decline_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                request_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListingOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cancel_handover_api_market__listing_id__cancel_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listing_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListingOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    photo_api_media__photo_id___size__get: {
+        parameters: {
+            query: {
+                a: "p" | "o";
+                e: number;
+                s: string;
+            };
+            header?: never;
+            path: {
+                photo_id: number;
+                size: "full" | "thumb";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     record_events_api_events_post: {
         parameters: {
             query?: never;
@@ -4795,6 +6294,408 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AuditPageOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    counts_api_admin_market_counts_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MarketCountsOut"];
+                };
+            };
+        };
+    };
+    listings_api_admin_market_get: {
+        parameters: {
+            query?: {
+                filter?: "pending" | "reported" | "approved" | "rejected" | "hidden" | "handover" | "all";
+                q?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MarketRowOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    listing_detail_api_admin_market__listing_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listing_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MarketListingOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    approve_api_admin_market__listing_id__approve_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listing_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MarketListingOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reject_api_admin_market__listing_id__reject_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listing_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MarketDecisionIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MarketListingOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    hide_api_admin_market__listing_id__hide_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listing_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MarketDecisionIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MarketListingOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    dismiss_reports_api_admin_market__listing_id__dismiss_reports_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listing_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MarketListingOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    handover_points_api_admin_handover_points_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HandoverPointOut"][];
+                };
+            };
+        };
+    };
+    desk_api_admin_handover_get: {
+        parameters: {
+            query?: {
+                point_id?: number | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HandoverDeskOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    lookup_api_admin_handover_lookup_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HandoverCodeIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HandoverMatchOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    receive_api_admin_handover__request_id__receive_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                request_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HandoverCodeIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HandoverItemOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    give_api_admin_handover__request_id__give_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                request_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HandoverCodeIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HandoverItemOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    return_to_owner_api_admin_handover_stored__listing_id__return_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                listing_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */

@@ -8,6 +8,7 @@ from app.api.rating import user_rank
 from app.badges import badge_progress
 from app.daily import current_streak
 from app.deps import CurrentUser, SessionDep
+from app.market import before_account_deletion
 from app.models import (
     ActivityLog,
     AnalyticsEvent,
@@ -84,9 +85,11 @@ async def change_nickname(body: NicknameIn, user: CurrentUser, session: SessionD
 async def delete_me(user: CurrentUser, session: SessionDep) -> Response:
     """Delete the account (TZ 8.8, QM-17).
 
-    The profile, nickname and badges are removed; the activity log stays for statistics
-    with the user id cleared (foreign keys use ON DELETE SET NULL / CASCADE).
+    The profile, nickname, badges and market listings with their photos are removed; the
+    activity log stays for statistics with the user id cleared (foreign keys use ON DELETE
+    SET NULL / CASCADE). Market handovers already under way are finished without the user.
     """
+    await before_account_deletion(session, user)
     await session.delete(user)
     await session.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)

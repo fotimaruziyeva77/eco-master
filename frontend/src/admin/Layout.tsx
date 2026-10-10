@@ -10,12 +10,15 @@ import {
   Lightbulb,
   ListChecks,
   LogOut,
+  MapPin,
   Menu,
+  PackageCheck,
   MessageSquareWarning,
   Recycle,
   ScrollText,
   ShieldAlert,
   ShieldCheck,
+  Store,
   Tags,
   Users,
   type LucideIcon,
@@ -36,6 +39,7 @@ export const TYPE_ICONS: Record<string, LucideIcon> = {
   cards: BookOpen,
   lessons: GraduationCap,
   categories: Tags,
+  "pickup-points": MapPin,
 };
 
 function Link({ to, icon: Icon, label, count }: { to: string; icon: LucideIcon; label: string; count?: number }) {
@@ -53,8 +57,10 @@ export function Layout({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
   const isAdmin = me.role === "admin";
+  const isPoint = me.role === "point";
   // Counts refresh on every page change: items waiting for review, open reports.
-  const types = useLoad(() => adminApi.contentTypes(), [pathname]);
+  const types = useLoad(() => (isPoint ? Promise.resolve([]) : adminApi.contentTypes()), [pathname, isPoint]);
+  const market = useLoad(() => (isPoint ? Promise.resolve(null) : adminApi.marketCounts()), [pathname, isPoint]);
   const reports = useLoad(() => (isAdmin ? adminApi.openReports() : Promise.resolve([])), [pathname, isAdmin]);
 
   useEffect(() => setOpen(false), [pathname]);
@@ -79,17 +85,32 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
         {isAdmin && <Link to="/stats" icon={BarChart3} label="Statistika" />}
 
-        <div className="a-nav-title">Kontent</div>
-        {types.data?.map((t) => (
+        {!isPoint && (
+          <>
+            <div className="a-nav-title">Kontent</div>
+            {types.data?.map((t) => (
+              <Link
+                key={t.key}
+                to={`/content/${t.key}`}
+                icon={TYPE_ICONS[t.key] ?? BookOpen}
+                label={t.title}
+                count={t.counts.review}
+              />
+            ))}
+            <Link to="/schedule" icon={CalendarDays} label="Kunlik jadval" />
+          </>
+        )}
+
+        <div className="a-nav-title">Bozor</div>
+        {!isPoint && (
           <Link
-            key={t.key}
-            to={`/content/${t.key}`}
-            icon={TYPE_ICONS[t.key] ?? BookOpen}
-            label={t.title}
-            count={t.counts.review}
+            to="/market"
+            icon={Store}
+            label="E'lonlar moderatsiyasi"
+            count={market.data ? market.data.pending + market.data.reported : undefined}
           />
-        ))}
-        <Link to="/schedule" icon={CalendarDays} label="Kunlik jadval" />
+        )}
+        {(isAdmin || isPoint) && <Link to="/handover" icon={PackageCheck} label="Topshirish pulti" />}
 
         {isAdmin && (
           <>
