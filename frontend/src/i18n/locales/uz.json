@@ -1,0 +1,26 @@
+{
+  "common": {
+    "loading": "Yuklanmoqda…",
+    "retry": "Qayta urinish",
+    "appName": "Ekoustoz"
+  },
+  "errors": {
+    "title": "Nimadir xato ketdi",
+    "network": "Internet aloqasini tekshiring va qayta urinib ko'ring.",
+    "auth": "Kirishning imkoni bo'lmadi. Ilovani Telegram'dan qayta oching.",
+    "blocked": "Akkauntingiz vaqtincha cheklangan. Savollar bo'lsa, botga yozing.",
+    "unknown": "Kutilmagan xatolik. Birozdan keyin qayta urinib ko'ring."
+  },
+  "openInTelegram": {
+    "title": "Ilovani Telegram'da oching",
+    "text": "Ekoustoz Telegram ichida ishlaydi. Pastdagi tugmani bosing yoki botimizni Telegram'dan qidiring.",
+    "button": "Telegram'da ochish"
+  },
+  "home": {
+    "welcome": "Xush kelibsiz!",
+    "building": "Ilova hozir tayyorlanmoqda. Tez orada bu yerda o'yinlar, topshiriqlar va video darslar paydo bo'ladi.",
+    "language": "Til",
+    "points_one": "{{count}} ball",
+    "points_other": "{{count}} ball"
+  }
+}

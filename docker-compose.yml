@@ -1,0 +1,21 @@
+# Local development services. Production deployment is set up in phase 8.
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: ekoustoz
+      POSTGRES_PASSWORD: ekoustoz
+      POSTGRES_DB: ekoustoz
+    ports:
+      - "127.0.0.1:55440:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./backend/scripts/create-test-db.sql:/docker-entrypoint-initdb.d/create-test-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ekoustoz -d ekoustoz"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  db-data:

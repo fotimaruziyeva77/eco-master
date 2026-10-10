@@ -1,0 +1,26 @@
+{
+  "common": {
+    "loading": "Loading…",
+    "retry": "Try again",
+    "appName": "Ekoustoz"
+  },
+  "errors": {
+    "title": "Something went wrong",
+    "network": "Check your internet connection and try again.",
+    "auth": "Couldn't sign you in. Please reopen the app from Telegram.",
+    "blocked": "Your account is temporarily restricted. Message the bot if you have questions.",
+    "unknown": "Unexpected error. Please try again in a moment."
+  },
+  "openInTelegram": {
+    "title": "Open the app in Telegram",
+    "text": "Ekoustoz runs inside Telegram. Tap the button below or find our bot in Telegram.",
+    "button": "Open in Telegram"
+  },
+  "home": {
+    "welcome": "Welcome!",
+    "building": "The app is being prepared. Games, daily tasks and video lessons will appear here soon.",
+    "language": "Language",
+    "points_one": "{{count}} point",
+    "points_other": "{{count}} points"
+  }
+}
