@@ -12,6 +12,7 @@ dependencies = [
     "pydantic-settings>=2.6",
     "pyjwt>=2.10",
     "aiogram>=3.15",
+    "tzdata>=2024.2",
 ]
 
 [project.optional-dependencies]
@@ -41,3 +42,7 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "ASYNC"]
+
+[tool.ruff.lint.per-file-ignores]
+# Translated content strings read better unbroken.
+"app/seed_data.py" = ["E501"]

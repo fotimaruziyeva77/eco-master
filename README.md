@@ -21,7 +21,8 @@ cd backend
 python -m venv .venv
 .venv/Scripts/python -m pip install -e ".[dev]"    # Linux/macOS: .venv/bin/python
 .venv/Scripts/alembic upgrade head
-.venv/Scripts/python -m uvicorn app.main:app --port 8077 --reload
+.venv/Scripts/python -m app.seed --demo                 # waste types, banned words, demo content
+.venv/Scripts/python -m uvicorn app.main:app --port 8090 --reload --reload-dir app
 
 cd ../frontend
 npm install
@@ -30,7 +31,7 @@ npm run dev                       # http://localhost:5180
 
 In a normal browser the Mini App logs in with a fake Telegram user
 (`ENV=dev` + `DEV_AUTH=true` in `.env`, `VITE_DEV_AUTH=true` in `frontend/.env.development`).
-API docs: http://localhost:8077/api/docs
+API docs: http://localhost:8090/api/docs
 
 ### Opening it inside Telegram
 

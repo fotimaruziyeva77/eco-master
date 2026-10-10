@@ -2,25 +2,163 @@
   "common": {
     "loading": "Loading…",
     "retry": "Try again",
-    "appName": "Ekoustoz"
+    "appName": "Ekoustoz",
+    "back": "Back",
+    "minutes_one": "{{count}} minute",
+    "minutes_other": "{{count}} minutes"
   },
   "errors": {
     "title": "Something went wrong",
     "network": "Check your internet connection and try again.",
     "auth": "Couldn't sign you in. Please reopen the app from Telegram.",
     "blocked": "Your account is temporarily restricted. Message the bot if you have questions.",
-    "unknown": "Unexpected error. Please try again in a moment."
+    "unknown": "Unexpected error. Please try again in a moment.",
+    "notFound": "This page doesn't exist."
   },
   "openInTelegram": {
     "title": "Open the app in Telegram",
     "text": "Ekoustoz runs inside Telegram. Tap the button below or find our bot in Telegram.",
     "button": "Open in Telegram"
   },
+  "nav": {
+    "home": "Home",
+    "learn": "Learn",
+    "games": "Games",
+    "rating": "Rating",
+    "profile": "Profile"
+  },
+  "levels": {
+    "seed": "🌰 Seed",
+    "beginner": "🌱 Eco beginner",
+    "young_ecologist": "🌿 Young ecologist",
+    "helper": "🌳 Ekoustoz helper",
+    "ekoustoz": "🏆 Ekoustoz"
+  },
+  "onboarding": {
+    "step": "Step {{current}} of {{total}}",
+    "language": {
+      "title": "Choose your language",
+      "subtitle": "You can change it later in settings."
+    },
+    "path": {
+      "title": "Who are you?",
+      "subtitle": "We'll tailor the home screen for you. You can change this later in settings.",
+      "student": "Student",
+      "studentHint": "Games, daily tasks and video lessons",
+      "teacher": "Teacher",
+      "teacherHint": "Everything plus ready-made lesson materials",
+      "general": "Parent or other user",
+      "generalHint": "Video lessons and useful tips"
+    },
+    "nickname": {
+      "title": "Pick a nickname",
+      "subtitle": "Other people will see it in the rating.",
+      "label": "Nickname",
+      "placeholder": "For example, Green_Leaf",
+      "hint": "3–20 characters: letters, digits and _",
+      "privacyHint": "Don't use your real first or last name.",
+      "suggest": "🎲 Random nickname",
+      "checking": "Checking…",
+      "available": "✓ This nickname is free",
+      "submit": "Continue"
+    },
+    "nicknameErrors": {
+      "nickname_length": "A nickname must be 3 to 20 characters long.",
+      "nickname_chars": "Use only letters (Latin or Cyrillic), digits and _. Include at least one letter.",
+      "nickname_forbidden": "This nickname isn't allowed. Please choose another one.",
+      "nickname_taken": "This nickname is taken. Try another one.",
+      "unknown": "Couldn't save. Please try again."
+    },
+    "intro": {
+      "slide1Title": "Give waste a second life",
+      "slide1Text": "Learn to sort waste properly and turn it into useful things.",
+      "slide2Title": "Play and earn points",
+      "slide2Text": "A quiz, a sorting game and daily tasks are waiting for you.",
+      "slide3Title": "Level up",
+      "slide3Text": "Collect badges and compete with friends in the rating.",
+      "next": "Next",
+      "skip": "Skip",
+      "start": "Start",
+      "consent": "By continuing you agree to the <policy>privacy policy</policy>."
+    }
+  },
   "home": {
-    "welcome": "Welcome!",
-    "building": "The app is being prepared. Games, daily tasks and video lessons will appear here soon.",
-    "language": "Language",
+    "greeting": "Hi, {{name}}!",
     "points_one": "{{count}} point",
-    "points_other": "{{count}} points"
+    "points_other": "{{count}} points",
+    "toNextLevel_one": "{{count}} point to the next level",
+    "toNextLevel_other": "{{count}} points to the next level",
+    "topLevel": "You've reached the top level!",
+    "streak_one": "🔥 {{count}} day in a row",
+    "streak_other": "🔥 {{count}} days in a row",
+    "tipTitle": "💡 Tip of the day",
+    "quiz": "Quiz",
+    "game": "Sorting game",
+    "wasteTypes": "Types of waste"
+  },
+  "learn": {
+    "title": "Learn",
+    "wasteTypes": "Types of waste",
+    "cards": "Environmental problems",
+    "projects_one": "{{count}} project",
+    "projects_other": "{{count}} projects"
+  },
+  "category": {
+    "empty": "Projects for this section are coming soon."
+  },
+  "project": {
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "safety": {
+      "green": "Kids can do it on their own",
+      "yellow": "With adult supervision",
+      "red": "Adults only"
+    },
+    "safetyTitle": "Safety",
+    "materials": "You will need",
+    "steps": "Steps",
+    "videoSoon": "Video coming soon",
+    "play": "Watch the video",
+    "done": "I did it",
+    "doneWait": "I did it ({{count}} s)",
+    "alreadyDone": "Done ✓",
+    "earned_one": "+{{count}} point! Well done!",
+    "earned_other": "+{{count}} points! Well done!",
+    "doneError": "Couldn't save. Please try again."
+  },
+  "card": {
+    "problem": "Problem",
+    "cause": "Cause",
+    "effect": "Effect",
+    "solution": "Solution",
+    "action": "What can I do?"
+  },
+  "soon": {
+    "title": "Coming soon",
+    "text": "This section will be added in the next stage."
+  },
+  "profile": {
+    "title": "Profile",
+    "language": "Language",
+    "privacy": "Privacy policy"
+  },
+  "privacy": {
+    "title": "Privacy policy",
+    "draft": "Draft. The final text will be published after legal review.",
+    "collectTitle": "What we store",
+    "collectText": "Your Telegram ID, the nickname you choose, your language and your activity in the app (points, completed tasks).",
+    "notCollectTitle": "What we never ask for",
+    "notCollectText": "We don't ask for your real name, phone number, address or photos. Your Telegram name and photo are not stored.",
+    "whyTitle": "Why",
+    "whyText": "To count your points, show the rating and, if you allow it, send reminders.",
+    "whoTitle": "Who can see it",
+    "whoText": "Only your nickname is shown in the rating. Your data is not used for advertising and is never sold.",
+    "deleteTitle": "Deleting your data",
+    "deleteText": "You can ask us to delete your data at any time. For now, message the bot to do this.",
+    "contactTitle": "Contact",
+    "contactText": "If you have questions, message the Ekoustoz bot."
   }
 }

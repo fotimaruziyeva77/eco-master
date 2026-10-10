@@ -59,6 +59,233 @@ export interface paths {
         patch: operations["update_me_api_me_patch"];
         trace?: never;
     };
+    "/api/me/write-access": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Set Write Access
+         * @description Result of Telegram's requestWriteAccess: whether the bot may send reminders (TZ 8.1).
+         */
+        post: operations["set_write_access_api_me_write_access_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/onboarding/language": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Set Language */
+        post: operations["set_language_api_onboarding_language_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/onboarding/path": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Set Path */
+        post: operations["set_path_api_onboarding_path_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/onboarding/nickname-check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Check Nickname */
+        get: operations["check_nickname_api_onboarding_nickname_check_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/onboarding/nickname": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Set Nickname */
+        post: operations["set_nickname_api_onboarding_nickname_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/onboarding/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Complete */
+        post: operations["complete_api_onboarding_complete_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/home": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Home */
+        get: operations["home_api_home_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Categories */
+        get: operations["categories_api_categories_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/categories/{code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Category Detail */
+        get: operations["category_detail_api_categories__code__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/projects/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Project Detail */
+        get: operations["project_detail_api_projects__slug__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/projects/{slug}/done": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Project Done
+         * @description 15 points, once per project (TZ 8.6, QM-06). Retries with the same event id are no-ops.
+         */
+        post: operations["project_done_api_projects__slug__done_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Cards */
+        get: operations["cards_api_cards_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cards/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Card Detail */
+        get: operations["card_detail_api_cards__slug__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/dev/init-data": {
         parameters: {
             query?: never;
@@ -89,30 +316,222 @@ export interface components {
             token: string;
             user: components["schemas"]["UserOut"];
         };
+        /** CardDetailOut */
+        CardDetailOut: {
+            /** Slug */
+            slug: string;
+            /** Title */
+            title: {
+                [key: string]: unknown;
+            };
+            /** Image Url */
+            image_url: string | null;
+            /** Sections */
+            sections: {
+                [key: string]: unknown;
+            };
+        };
+        /** CardSummaryOut */
+        CardSummaryOut: {
+            /** Slug */
+            slug: string;
+            /** Title */
+            title: {
+                [key: string]: unknown;
+            };
+            /** Image Url */
+            image_url: string | null;
+        };
+        /** CategoryDetailOut */
+        CategoryDetailOut: {
+            category: components["schemas"]["CategoryOut"];
+            /** Projects */
+            projects: components["schemas"]["ProjectSummaryOut"][];
+        };
+        /** CategoryOut */
+        CategoryOut: {
+            /** Code */
+            code: string;
+            /** Name */
+            name: {
+                [key: string]: unknown;
+            };
+            /** Icon */
+            icon: string;
+            /** Color */
+            color: string;
+            /** Has Projects */
+            has_projects: boolean;
+            /** Is Game Bin */
+            is_game_bin: boolean;
+            /**
+             * Project Count
+             * @default 0
+             */
+            project_count: number;
+        };
         /** DevInitDataOut */
         DevInitDataOut: {
             /** Init Data */
             init_data: string;
+        };
+        /**
+         * Difficulty
+         * @enum {string}
+         */
+        Difficulty: "easy" | "medium" | "hard";
+        /** DoneIn */
+        DoneIn: {
+            /**
+             * Client Event Id
+             * Format: uuid
+             */
+            client_event_id: string;
+        };
+        /** DoneOut */
+        DoneOut: {
+            /** Awarded */
+            awarded: boolean;
+            /** Points */
+            points: number;
+            /** Points Total */
+            points_total: number;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** HomeOut */
+        HomeOut: {
+            user: components["schemas"]["UserOut"];
+            tip: components["schemas"]["TipOut"] | null;
+            /** Categories */
+            categories: components["schemas"]["CategoryOut"][];
+        };
+        /** LevelOut */
+        LevelOut: {
+            /** Code */
+            code: string;
+            /** Min Points */
+            min_points: number;
+            /** Next Min Points */
+            next_min_points: number | null;
+        };
         /** MeUpdate */
         MeUpdate: {
             /** Language */
             language?: ("uz" | "ru" | "en") | null;
+        };
+        /** NicknameCheckOut */
+        NicknameCheckOut: {
+            /** Ok */
+            ok: boolean;
+            /** Error */
+            error?: string | null;
+        };
+        /** NicknameIn */
+        NicknameIn: {
+            /** Nickname */
+            nickname: string;
+        };
+        /** OnboardingLanguageIn */
+        OnboardingLanguageIn: {
+            /**
+             * Language
+             * @enum {string}
+             */
+            language: "uz" | "ru" | "en";
+        };
+        /** OnboardingPathIn */
+        OnboardingPathIn: {
+            path: components["schemas"]["UserPath"];
         };
         /**
          * OnboardingStep
          * @enum {string}
          */
         OnboardingStep: "language" | "path" | "nickname" | "intro" | "done";
+        /** ProjectDetailOut */
+        ProjectDetailOut: {
+            /** Slug */
+            slug: string;
+            /** Category Code */
+            category_code: string;
+            /** Title */
+            title: {
+                [key: string]: unknown;
+            };
+            difficulty: components["schemas"]["Difficulty"];
+            safety_level: components["schemas"]["SafetyLevel"];
+            /** Duration Min */
+            duration_min: number;
+            /** Poster Url */
+            poster_url: string | null;
+            /** Has Video */
+            has_video: boolean;
+            /** Done */
+            done: boolean;
+            /** Category Name */
+            category_name: {
+                [key: string]: unknown;
+            };
+            /** Category Icon */
+            category_icon: string;
+            /** Materials */
+            materials: {
+                [key: string]: unknown;
+            };
+            /** Steps */
+            steps: {
+                [key: string]: unknown;
+            };
+            /** Safety Text */
+            safety_text: {
+                [key: string]: unknown;
+            } | null;
+            /** Video Url */
+            video_url: string | null;
+        };
+        /** ProjectSummaryOut */
+        ProjectSummaryOut: {
+            /** Slug */
+            slug: string;
+            /** Category Code */
+            category_code: string;
+            /** Title */
+            title: {
+                [key: string]: unknown;
+            };
+            difficulty: components["schemas"]["Difficulty"];
+            safety_level: components["schemas"]["SafetyLevel"];
+            /** Duration Min */
+            duration_min: number;
+            /** Poster Url */
+            poster_url: string | null;
+            /** Has Video */
+            has_video: boolean;
+            /** Done */
+            done: boolean;
+        };
+        /**
+         * SafetyLevel
+         * @enum {string}
+         */
+        SafetyLevel: "green" | "yellow" | "red";
         /** TelegramAuthIn */
         TelegramAuthIn: {
             /** Init Data */
             init_data: string;
+        };
+        /** TipOut */
+        TipOut: {
+            /** Id */
+            id: number;
+            /** Text */
+            text: {
+                [key: string]: unknown;
+            };
         };
         /** UserOut */
         UserOut: {
@@ -140,6 +559,9 @@ export interface components {
              * Format: time
              */
             reminder_time: string;
+            /** Write Access */
+            write_access: boolean;
+            readonly level: components["schemas"]["LevelOut"];
         };
         /**
          * UserPath
@@ -158,6 +580,11 @@ export interface components {
             input?: unknown;
             /** Context */
             ctx?: Record<string, never>;
+        };
+        /** WriteAccessIn */
+        WriteAccessIn: {
+            /** Granted */
+            granted: boolean;
         };
     };
     responses: never;
@@ -263,6 +690,377 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UserOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_write_access_api_me_write_access_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WriteAccessIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_language_api_onboarding_language_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OnboardingLanguageIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_path_api_onboarding_path_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OnboardingPathIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    check_nickname_api_onboarding_nickname_check_get: {
+        parameters: {
+            query: {
+                value: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NicknameCheckOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_nickname_api_onboarding_nickname_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NicknameIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    complete_api_onboarding_complete_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserOut"];
+                };
+            };
+        };
+    };
+    home_api_home_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HomeOut"];
+                };
+            };
+        };
+    };
+    categories_api_categories_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategoryOut"][];
+                };
+            };
+        };
+    };
+    category_detail_api_categories__code__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategoryDetailOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    project_detail_api_projects__slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDetailOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    project_done_api_projects__slug__done_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DoneIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DoneOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cards_api_cards_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CardSummaryOut"][];
+                };
+            };
+        };
+    };
+    card_detail_api_cards__slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CardDetailOut"];
                 };
             };
             /** @description Validation Error */

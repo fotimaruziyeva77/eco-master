@@ -1,15 +1,24 @@
+import uuid
 from datetime import time
-from typing import Literal
+from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, computed_field
 
-from app.models import OnboardingStep, UserPath
+from app.levels import level_for
+from app.models import Difficulty, OnboardingStep, SafetyLevel, UserPath
 
 Language = Literal["uz", "ru", "en"]
+I18nText = dict[str, Any]  # {"uz": ..., "ru": ..., "en": ...}; the Mini App picks the language
 
 
 class TelegramAuthIn(BaseModel):
     init_data: str = Field(min_length=1, max_length=4096)
+
+
+class LevelOut(BaseModel):
+    code: str
+    min_points: int
+    next_min_points: int | None
 
 
 class UserOut(BaseModel):
@@ -25,6 +34,15 @@ class UserOut(BaseModel):
     streak_best: int
     reminders_enabled: bool
     reminder_time: time
+    write_access: bool
+
+    @computed_field
+    @property
+    def level(self) -> LevelOut:
+        lvl = level_for(self.points_total)
+        return LevelOut(
+            code=lvl.code, min_points=lvl.min_points, next_min_points=lvl.next_min_points
+        )
 
 
 class AuthOut(BaseModel):
@@ -36,5 +54,100 @@ class MeUpdate(BaseModel):
     language: Language | None = None
 
 
+class WriteAccessIn(BaseModel):
+    granted: bool
+
+
 class DevInitDataOut(BaseModel):
     init_data: str
+
+
+# ------------------------------------------------------------------ onboarding
+
+
+class OnboardingLanguageIn(BaseModel):
+    language: Language
+
+
+class OnboardingPathIn(BaseModel):
+    path: UserPath
+
+
+class NicknameIn(BaseModel):
+    # Longer than the 20-character limit so the server can answer with a clear error code.
+    nickname: str = Field(max_length=64)
+
+
+class NicknameCheckOut(BaseModel):
+    ok: bool
+    error: str | None = None
+
+
+# --------------------------------------------------------------------- content
+
+
+class CategoryOut(BaseModel):
+    code: str
+    name: I18nText
+    icon: str
+    color: str
+    has_projects: bool
+    is_game_bin: bool
+    project_count: int = 0
+
+
+class ProjectSummaryOut(BaseModel):
+    slug: str
+    category_code: str
+    title: I18nText
+    difficulty: Difficulty
+    safety_level: SafetyLevel
+    duration_min: int
+    poster_url: str | None
+    has_video: bool
+    done: bool
+
+
+class ProjectDetailOut(ProjectSummaryOut):
+    category_name: I18nText
+    category_icon: str
+    materials: I18nText
+    steps: I18nText
+    safety_text: I18nText | None
+    video_url: str | None
+
+
+class CategoryDetailOut(BaseModel):
+    category: CategoryOut
+    projects: list[ProjectSummaryOut]
+
+
+class DoneIn(BaseModel):
+    client_event_id: uuid.UUID
+
+
+class DoneOut(BaseModel):
+    awarded: bool
+    points: int
+    points_total: int
+
+
+class CardSummaryOut(BaseModel):
+    slug: str
+    title: I18nText
+    image_url: str | None
+
+
+class CardDetailOut(CardSummaryOut):
+    sections: I18nText
+
+
+class TipOut(BaseModel):
+    id: int
+    text: I18nText
+
+
+class HomeOut(BaseModel):
+    user: UserOut
+    tip: TipOut | None
+    categories: list[CategoryOut]

@@ -10,7 +10,7 @@ export default defineConfig({
     // ngrok / cloudflared tunnel whose host name changes between runs.
     allowedHosts: true,
     // Same-origin API calls: one tunnel to Vite also reaches the backend.
-    proxy: { "/api": "http://127.0.0.1:8077" },
+    proxy: { "/api": "http://127.0.0.1:8090" },
   },
   test: {
     environment: "node",

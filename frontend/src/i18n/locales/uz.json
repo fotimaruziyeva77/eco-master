@@ -2,25 +2,163 @@
   "common": {
     "loading": "Yuklanmoqda…",
     "retry": "Qayta urinish",
-    "appName": "Ekoustoz"
+    "appName": "Ekoustoz",
+    "back": "Orqaga",
+    "minutes_one": "{{count}} daqiqa",
+    "minutes_other": "{{count}} daqiqa"
   },
   "errors": {
     "title": "Nimadir xato ketdi",
     "network": "Internet aloqasini tekshiring va qayta urinib ko'ring.",
     "auth": "Kirishning imkoni bo'lmadi. Ilovani Telegram'dan qayta oching.",
     "blocked": "Akkauntingiz vaqtincha cheklangan. Savollar bo'lsa, botga yozing.",
-    "unknown": "Kutilmagan xatolik. Birozdan keyin qayta urinib ko'ring."
+    "unknown": "Kutilmagan xatolik. Birozdan keyin qayta urinib ko'ring.",
+    "notFound": "Bunday sahifa topilmadi."
   },
   "openInTelegram": {
     "title": "Ilovani Telegram'da oching",
     "text": "Ekoustoz Telegram ichida ishlaydi. Pastdagi tugmani bosing yoki botimizni Telegram'dan qidiring.",
     "button": "Telegram'da ochish"
   },
+  "nav": {
+    "home": "Bosh sahifa",
+    "learn": "O'rganish",
+    "games": "O'yinlar",
+    "rating": "Reyting",
+    "profile": "Profil"
+  },
+  "levels": {
+    "seed": "🌰 Urug'",
+    "beginner": "🌱 Ekologiya boshlovchisi",
+    "young_ecologist": "🌿 Yosh ekolog",
+    "helper": "🌳 Ekoustoz yordamchisi",
+    "ekoustoz": "🏆 Ekoustoz"
+  },
+  "onboarding": {
+    "step": "{{current}}-qadam / {{total}}",
+    "language": {
+      "title": "Tilni tanlang",
+      "subtitle": "Keyin sozlamalarda o'zgartirish mumkin."
+    },
+    "path": {
+      "title": "Siz kimsiz?",
+      "subtitle": "Bosh sahifani sizga moslashtiramiz. Keyin sozlamalarda o'zgartirish mumkin.",
+      "student": "O'quvchi",
+      "studentHint": "O'yinlar, topshiriqlar va video darslar",
+      "teacher": "O'qituvchi",
+      "teacherHint": "Hammasi va dars uchun tayyor materiallar",
+      "general": "Ota-ona yoki boshqa foydalanuvchi",
+      "generalHint": "Video darslar va foydali maslahatlar"
+    },
+    "nickname": {
+      "title": "Taxallus o'ylab toping",
+      "subtitle": "U reytingda boshqalarga ko'rinadi.",
+      "label": "Taxallus",
+      "placeholder": "Masalan, Yashil_Barg",
+      "hint": "3–20 belgi: harflar, raqamlar va _",
+      "privacyHint": "Haqiqiy ism-familiyangizni yozmang.",
+      "suggest": "🎲 Tasodifiy taxallus",
+      "checking": "Tekshirilmoqda…",
+      "available": "✓ Bu taxallus bo'sh",
+      "submit": "Davom etish"
+    },
+    "nicknameErrors": {
+      "nickname_length": "Taxallus 3 tadan 20 tagacha belgidan iborat bo'lishi kerak.",
+      "nickname_chars": "Faqat harflar (lotin yoki kirill), raqamlar va _ ishlating. Kamida bitta harf bo'lsin.",
+      "nickname_forbidden": "Bu taxallusni ishlatib bo'lmaydi. Boshqasini tanlang.",
+      "nickname_taken": "Bu taxallus band. Boshqasini o'ylab toping.",
+      "unknown": "Saqlab bo'lmadi. Qayta urinib ko'ring."
+    },
+    "intro": {
+      "slide1Title": "Chiqindiga ikkinchi hayot bering",
+      "slide1Text": "Chiqindini to'g'ri saralashni va undan foydali buyumlar yasashni o'rganing.",
+      "slide2Title": "O'ynang va ball to'plang",
+      "slide2Text": "Viktorina, saralash o'yini va kunlik topshiriqlar sizni kutmoqda.",
+      "slide3Title": "Darajangizni oshiring",
+      "slide3Text": "Nishonlar oling va reytingda do'stlaringiz bilan bellashing.",
+      "next": "Keyingi",
+      "skip": "O'tkazib yuborish",
+      "start": "Boshlash",
+      "consent": "Davom etish orqali <policy>maxfiylik siyosati</policy>ga rozilik bildirasiz."
+    }
+  },
   "home": {
-    "welcome": "Xush kelibsiz!",
-    "building": "Ilova hozir tayyorlanmoqda. Tez orada bu yerda o'yinlar, topshiriqlar va video darslar paydo bo'ladi.",
-    "language": "Til",
+    "greeting": "Salom, {{name}}!",
     "points_one": "{{count}} ball",
-    "points_other": "{{count}} ball"
+    "points_other": "{{count}} ball",
+    "toNextLevel_one": "Keyingi darajagacha {{count}} ball",
+    "toNextLevel_other": "Keyingi darajagacha {{count}} ball",
+    "topLevel": "Siz eng yuqori darajadasiz!",
+    "streak_one": "🔥 {{count}} kun ketma-ket",
+    "streak_other": "🔥 {{count}} kun ketma-ket",
+    "tipTitle": "💡 Kun maslahati",
+    "quiz": "Viktorina",
+    "game": "Saralash o'yini",
+    "wasteTypes": "Chiqindi turlari"
+  },
+  "learn": {
+    "title": "O'rganish",
+    "wasteTypes": "Chiqindi turlari",
+    "cards": "Ekologik muammolar",
+    "projects_one": "{{count}} loyiha",
+    "projects_other": "{{count}} loyiha"
+  },
+  "category": {
+    "empty": "Bu bo'limga loyihalar tez orada qo'shiladi."
+  },
+  "project": {
+    "difficulty": {
+      "easy": "Oson",
+      "medium": "O'rtacha",
+      "hard": "Qiyin"
+    },
+    "safety": {
+      "green": "Bolalar mustaqil qila oladi",
+      "yellow": "Kattalar nazorati bilan",
+      "red": "Faqat kattalar"
+    },
+    "safetyTitle": "Xavfsizlik",
+    "materials": "Kerakli materiallar",
+    "steps": "Qadamlar",
+    "videoSoon": "Video tez orada qo'shiladi",
+    "play": "Videoni ko'rish",
+    "done": "Bajardim",
+    "doneWait": "Bajardim ({{count}} s)",
+    "alreadyDone": "Bajarilgan ✓",
+    "earned_one": "+{{count}} ball! Barakalla!",
+    "earned_other": "+{{count}} ball! Barakalla!",
+    "doneError": "Saqlab bo'lmadi. Qayta urinib ko'ring."
+  },
+  "card": {
+    "problem": "Muammo",
+    "cause": "Sabab",
+    "effect": "Oqibat",
+    "solution": "Yechim",
+    "action": "Men nima qila olaman?"
+  },
+  "soon": {
+    "title": "Tez orada",
+    "text": "Bu bo'lim keyingi bosqichda qo'shiladi."
+  },
+  "profile": {
+    "title": "Profil",
+    "language": "Til",
+    "privacy": "Maxfiylik siyosati"
+  },
+  "privacy": {
+    "title": "Maxfiylik siyosati",
+    "draft": "Qoralama. Yakuniy matn yurist tekshiruvidan keyin e'lon qilinadi.",
+    "collectTitle": "Qanday ma'lumot saqlanadi",
+    "collectText": "Telegram ID raqamingiz, siz tanlagan taxallus, til va ilovadagi faolligingiz (ball, bajarilgan topshiriqlar).",
+    "notCollectTitle": "Nima so'ralmaydi",
+    "notCollectText": "Haqiqiy ism, telefon raqami, manzil va suratlar so'ralmaydi. Telegram'dagi ismingiz va rasmingiz saqlanmaydi.",
+    "whyTitle": "Nima uchun",
+    "whyText": "Ballaringizni hisoblash, reytingni ko'rsatish va siz ruxsat bergan bo'lsangiz, eslatma yuborish uchun.",
+    "whoTitle": "Kim ko'radi",
+    "whoText": "Reytingda faqat taxallusingiz ko'rinadi. Ma'lumotlaringiz reklama uchun ishlatilmaydi va sotilmaydi.",
+    "deleteTitle": "Ma'lumotni o'chirish",
+    "deleteText": "Istalgan vaqtda ma'lumotlaringizni o'chirishni so'rashingiz mumkin. Hozircha buning uchun botga yozing.",
+    "contactTitle": "Bog'lanish",
+    "contactText": "Savollar bo'lsa, Ekoustoz botiga yozing."
   }
 }
