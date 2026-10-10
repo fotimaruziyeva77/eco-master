@@ -1,3 +1,4 @@
+import { CircleCheck, Lock, ShieldCheck } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -68,48 +69,59 @@ export function NicknameStep({ onDone }: { onDone: () => void }) {
   const errorCode = check.state === "error" ? check.code : null;
 
   return (
-    <form onSubmit={(e) => void submit(e)} noValidate>
-      <h1>{t("onboarding.nickname.title")}</h1>
-      <p className="hint">{t("onboarding.nickname.subtitle")}</p>
+    <form className="stack stack--lg" onSubmit={(e) => void submit(e)} noValidate>
+      <div className="stack">
+        <div className="row row--between row--wrap">
+          <h1>{t("onboarding.nickname.title")}</h1>
+          <span className="chip chip--sm">
+            <Lock size={12} /> {t("onboarding.nickname.anonymous")}
+          </span>
+        </div>
+        <p className="hint">{t("onboarding.nickname.subtitle")}</p>
+      </div>
 
-      <label className="field">
-        <span className="field__label">{t("onboarding.nickname.label")}</span>
-        <input
-          className={errorCode ? "input is-invalid" : "input"}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder={t("onboarding.nickname.placeholder")}
-          maxLength={32}
-          autoComplete="off"
-          autoCapitalize="off"
-          spellCheck={false}
-          aria-invalid={Boolean(errorCode)}
-          aria-describedby="nickname-status"
-        />
-      </label>
+      <div className="card stack">
+        <label className="field">
+          <span className="field__label">{t("onboarding.nickname.label")}</span>
+          <span className={errorCode ? "input-wrap is-invalid" : "input-wrap"}>
+            <span className="input-wrap__prefix" aria-hidden="true">
+              @
+            </span>
+            <input
+              className="input"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder={t("onboarding.nickname.placeholder")}
+              maxLength={32}
+              autoComplete="off"
+              autoCapitalize="off"
+              spellCheck={false}
+              aria-invalid={Boolean(errorCode)}
+              aria-describedby="nickname-status"
+            />
+            {check.state === "ok" && <CircleCheck size={22} className="ok-text" aria-hidden="true" />}
+          </span>
+        </label>
+        <p id="nickname-status" className="field__status" aria-live="polite">
+          {errorCode && <span className="error-text">{t(`onboarding.nicknameErrors.${errorCode || "unknown"}`)}</span>}
+          {check.state === "checking" && <span className="hint">{t("onboarding.nickname.checking")}</span>}
+          {check.state === "ok" && <span className="ok-text">{t("onboarding.nickname.available")}</span>}
+        </p>
+        <p className="hint small row" style={{ alignItems: "flex-start" }}>
+          <ShieldCheck size={16} style={{ flex: "none", marginTop: 1 }} /> {t("onboarding.nickname.hint")}{" "}
+          {t("onboarding.nickname.privacyHint")}
+        </p>
+        <button
+          type="button"
+          className="btn btn--soft btn--sm"
+          style={{ alignSelf: "flex-start" }}
+          onClick={() => setValue(randomNickname(pickLanguage(i18n.language)))}
+        >
+          {t("onboarding.nickname.suggest")}
+        </button>
+      </div>
 
-      <p id="nickname-status" className="field__status" aria-live="polite">
-        {errorCode && (
-          <span className="error-text">{t(`onboarding.nicknameErrors.${errorCode || "unknown"}`)}</span>
-        )}
-        {check.state === "checking" && <span className="hint">{t("onboarding.nickname.checking")}</span>}
-        {check.state === "ok" && <span className="ok-text">{t("onboarding.nickname.available")}</span>}
-        {check.state === "idle" && <span className="hint">{t("onboarding.nickname.hint")}</span>}
-      </p>
-      <p className="hint small">🔒 {t("onboarding.nickname.privacyHint")}</p>
-
-      <button
-        type="button"
-        className="button button--secondary"
-        onClick={() => setValue(randomNickname(pickLanguage(i18n.language)))}
-      >
-        {t("onboarding.nickname.suggest")}
-      </button>
-      <button
-        type="submit"
-        className="button button--block"
-        disabled={saving || Boolean(errorCode) || !value.trim()}
-      >
+      <button type="submit" className="btn btn--block" disabled={saving || Boolean(errorCode) || !value.trim()}>
         {t("onboarding.nickname.submit")}
       </button>
     </form>

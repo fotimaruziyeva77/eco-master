@@ -1,7 +1,9 @@
+import { ArrowRight, BellRing } from "lucide-react";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
 import { api } from "../../api/client";
+import { Toggle } from "../../components/ui";
 import { useUser } from "../../state/user";
 import { haptic, requestWriteAccess } from "../../telegram";
 
@@ -15,6 +17,7 @@ export function IntroStep({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
   const { t } = useTranslation();
   const { user, setUser } = useUser();
   const [slide, setSlide] = useState(0);
+  const [reminders, setReminders] = useState(true);
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
   const isLast = slide === SLIDES.length - 1;
@@ -25,9 +28,10 @@ export function IntroStep({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
     setFailed(false);
     try {
       // Reminders need the user's permission for the bot to write (TZ 8.1). Declining is fine.
-      if (!user.write_access && (await requestWriteAccess())) {
+      if (reminders && !user.write_access && (await requestWriteAccess())) {
         await api.setWriteAccess(true);
       }
+      await api.updateMe({ reminders_enabled: reminders });
       const done = await api.onboardingComplete();
       haptic.success();
       setUser(done);
@@ -41,18 +45,31 @@ export function IntroStep({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
   return (
     <section className="intro">
       <div className="intro__slide" key={slide}>
-        <div className="emoji emoji--large" aria-hidden="true">
+        <div className="intro__art" aria-hidden="true">
           {current.icon}
         </div>
         <h1>{t(current.title)}</h1>
         <p className="hint">{t(current.text)}</p>
       </div>
 
-      <div className="dots dots--center" aria-hidden="true">
+      <div className="dots dots--center" aria-hidden="true" style={{ margin: "16px 0" }}>
         {SLIDES.map((s, i) => (
           <span key={s.title} className={i === slide ? "dot is-active" : "dot"} />
         ))}
       </div>
+
+      {isLast && (
+        <div className="card card--soft row" style={{ marginBottom: 16, gap: 12 }}>
+          <span className="icon-tile icon-tile--amber" aria-hidden="true">
+            <BellRing size={20} />
+          </span>
+          <span className="list-row__text">
+            <strong>{t("onboarding.intro.remindersTitle")}</strong>
+            <span className="hint small">{t("onboarding.intro.remindersText")}</span>
+          </span>
+          <Toggle checked={reminders} onChange={setReminders} label={t("onboarding.intro.remindersTitle")} />
+        </div>
+      )}
 
       {failed && (
         <p className="error-text" role="alert">
@@ -60,14 +77,14 @@ export function IntroStep({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
         </p>
       )}
 
-      <div className="intro__actions">
+      <div className="stack">
         <button
           type="button"
-          className="button button--block"
+          className="btn btn--block"
           disabled={busy}
           onClick={() => (isLast ? void finish() : setSlide(slide + 1))}
         >
-          {isLast ? t("onboarding.intro.start") : t("onboarding.intro.next")}
+          {isLast ? `${t("onboarding.intro.start")} 🌱` : t("onboarding.intro.next")} <ArrowRight size={20} />
         </button>
         {!isLast && (
           <button type="button" className="link-button" disabled={busy} onClick={() => void finish()}>
@@ -76,7 +93,7 @@ export function IntroStep({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
         )}
       </div>
 
-      <p className="hint small consent">
+      <p className="hint small consent" style={{ marginTop: 12 }}>
         <Trans
           i18nKey="onboarding.intro.consent"
           components={{ policy: <button type="button" className="link-inline" onClick={onOpenPrivacy} /> }}

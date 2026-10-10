@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import auth, content, dev, games, health, me, onboarding
+from app.api import auth, content, daily, dev, games, health, me, onboarding, rating
 from app.config import get_settings
 
 
@@ -23,7 +23,7 @@ def create_app() -> FastAPI:
         allow_headers=["Authorization", "Content-Type"],
     )
 
-    routers = (health, auth, me, onboarding, content, games)
+    routers = (health, auth, me, onboarding, content, games, daily, rating)
     for module in routers:
         app.include_router(module.router, prefix="/api")
     if settings.dev_auth_enabled:

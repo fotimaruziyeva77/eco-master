@@ -1,3 +1,4 @@
+import { Play, VolumeX } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -27,7 +28,7 @@ export function VideoPlayer({ url, poster, icon, onEnded }: Props) {
         <span className="video__icon" aria-hidden="true">
           {icon}
         </span>
-        <span className="hint">🎬 {t("project.videoSoon")}</span>
+        <span className="strong">🎬 {t("project.videoSoon")}</span>
       </div>
     );
   }
@@ -40,13 +41,19 @@ export function VideoPlayer({ url, poster, icon, onEnded }: Props) {
         className="video video--poster"
         style={poster ? { backgroundImage: `url(${poster})` } : undefined}
         onClick={() => (source.kind === "link" ? openExternal(source.url) : setPlaying(true))}
+        aria-label={t("project.play")}
       >
         {!poster && (
           <span className="video__icon" aria-hidden="true">
             {icon}
           </span>
         )}
-        <span className="video__play">▶ {t("project.play")}</span>
+        <span className="video__play" aria-hidden="true">
+          <Play size={30} fill="currentColor" />
+        </span>
+        <span className="video__caption">
+          <VolumeX size={14} /> {t("project.silentVideo")}
+        </span>
       </button>
     );
   }

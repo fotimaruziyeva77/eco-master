@@ -8,13 +8,13 @@ export function OpenInTelegramScreen() {
   const link = telegramAppLink();
   return (
     <main className="screen screen--center">
-      <div className="emoji" aria-hidden="true">
+      <div className="intro__art" aria-hidden="true">
         🌱
       </div>
       <h1>{t("openInTelegram.title")}</h1>
       <p className="hint">{t("openInTelegram.text")}</p>
       {link && (
-        <a className="button" href={link}>
+        <a className="btn" href={link} style={{ marginTop: 12 }}>
           {t("openInTelegram.button")}
         </a>
       )}

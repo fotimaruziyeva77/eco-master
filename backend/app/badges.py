@@ -5,6 +5,7 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import ActivityLog, Badge, Category, ContentStatus, Project, User, UserBadge
+from app.schemas import BadgeOut
 
 QUIZ_CHAMPION_ANSWERS = 50
 SORTING_MASTER_SORTS = 100
@@ -28,8 +29,8 @@ async def _count(session: AsyncSession, user_id: int, action: str) -> int:
     )
 
 
-async def _mastered_categories(session: AsyncSession, user_id: int) -> set[str]:
-    """Waste types where the user has done every published project (and there is at least one)."""
+async def category_progress(session: AsyncSession, user_id: int) -> dict[str, tuple[int, int]]:
+    """Per waste type: (projects done by the user, published projects)."""
     done = (
         select(ActivityLog.object_id)
         .where(ActivityLog.user_id == user_id, ActivityLog.action == "project_done")
@@ -38,14 +39,34 @@ async def _mastered_categories(session: AsyncSession, user_id: int) -> set[str]:
     rows = await session.execute(
         select(
             Category.code,
-            func.count(Project.id),
             func.count(Project.id).filter(cast(Project.id, String).in_(done)),
+            func.count(Project.id),
         )
         .join(Project, Project.category_id == Category.id)
         .where(Project.status == ContentStatus.PUBLISHED)
         .group_by(Category.code)
     )
-    return {code for code, total, finished in rows.all() if total > 0 and finished == total}
+    return {code: (finished, total) for code, finished, total in rows.all()}
+
+
+async def badge_progress(session: AsyncSession, user: User) -> dict[str, tuple[int, int]]:
+    """(current, target) per badge, for progress bars in the profile."""
+    categories = await category_progress(session, user.id)
+    progress = {
+        "first_step": (1 if user.points_total > 0 else 0, 1),
+        "streak_7": (min(user.streak_best, STREAK_BADGE_DAYS), STREAK_BADGE_DAYS),
+        "quiz_champion": (
+            min(await _count(session, user.id, "quiz_correct"), QUIZ_CHAMPION_ANSWERS),
+            QUIZ_CHAMPION_ANSWERS,
+        ),
+        "sorting_master": (
+            min(await _count(session, user.id, "game_correct"), SORTING_MASTER_SORTS),
+            SORTING_MASTER_SORTS,
+        ),
+    }
+    for code, category in CATEGORY_MASTERS.items():
+        progress[code] = categories.get(category, (0, 0))
+    return progress
 
 
 async def earned_badge_codes(session: AsyncSession, user: User) -> set[str]:
@@ -58,8 +79,12 @@ async def earned_badge_codes(session: AsyncSession, user: User) -> set[str]:
         codes.add("quiz_champion")
     if await _count(session, user.id, "game_correct") >= SORTING_MASTER_SORTS:
         codes.add("sorting_master")
-    mastered = await _mastered_categories(session, user.id)
-    codes.update(code for code, category in CATEGORY_MASTERS.items() if category in mastered)
+    categories = await category_progress(session, user.id)
+    codes.update(
+        code
+        for code, category in CATEGORY_MASTERS.items()
+        if (progress := categories.get(category)) and progress[1] > 0 and progress[0] == progress[1]
+    )
     return codes
 
 
@@ -83,3 +108,9 @@ async def award_badges(session: AsyncSession, user_id: int) -> list[Badge]:
     )
     new_ids = set(inserted.all())
     return sorted((b for b in badges if b.id in new_ids), key=lambda b: b.sort_order)
+
+
+def badges_out(badges: list[Badge]) -> list[BadgeOut]:
+    return [
+        BadgeOut(code=b.code, name=b.name, description=b.description, icon=b.icon) for b in badges
+    ]

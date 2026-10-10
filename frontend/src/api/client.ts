@@ -20,6 +20,12 @@ export type QuizAnswer = Schemas["QuizAnswerOut"];
 export type GameRound = Schemas["GameRoundOut"];
 export type GameItem = Schemas["GameItemOut"];
 export type GameAnswer = Schemas["GameAnswerOut"];
+export type Daily = Schemas["DailyOut"];
+export type DailyDone = Schemas["DailyDoneOut"];
+export type Leaderboard = Schemas["LeaderboardOut"];
+export type LeaderboardEntry = Schemas["LeaderboardEntryOut"];
+export type Stats = Schemas["StatsOut"];
+export type Period = Leaderboard["period"];
 
 let sessionToken: string | null = null;
 
@@ -48,6 +54,7 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
     }
     throw new ApiError(response.status, code);
   }
+  if (response.status === 204) return undefined as T;
   return (await response.json()) as T;
 }
 
@@ -104,4 +111,13 @@ export const api = {
   gameRound: () => post<GameRound>("/game/rounds"),
   gameAnswer: (roundToken: string, itemId: number, bin: string | null) =>
     post<GameAnswer>("/game/answer", { round_token: roundToken, item_id: itemId, bin }),
+
+  daily: () => request<Daily>("/daily"),
+  dailyDone: (clientEventId: string) =>
+    post<DailyDone>("/daily/done", { client_event_id: clientEventId }),
+  leaderboard: (period: Period) => request<Leaderboard>(`/leaderboard?period=${period}`),
+  report: (targetUserId: number) => post<{ ok: boolean }>("/reports", { target_user_id: targetUserId }),
+  myStats: () => request<Stats>("/me/stats"),
+  changeNickname: (nickname: string) => post<User>("/me/nickname", { nickname }),
+  deleteMe: () => request<void>("/me", { method: "DELETE" }),
 };

@@ -5,7 +5,9 @@
     "appName": "Ekoustoz",
     "back": "Back",
     "minutes_one": "{{count}} minute",
-    "minutes_other": "{{count}} minutes"
+    "minutes_other": "{{count}} minutes",
+    "cancel": "Cancel",
+    "save": "Save"
   },
   "errors": {
     "title": "Something went wrong",
@@ -28,11 +30,11 @@
     "profile": "Profile"
   },
   "levels": {
-    "seed": "🌰 Seed",
-    "beginner": "🌱 Eco beginner",
-    "young_ecologist": "🌿 Young ecologist",
-    "helper": "🌳 Ekoustoz helper",
-    "ekoustoz": "🏆 Ekoustoz"
+    "seed": "Seed",
+    "beginner": "Eco beginner",
+    "young_ecologist": "Young ecologist",
+    "helper": "Ekoustoz helper",
+    "ekoustoz": "Ekoustoz"
   },
   "onboarding": {
     "step": "Step {{current}} of {{total}}",
@@ -44,23 +46,27 @@
       "title": "Who are you?",
       "subtitle": "We'll tailor the home screen for you. You can change this later in settings.",
       "student": "Student",
-      "studentHint": "Games, daily tasks and video lessons",
+      "studentHint": "Daily tasks, fun games, badges and the rating.",
       "teacher": "Teacher",
-      "teacherHint": "Everything plus ready-made lesson materials",
+      "teacherHint": "Ready-made 45-minute lesson plans and PDF materials.",
       "general": "Parent or other user",
-      "generalHint": "Video lessons and useful tips"
+      "generalHint": "Cutting waste at home, handy DIY lessons and tips.",
+      "studentTag": "Ages 10–15",
+      "teacherTag": "Lessons",
+      "generalTag": "At home"
     },
     "nickname": {
-      "title": "Pick a nickname",
-      "subtitle": "Other people will see it in the rating.",
+      "title": "Choose your nickname",
+      "subtitle": "This is how you'll appear in the rating and lessons.",
       "label": "Nickname",
-      "placeholder": "For example, Green_Leaf",
-      "hint": "3–20 characters: letters, digits and _",
-      "privacyHint": "Don't use your real first or last name.",
+      "placeholder": "Green_Leaf",
+      "hint": "3–20 characters: letters, digits and _.",
+      "privacyHint": "No real name or phone number needed.",
       "suggest": "🎲 Random nickname",
       "checking": "Checking…",
       "available": "✓ This nickname is free",
-      "submit": "Continue"
+      "submit": "Continue",
+      "anonymous": "Anonymous & safe"
     },
     "nicknameErrors": {
       "nickname_length": "A nickname must be 3 to 20 characters long.",
@@ -79,29 +85,57 @@
       "next": "Next",
       "skip": "Skip",
       "start": "Start",
-      "consent": "By continuing you agree to the <policy>privacy policy</policy>."
-    }
+      "consent": "By continuing you agree to the <policy>privacy policy</policy>.",
+      "remindersTitle": "Reminders to keep your streak",
+      "remindersText": "One reminder a day from the bot."
+    },
+    "welcome": "Welcome!",
+    "headline": "Let's learn to protect nature",
+    "subheadline": "With Ekoustoz, small steps every day add up to big changes."
   },
   "home": {
     "greeting": "Hi, {{name}}!",
     "points_one": "{{count}} point",
     "points_other": "{{count}} points",
-    "toNextLevel_one": "{{count}} point to the next level",
-    "toNextLevel_other": "{{count}} points to the next level",
     "topLevel": "You've reached the top level!",
     "streak_one": "🔥 {{count}} day in a row",
     "streak_other": "🔥 {{count}} days in a row",
-    "tipTitle": "💡 Tip of the day",
-    "quiz": "Quiz",
+    "tipTitle": "Tip of the day",
+    "quiz": "Eco quiz",
     "game": "Sorting game",
-    "wasteTypes": "Types of waste"
+    "wasteTypes": "Waste types and DIY lessons",
+    "subtitle": "What will we do for nature today?",
+    "stage": "Stage {{n}}",
+    "filled": "{{percent}}% complete",
+    "nextLevel": "Next: {{name}}",
+    "streakStart": "Start a streak!",
+    "streakStartHint": "Do today's task — 7 days in a row earns +50 points.",
+    "taskTitle": "Today's task",
+    "taskDeadline": "Until 23:59 today",
+    "taskDone": "Done",
+    "quickGames": "Quick games",
+    "all": "All",
+    "sortChip": "+2 points each",
+    "sortHint": "Put it in the right bin",
+    "quizChip": "10 questions",
+    "quizHint": "Test what you know",
+    "wasteTypesHint": "Help nature with your own hands",
+    "start": "Start",
+    "pointsWord_one": "point",
+    "pointsWord_other": "points",
+    "streakTitle_one": "{{count}}-day streak!",
+    "streakTitle_other": "{{count}}-day streak!",
+    "streakBonus_one": "{{count}} more day to the +{{points}} bonus",
+    "streakBonus_other": "{{count}} more days to the +{{points}} bonus"
   },
   "learn": {
     "title": "Learn",
     "wasteTypes": "Types of waste",
     "cards": "Environmental problems",
     "projects_one": "{{count}} project",
-    "projects_other": "{{count}} projects"
+    "projects_other": "{{count}} projects",
+    "subtitle": "Learn to give waste a second life.",
+    "cardHint": "Problem, cause and solution"
   },
   "category": {
     "empty": "Projects for this section are coming soon."
@@ -117,9 +151,9 @@
       "yellow": "With adult supervision",
       "red": "Adults only"
     },
-    "safetyTitle": "Safety",
+    "safetyTitle": "Safety rule",
     "materials": "You will need",
-    "steps": "Steps",
+    "steps": "Step-by-step guide",
     "videoSoon": "Video coming soon",
     "play": "Watch the video",
     "done": "I did it",
@@ -127,23 +161,61 @@
     "alreadyDone": "Done ✓",
     "earned_one": "+{{count}} point! Well done!",
     "earned_other": "+{{count}} points! Well done!",
-    "doneError": "Couldn't save. Please try again."
+    "doneError": "Couldn't save. Please try again.",
+    "title": "Project",
+    "categoryProject": "{{name}} project",
+    "safetyShort": {
+      "green": "Easy for kids",
+      "yellow": "With an adult",
+      "red": "Adults only"
+    },
+    "ready": "{{done}}/{{total}} ready",
+    "silentVideo": "Silent video (steps are in the text)",
+    "doneCta": "I did it (+{{count}} points)",
+    "doneCount_one": "Made {{count}} time",
+    "doneCount_other": "Made {{count}} times"
   },
   "card": {
     "problem": "Problem",
     "cause": "Cause",
     "effect": "Effect",
     "solution": "Solution",
-    "action": "What can I do?"
-  },
-  "soon": {
-    "title": "Coming soon",
-    "text": "This section will be added in the next stage."
+    "action": "What can I do?",
+    "position": "Card {{current}}/{{total}}",
+    "chain": "Cause-and-effect chain",
+    "quizTitle": "Test your knowledge?",
+    "quizText": "Answer the questions in the quiz.",
+    "readTime_one": "{{count}} min read",
+    "readTime_other": "{{count}} min read"
   },
   "profile": {
-    "title": "Profile",
     "language": "Language",
-    "privacy": "Privacy policy"
+    "privacy": "Privacy policy",
+    "rank": "#{{rank}} place",
+    "streak": "Current streak",
+    "tasks": "Tasks done",
+    "projects": "DIY projects made",
+    "sorted": "Items sorted",
+    "accuracy": "{{percent}}% accurate",
+    "settings": "Settings",
+    "nickname": "Nickname",
+    "nicknameRule": "You can change it once every 30 days. 3–20 characters: letters, digits and _.",
+    "nicknameLocked": "You can change your nickname after {{date}}.",
+    "nicknameTooSoon": "The nickname can be changed once every 30 days.",
+    "role": "Role",
+    "reminders": "Daily reminders",
+    "reminderAt": "Every day at",
+    "remindersOff": "Off",
+    "remindersNeedBot": "Send /start to the bot to get reminders.",
+    "delete": "Delete my data",
+    "deleteTitle": "Delete all your data?",
+    "deleteText": "Your profile, points and badges will be deleted for good. This can't be undone.",
+    "deleteConfirm": "Yes, delete",
+    "deleted": "Your data has been deleted",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days",
+    "best_one": "Best: {{count}} day",
+    "best_other": "Best: {{count}} days"
   },
   "privacy": {
     "title": "Privacy policy",
@@ -157,7 +229,7 @@
     "whoTitle": "Who can see it",
     "whoText": "Only your nickname is shown in the rating. Your data is not used for advertising and is never sold.",
     "deleteTitle": "Deleting your data",
-    "deleteText": "You can ask us to delete your data at any time. For now, message the bot to do this.",
+    "deleteText": "You can delete your data at any time: Profile → \"Delete my data\".",
     "contactTitle": "Contact",
     "contactText": "If you have questions, message the Ekoustoz bot."
   },
@@ -168,28 +240,33 @@
     "quizText_other": "{{count}} questions: test what you know",
     "sortTitle": "Put the waste in the right bin",
     "sortText": "Drop each item into the right bin and learn to sort.",
-    "todayPoints": "Today: {{points}} / {{cap}} points",
     "quickMode": "⚡ Quick mode (10 seconds per item)",
     "play": "Play",
-    "empty": "No questions have been added for this game yet."
+    "empty": "No questions have been added for this game yet.",
+    "quizPoints": "+5 points per correct answer",
+    "dailyLimit": "Daily limit: {{points}} / {{cap}} points"
   },
   "quiz": {
     "chooseTopic": "Choose a topic",
     "mixed": "Mixed",
-    "questionOf": "Question {{current}} of {{total}}",
     "next": "Next question",
     "finish": "See the result",
-    "correct": "Correct!",
-    "wrong": "Wrong",
+    "correct": "Well done, correct!",
+    "wrong": "Oops, not quite",
     "alreadyEarned": "You already earned points for this question.",
     "answerError": "Your answer wasn't sent. Check the internet and try again.",
     "resultTitle": "Result",
     "resultScore": "{{correct}} of {{total}} correct",
     "playAgain": "Play again",
-    "backToGames": "Back to games"
+    "backToGames": "Back to games",
+    "question": "Question {{n}}",
+    "score": "Score",
+    "combo_one": "{{count}} in a row!",
+    "combo_other": "{{count}} in a row!",
+    "added_one": "{{count}} point added",
+    "added_other": "{{count}} points added"
   },
   "sort": {
-    "itemOf": "{{current}} of {{total}}",
     "whereDoesItGo": "Which bin does it go in?",
     "correct": "Correct!",
     "wrongBin": "This goes in the \"{{bin}}\" bin.",
@@ -198,12 +275,36 @@
     "secondsLeft_one": "{{count}} second left",
     "secondsLeft_other": "{{count}} seconds left",
     "capReached": "You've reached today's game points limit. You can keep playing, but no more points today.",
-    "resultScore": "{{correct}} of {{total}} items sorted correctly"
+    "resultScore": "{{correct}} of {{total}} items sorted correctly",
+    "round": "Round: {{current}} / {{total}}",
+    "instruction": "Tap the right bin for the item!",
+    "bins": "Waste bins"
   },
   "badges": {
-    "title": "Badges",
+    "title": "Achievements and badges",
     "newTitle": "🎉 New badge!",
     "ok": "Great!",
-    "locked": "Not earned yet"
+    "locked": "Locked",
+    "earned": "Earned"
+  },
+  "roles": {
+    "student": "Student",
+    "teacher": "Teacher",
+    "general": "Parent"
+  },
+  "rating": {
+    "title": "Top of the rating",
+    "week": "This week",
+    "all": "All time",
+    "weekHint": "The week starts over every Monday at 00:00.",
+    "allHint": "Points earned over all time.",
+    "empty": "No one has earned points yet. Be the first!",
+    "notRanked": "Earn points to get into the rating!",
+    "you": "You",
+    "report": "Report",
+    "reportTitle": "Report the nickname \"@{{name}}\"?",
+    "reportText": "If the nickname is rude or offensive, a moderator will check it.",
+    "reportSend": "Send report",
+    "reported": "Thank you! The report was sent to a moderator."
   }
 }

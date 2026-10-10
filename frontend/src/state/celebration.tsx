@@ -27,16 +27,18 @@ export function CelebrationProvider({ children }: { children: ReactNode }) {
       {children}
       {current && (
         <div className="overlay" role="dialog" aria-modal="true" aria-labelledby="badge-title">
-          <div className="dialog">
-            <div className="emoji emoji--large" aria-hidden="true">
+          <div className="sheet sheet--center stack">
+            <div className="intro__art" style={{ margin: "0 auto", background: "var(--amber-soft)" }} aria-hidden="true">
               {current.icon}
             </div>
-            <p className="hint">{t("badges.newTitle")}</p>
+            <span className="chip chip--amber" style={{ justifySelf: "center" }}>
+              {t("badges.newTitle")}
+            </span>
             <h2 id="badge-title">{tr(current.name)}</h2>
             <p className="hint">{tr(current.description)}</p>
             <button
               type="button"
-              className="button button--block"
+              className="btn btn--block"
               onClick={() => setQueue((q) => q.slice(1))}
               autoFocus
             >

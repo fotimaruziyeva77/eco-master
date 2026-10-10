@@ -1,3 +1,4 @@
+import { Check } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -5,10 +6,10 @@ import { api, type UserPath } from "../../api/client";
 import { useUser } from "../../state/user";
 import { haptic } from "../../telegram";
 
-const PATHS: { value: UserPath; icon: string }[] = [
-  { value: "student", icon: "🎒" },
-  { value: "teacher", icon: "👩‍🏫" },
-  { value: "general", icon: "👨‍👩‍👧" },
+const PATHS: { value: UserPath; icon: string; tone?: "amber" | "sky" }[] = [
+  { value: "student", icon: "🎓" },
+  { value: "teacher", icon: "👩‍🏫", tone: "sky" },
+  { value: "general", icon: "🏡", tone: "amber" },
 ];
 
 export function PathStep({ onDone }: { onDone: () => void }) {
@@ -33,24 +34,34 @@ export function PathStep({ onDone }: { onDone: () => void }) {
   }
 
   return (
-    <section>
-      <h1>{t("onboarding.path.title")}</h1>
-      <p className="hint">{t("onboarding.path.subtitle")}</p>
-      <div className="options">
-        {PATHS.map(({ value, icon }) => (
+    <section className="stack stack--lg">
+      <div className="stack">
+        <h1>{t("onboarding.path.title")}</h1>
+        <p className="hint">{t("onboarding.path.subtitle")}</p>
+      </div>
+      <div className="stack">
+        {PATHS.map(({ value, icon, tone }) => (
           <button
             key={value}
             type="button"
-            className={user.path === value ? "option is-selected" : "option"}
+            className={user.path === value ? "choice is-selected" : "choice"}
             disabled={busy}
             onClick={() => void choose(value)}
           >
-            <span className="option__icon" aria-hidden="true">
+            <span className="choice__icon" aria-hidden="true">
               {icon}
             </span>
-            <span>
-              <span className="option__title">{t(`onboarding.path.${value}`)}</span>
-              <span className="option__hint">{t(`onboarding.path.${value}Hint`)}</span>
+            <span className="choice__body">
+              <span className="row row--wrap">
+                <span className="choice__title">{t(`roles.${value}`)}</span>
+                <span className={tone ? `chip chip--sm chip--${tone}` : "chip chip--sm"}>
+                  {t(`onboarding.path.${value}Tag`)}
+                </span>
+              </span>
+              <span className="hint small">{t(`onboarding.path.${value}Hint`)}</span>
+            </span>
+            <span className="choice__check" aria-hidden="true">
+              <Check size={16} />
             </span>
           </button>
         ))}

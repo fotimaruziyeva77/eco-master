@@ -16,19 +16,21 @@ export function RoundResult({ score, points, perfect, note, onAgain, onBack }: P
   useTelegramBackButton(onBack);
   return (
     <main className="screen screen--center">
-      <div className="emoji emoji--large" aria-hidden="true">
+      <div className="intro__art" aria-hidden="true">
         {perfect ? "🏆" : points > 0 ? "🌿" : "🌱"}
       </div>
       <h1>{t("quiz.resultTitle")}</h1>
       <p className="result-score">{score}</p>
-      {points > 0 && <p className="badge">+{t("home.points", { count: points })}</p>}
+      {points > 0 && <span className="chip chip--amber">⭐ +{t("home.points", { count: points })}</span>}
       {note && <p className="hint small">{note}</p>}
-      <button type="button" className="button button--block" onClick={onAgain}>
-        {t("quiz.playAgain")}
-      </button>
-      <button type="button" className="link-button" onClick={onBack}>
-        {t("quiz.backToGames")}
-      </button>
+      <div className="stack" style={{ width: "100%", marginTop: 16 }}>
+        <button type="button" className="btn btn--block" onClick={onAgain}>
+          {t("quiz.playAgain")}
+        </button>
+        <button type="button" className="btn btn--soft btn--block" onClick={onBack}>
+          {t("quiz.backToGames")}
+        </button>
+      </div>
     </main>
   );
 }

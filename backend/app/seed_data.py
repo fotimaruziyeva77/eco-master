@@ -9,32 +9,52 @@ by the content team (TZ 9.3).
 CATEGORIES = [
     {
         "code": "plastic",
+        "examples": {
+            "uz": "Butilka, idish, stakan",
+            "ru": "Бутылки, флаконы, стаканчики",
+            "en": "Bottles, containers, cups",
+        },
         "icon": "🧴",
-        "color": "#1E88E5",
+        "color": "#0284C7",
         "has_projects": True,
         "is_game_bin": True,
         "name": {"uz": "Plastik", "ru": "Пластик", "en": "Plastic"},
     },
     {
         "code": "glass",
+        "examples": {
+            "uz": "Butilka va bankalar",
+            "ru": "Бутылки и банки",
+            "en": "Bottles and jars",
+        },
         "icon": "🍾",
-        "color": "#00897B",
+        "color": "#10B981",
         "has_projects": True,
         "is_game_bin": True,
         "name": {"uz": "Shisha", "ru": "Стекло", "en": "Glass"},
     },
     {
         "code": "paper",
+        "examples": {
+            "uz": "Karton, gazeta, daftar",
+            "ru": "Картон, газеты, тетради",
+            "en": "Cardboard, newspapers, notebooks",
+        },
         "icon": "📦",
-        "color": "#8D6E63",
+        "color": "#D97706",
         "has_projects": True,
         "is_game_bin": True,
         "name": {"uz": "Qog'oz va karton", "ru": "Бумага и картон", "en": "Paper and cardboard"},
     },
     {
         "code": "textile",
+        "examples": {
+            "uz": "Eski kiyim, mato",
+            "ru": "Старая одежда, ткань",
+            "en": "Old clothes, fabric",
+        },
         "icon": "👕",
-        "color": "#8E24AA",
+        "color": "#8B5CF6",
         "has_projects": True,
         "is_game_bin": False,
         "name": {
@@ -45,24 +65,39 @@ CATEGORIES = [
     },
     {
         "code": "organic",
+        "examples": {
+            "uz": "Po'choq, barg, ovqat qoldig'i",
+            "ru": "Очистки, листья, остатки еды",
+            "en": "Peels, leaves, food scraps",
+        },
         "icon": "🍂",
-        "color": "#43A047",
+        "color": "#84CC16",
         "has_projects": True,
         "is_game_bin": True,
         "name": {"uz": "Organik", "ru": "Органика", "en": "Organic"},
     },
     {
         "code": "metal",
+        "examples": {
+            "uz": "Banka, mix, kalit",
+            "ru": "Банки, гвозди, ключи",
+            "en": "Cans, nails, keys",
+        },
         "icon": "🥫",
-        "color": "#757575",
+        "color": "#64748B",
         "has_projects": False,
         "is_game_bin": True,
         "name": {"uz": "Metall", "ru": "Металл", "en": "Metal"},
     },
     {
         "code": "hazardous",
+        "examples": {
+            "uz": "Batareya, lampa, dori",
+            "ru": "Батарейки, лампы, лекарства",
+            "en": "Batteries, lamps, medicines",
+        },
         "icon": "🔋",
-        "color": "#E53935",
+        "color": "#DC2626",
         "has_projects": False,
         "is_game_bin": True,
         "name": {"uz": "Xavfli chiqindi", "ru": "Опасные отходы", "en": "Hazardous waste"},
@@ -531,5 +566,59 @@ DEMO_CARDS = [
                 ),
             },
         },
+    },
+]
+
+# TZ 8.5: one shared task per day. Demo set; the full 30 are prepared in phase 7.
+DEMO_DAILY_TASKS = [
+    {
+        "uz": "Uyda 5 ta plastik chiqindini topib, alohida qutiga yig'ing.",
+        "ru": "Найдите дома 5 пластиковых отходов и сложите их в отдельную коробку.",
+        "en": "Find 5 pieces of plastic waste at home and put them in a separate box.",
+    },
+    {
+        "uz": "Tishingizni yuvayotganda jo'mrakni yopib qo'ying.",
+        "ru": "Закрывайте кран, пока чистите зубы.",
+        "en": "Turn off the tap while you brush your teeth.",
+    },
+    {
+        "uz": "Xonadan chiqayotganda chiroqni o'chirishni unutmang.",
+        "ru": "Выходя из комнаты, не забудьте выключить свет.",
+        "en": "Remember to switch off the light when you leave a room.",
+    },
+    {
+        "uz": "Bitta eski shisha bankani yuvib, undan qalam yoki mayda buyumlar idishi qiling.",
+        "ru": "Вымойте старую стеклянную банку и сделайте из неё подставку для карандашей или мелочей.",
+        "en": "Wash an old glass jar and turn it into a pencil or odds-and-ends holder.",
+    },
+    {
+        "uz": "Uyda ishlatilgan batareyalar uchun alohida quti tayyorlang.",
+        "ru": "Подготовьте дома отдельную коробку для использованных батареек.",
+        "en": "Set up a separate box at home for used batteries.",
+    },
+    {
+        "uz": "Uydagi karton va gazetalarni alohida yig'ing.",
+        "ru": "Соберите дома картон и газеты отдельно.",
+        "en": "Collect the cardboard and newspapers at home separately.",
+    },
+    {
+        "uz": "Oilangizga chiqindini saralash haqida bitta qiziq faktni aytib bering.",
+        "ru": "Расскажите семье один интересный факт о сортировке отходов.",
+        "en": "Tell your family one interesting fact about sorting waste.",
+    },
+    {
+        "uz": "Bugun bir martalik plastik stakan yoki idish ishlatmang.",
+        "ru": "Сегодня не пользуйтесь одноразовыми пластиковыми стаканчиками и посудой.",
+        "en": "Don't use single-use plastic cups or dishes today.",
+    },
+    {
+        "uz": "Kattalar bilan birga hovlidagi 5 ta axlatni qo'lqopda yig'ib, qutiga tashlang.",
+        "ru": "Вместе со взрослыми соберите в перчатках 5 штук мусора во дворе и выбросьте в урну.",
+        "en": "Together with an adult, wear gloves and pick up 5 pieces of litter in your yard.",
+    },
+    {
+        "uz": "Meva va sabzavot po'choqlarini oddiy chiqindidan alohida yig'ing.",
+        "ru": "Собирайте очистки фруктов и овощей отдельно от обычного мусора.",
+        "en": "Keep fruit and vegetable peels separate from the rest of the rubbish.",
     },
 ]

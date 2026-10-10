@@ -1,8 +1,10 @@
+import { ArrowRight, CircleCheck, CircleX, Lightbulb } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { api, type QuizAnswer, type QuizRound } from "../../api/client";
-import { InlineError, InlineLoading, SubpageHeader } from "../../components/common";
+import { InlineError, InlineLoading } from "../../components/common";
+import { ProgressBar, SubpageHeader } from "../../components/ui";
 import { useBack } from "../../hooks/useBack";
 import { useLoad } from "../../hooks/useLoad";
 import { useTr } from "../../i18n/tr";
@@ -11,12 +13,15 @@ import { useUser } from "../../state/user";
 import { haptic } from "../../telegram";
 import { RoundResult } from "./RoundResult";
 
+const LETTERS = ["A", "B", "C", "D", "E", "F"];
+
 type Play = {
   round: QuizRound;
   index: number;
   answer: QuizAnswer | null;
   chosen: number | null;
   correctCount: number;
+  combo: number;
   points: number;
 };
 
@@ -39,7 +44,7 @@ export function QuizScreen() {
     setError(false);
     try {
       const round = await api.quizRound(category);
-      setPlay({ round, index: 0, answer: null, chosen: null, correctCount: 0, points: 0 });
+      setPlay({ round, index: 0, answer: null, chosen: null, correctCount: 0, combo: 0, points: 0 });
     } catch {
       setError(true);
     } finally {
@@ -61,6 +66,7 @@ export function QuizScreen() {
         answer,
         chosen: option,
         correctCount: play.correctCount + (answer.correct ? 1 : 0),
+        combo: answer.correct ? play.combo + 1 : 0,
         points: play.points + answer.points,
       });
       setUser({ ...user, points_total: answer.points_total });
@@ -83,36 +89,32 @@ export function QuizScreen() {
     return (
       <main className="screen">
         <SubpageHeader onBack={back} title={t("games.quizTitle")} />
+        <h1>{t("quiz.chooseTopic")}</h1>
         {overview.loading && !games && <InlineLoading />}
-        {overview.error !== undefined && !games && (
-          <InlineError error={overview.error} onRetry={overview.reload} />
-        )}
+        {overview.error !== undefined && !games && <InlineError error={overview.error} onRetry={overview.reload} />}
         {games && (
-          <>
-            <h2 className="section-title">{t("quiz.chooseTopic")}</h2>
-            <div className="options">
-              <button type="button" className="option" disabled={busy} onClick={() => void start(null)}>
-                <span className="option__icon" aria-hidden="true">
-                  🌍
+          <div className="stack section">
+            <button type="button" className="choice" disabled={busy} onClick={() => void start(null)}>
+              <span className="choice__icon" aria-hidden="true">
+                🌍
+              </span>
+              <span className="choice__body">
+                <span className="choice__title">{t("quiz.mixed")}</span>
+                <span className="hint small">{t("games.quizText", { count: games.quiz_total })}</span>
+              </span>
+            </button>
+            {games.quiz_categories.map((c) => (
+              <button key={c.code} type="button" className="choice" disabled={busy} onClick={() => void start(c.code)}>
+                <span className="choice__icon" aria-hidden="true">
+                  {c.icon}
                 </span>
-                <span className="option__title">{t("quiz.mixed")}</span>
+                <span className="choice__body">
+                  <span className="choice__title">{tr(c.name)}</span>
+                  <span className="hint small">{t("games.quizText", { count: c.question_count })}</span>
+                </span>
               </button>
-              {games.quiz_categories.map((c) => (
-                <button
-                  key={c.code}
-                  type="button"
-                  className="option"
-                  disabled={busy}
-                  onClick={() => void start(c.code)}
-                >
-                  <span className="option__icon" aria-hidden="true">
-                    {c.icon}
-                  </span>
-                  <span className="option__title">{tr(c.name)}</span>
-                </button>
-              ))}
-            </div>
-          </>
+            ))}
+          </div>
         )}
         {error && (
           <p className="error-text" role="alert">
@@ -153,19 +155,29 @@ export function QuizScreen() {
 
   return (
     <main className="screen screen--with-action">
-      <SubpageHeader onBack={back} />
-      <div className="round-head">
-        <span className="hint">{t("quiz.questionOf", { current: play.index + 1, total })}</span>
-        {play.points > 0 && <span className="badge">+{play.points}</span>}
-      </div>
-      <div className="progress">
-        <div className="progress__bar" style={{ width: `${(play.index / total) * 100}%` }} />
+      <SubpageHeader onBack={back} title={t("games.quizTitle")} />
+      <div className="round-card">
+        <div className="row row--between">
+          <span className="row">
+            <strong style={{ fontSize: 20 }}>{t("quiz.question", { n: play.index + 1 })}</strong>
+            <span className="hint">/ {total}</span>
+          </span>
+          <span className="row">
+            {play.combo >= 2 && <span className="chip chip--amber">🔥 {t("quiz.combo", { count: play.combo })}</span>}
+            <span className="chip chip--neutral">
+              {t("quiz.score")}: <strong className="ok-text">{play.points}</strong>
+            </span>
+          </span>
+        </div>
+        <ProgressBar value={play.index + (answer ? 1 : 0)} max={total} />
       </div>
 
-      <h1 className="question">{tr(question.text)}</h1>
-      {question.image_url && <img className="question__image" src={question.image_url} alt="" />}
+      <section className="card question-card section">
+        {question.image_url && <img src={question.image_url} alt="" />}
+        <h1>{tr(question.text)}</h1>
+      </section>
 
-      <div className="answers">
+      <div className="answers section">
         {options.map((option, i) => (
           <button
             key={option}
@@ -174,19 +186,24 @@ export function QuizScreen() {
             disabled={busy || Boolean(answer)}
             onClick={() => void choose(i)}
           >
-            {option}
+            <span className="answer__letter">{LETTERS[i]}</span>
+            <span style={{ flex: 1 }}>{option}</span>
+            {answer && i === answer.correct_index && <CircleCheck size={22} className="ok-text" />}
+            {answer && i === play.chosen && i !== answer.correct_index && <CircleX size={22} className="error-text" />}
           </button>
         ))}
       </div>
 
       {answer && (
-        <section className={answer.correct ? "feedback feedback--ok" : "feedback feedback--bad"} role="status">
-          <strong>
-            {answer.correct ? `✓ ${t("quiz.correct")}` : `✗ ${t("quiz.wrong")}`}
-            {answer.points > 0 && ` +${t("home.points", { count: answer.points })}`}
-          </strong>
+        <section className={`card feedback section ${answer.correct ? "feedback--ok" : "feedback--bad"}`} role="status">
+          <div className="feedback__head">
+            <strong className="row">
+              <Lightbulb size={20} /> {answer.correct ? t("quiz.correct") : t("quiz.wrong")}
+            </strong>
+            {answer.points > 0 && <span className="chip chip--sm chip--amber">+{t("quiz.added", { count: answer.points })}</span>}
+          </div>
           {answer.correct && answer.points === 0 && <p className="hint small">{t("quiz.alreadyEarned")}</p>}
-          <p>💡 {tr(answer.explanation)}</p>
+          <p className="text-2">{tr(answer.explanation)}</p>
         </section>
       )}
       {error && (
@@ -197,8 +214,8 @@ export function QuizScreen() {
 
       {answer && (
         <div className="action-bar">
-          <button type="button" className="button button--block" onClick={next}>
-            {isLast ? t("quiz.finish") : t("quiz.next")}
+          <button type="button" className="btn btn--block" onClick={next}>
+            {isLast ? t("quiz.finish") : t("quiz.next")} <ArrowRight size={20} />
           </button>
         </div>
       )}

@@ -16,6 +16,7 @@ from app.models import (
     BannedWord,
     Category,
     ContentStatus,
+    DailyTask,
     GameItem,
     KnowledgeCard,
     Project,
@@ -26,6 +27,7 @@ from app.models import (
 from app.seed_data import (
     CATEGORIES,
     DEMO_CARDS,
+    DEMO_DAILY_TASKS,
     DEMO_PROJECTS,
     DEMO_TIPS,
     PROFANITY,
@@ -91,6 +93,11 @@ async def seed_demo(session: AsyncSession) -> None:
         session.add_all(
             Tip(text=text, sort_order=i, status=ContentStatus.PUBLISHED)
             for i, text in enumerate(DEMO_TIPS, start=1)
+        )
+    if await is_empty(session, DailyTask):
+        session.add_all(
+            DailyTask(text=text, sort_order=i, status=ContentStatus.PUBLISHED)
+            for i, text in enumerate(DEMO_DAILY_TASKS, start=1)
         )
     if await is_empty(session, Question):
         session.add_all(

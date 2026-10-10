@@ -1,13 +1,15 @@
 import uuid
-from datetime import datetime, time
+from datetime import date, datetime, time, timedelta
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, computed_field
+from pydantic import BaseModel, ConfigDict, Field, computed_field, field_validator, model_validator
 
 from app.levels import level_for
 from app.models import Difficulty, OnboardingStep, SafetyLevel, UserPath
+from app.timeutil import local_today
 
 Language = Literal["uz", "ru", "en"]
+NICKNAME_CHANGE_INTERVAL = timedelta(days=30)
 I18nText = dict[str, Any]  # {"uz": ..., "ru": ..., "en": ...}; the Mini App picks the language
 
 
@@ -35,6 +37,28 @@ class UserOut(BaseModel):
     reminders_enabled: bool
     reminder_time: time
     write_access: bool
+    last_task_date: date | None
+    nickname_changed_at: datetime | None
+
+    @model_validator(mode="after")
+    def _live_streak(self) -> "UserOut":
+        # The stored streak is stale once a whole day has been missed.
+        today = local_today()
+        if self.last_task_date is None or self.last_task_date < today - timedelta(days=1):
+            self.streak_current = 0
+        return self
+
+    @computed_field
+    @property
+    def done_today(self) -> bool:
+        return self.last_task_date == local_today()
+
+    @computed_field
+    @property
+    def nickname_change_available_at(self) -> datetime | None:
+        if self.nickname_changed_at is None:
+            return None
+        return self.nickname_changed_at + NICKNAME_CHANGE_INTERVAL
 
     @computed_field
     @property
@@ -52,6 +76,19 @@ class AuthOut(BaseModel):
 
 class MeUpdate(BaseModel):
     language: Language | None = None
+    path: UserPath | None = None
+    reminders_enabled: bool | None = None
+    reminder_time: time | None = None
+
+    @field_validator("reminder_time")
+    @classmethod
+    def _reminder_window(cls, value: time | None) -> time | None:
+        # Reminders go out between 08:00 and 20:00, on the hour or half hour (TZ 8.5).
+        if value is None:
+            return value
+        if not (time(8, 0) <= value <= time(20, 0)) or value.minute not in (0, 30) or value.second:
+            raise ValueError("reminder time must be 08:00–20:00 in 30-minute steps")
+        return value
 
 
 class WriteAccessIn(BaseModel):
@@ -89,6 +126,7 @@ class NicknameCheckOut(BaseModel):
 class CategoryOut(BaseModel):
     code: str
     name: I18nText
+    examples: I18nText | None = None
     icon: str
     color: str
     has_projects: bool
@@ -115,6 +153,7 @@ class ProjectDetailOut(ProjectSummaryOut):
     steps: I18nText
     safety_text: I18nText | None
     video_url: str | None
+    done_count: int = 0
 
 
 class CategoryDetailOut(BaseModel):
@@ -128,6 +167,8 @@ class BadgeOut(BaseModel):
     description: I18nText
     icon: str
     earned_at: datetime | None = None
+    progress_current: int | None = None
+    progress_target: int | None = None
 
 
 class DoneIn(BaseModel):
@@ -156,10 +197,76 @@ class TipOut(BaseModel):
     text: I18nText
 
 
+class DailyTaskOut(BaseModel):
+    id: int
+    text: I18nText
+    points: int
+
+
+class DailyOut(BaseModel):
+    task: DailyTaskOut | None
+    done_today: bool
+    streak_current: int
+    streak_best: int
+    days_to_bonus: int
+    bonus_points: int
+
+
+class DailyDoneOut(BaseModel):
+    awarded: bool
+    points: int
+    bonus_points: int
+    streak_current: int
+    streak_best: int
+    points_total: int
+    new_badges: list["BadgeOut"] = []
+
+
 class HomeOut(BaseModel):
     user: UserOut
+    daily: DailyOut
     tip: TipOut | None
     categories: list[CategoryOut]
+    featured: ProjectSummaryOut | None = None
+
+
+# ---------------------------------------------------------------- profile, rating
+
+
+class StatsOut(BaseModel):
+    streak_current: int
+    streak_best: int
+    tasks_done: int
+    projects_done: int
+    projects_total: int
+    quiz_correct: int
+    quiz_answered: int
+    sorted_correct: int
+    sorted_total: int
+    badges_earned: int
+    badges_total: int
+    rank_all: int | None
+
+
+class LeaderboardEntryOut(BaseModel):
+    rank: int
+    user_id: int
+    nickname: str
+    level_code: str
+    points: int
+    is_me: bool
+
+
+class LeaderboardOut(BaseModel):
+    period: Literal["week", "all"]
+    week_start: date | None
+    entries: list[LeaderboardEntryOut]
+    me: LeaderboardEntryOut | None
+
+
+class ReportIn(BaseModel):
+    target_user_id: int
+    reason: Literal["nickname"] = "nickname"
 
 
 # ----------------------------------------------------------------------- games

@@ -7,9 +7,9 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.content import list_categories
-from app.badges import award_badges
+from app.badges import award_badges, badges_out
 from app.deps import CurrentUser, SessionDep, SettingsDep
-from app.models import AnalyticsEvent, Badge, Category, ContentStatus, GameItem, Question
+from app.models import AnalyticsEvent, Category, ContentStatus, GameItem, Question
 from app.points import (
     GAME_CORRECT_POINTS,
     GAME_DAILY_CAP,
@@ -20,7 +20,6 @@ from app.points import (
 )
 from app.rounds import RoundError, answer_event_id, create_round_token, read_round_token
 from app.schemas import (
-    BadgeOut,
     GameAnswerIn,
     GameAnswerOut,
     GameItemOut,
@@ -39,12 +38,6 @@ router = APIRouter(tags=["games"])
 
 ROUND_SIZE = 10
 PUBLISHED = ContentStatus.PUBLISHED
-
-
-def badge_out(badges: list[Badge]) -> list[BadgeOut]:
-    return [
-        BadgeOut(code=b.code, name=b.name, description=b.description, icon=b.icon) for b in badges
-    ]
 
 
 async def already_answered(session: AsyncSession, user_id: int, event: str, props: dict) -> bool:
@@ -189,7 +182,7 @@ async def answer_quiz(
         explanation=question.explanation,
         points=points,
         points_total=user.points_total,
-        new_badges=badge_out(new_badges),
+        new_badges=badges_out(new_badges),
     )
 
 
@@ -265,5 +258,5 @@ async def answer_game(
         points_today=earned_today + points,
         daily_cap=GAME_DAILY_CAP,
         points_total=user.points_total,
-        new_badges=badge_out(new_badges),
+        new_badges=badges_out(new_badges),
     )

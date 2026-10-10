@@ -5,7 +5,9 @@
     "appName": "Ekoustoz",
     "back": "Orqaga",
     "minutes_one": "{{count}} daqiqa",
-    "minutes_other": "{{count}} daqiqa"
+    "minutes_other": "{{count}} daqiqa",
+    "cancel": "Bekor qilish",
+    "save": "Saqlash"
   },
   "errors": {
     "title": "Nimadir xato ketdi",
@@ -28,11 +30,11 @@
     "profile": "Profil"
   },
   "levels": {
-    "seed": "🌰 Urug'",
-    "beginner": "🌱 Ekologiya boshlovchisi",
-    "young_ecologist": "🌿 Yosh ekolog",
-    "helper": "🌳 Ekoustoz yordamchisi",
-    "ekoustoz": "🏆 Ekoustoz"
+    "seed": "Urug'",
+    "beginner": "Ekologiya boshlovchisi",
+    "young_ecologist": "Yosh ekolog",
+    "helper": "Ekoustoz yordamchisi",
+    "ekoustoz": "Ekoustoz"
   },
   "onboarding": {
     "step": "{{current}}-qadam / {{total}}",
@@ -44,23 +46,27 @@
       "title": "Siz kimsiz?",
       "subtitle": "Bosh sahifani sizga moslashtiramiz. Keyin sozlamalarda o'zgartirish mumkin.",
       "student": "O'quvchi",
-      "studentHint": "O'yinlar, topshiriqlar va video darslar",
+      "studentHint": "Bugungi topshiriqlar, qiziqarli o'yinlar, nishonlar va reyting.",
       "teacher": "O'qituvchi",
-      "teacherHint": "Hammasi va dars uchun tayyor materiallar",
+      "teacherHint": "Tayyor 45 daqiqalik dars rejalari va PDF materiallar.",
       "general": "Ota-ona yoki boshqa foydalanuvchi",
-      "generalHint": "Video darslar va foydali maslahatlar"
+      "generalHint": "Uyda chiqindini kamaytirish, foydali DIY darslar va maslahatlar.",
+      "studentTag": "10–15 yosh",
+      "teacherTag": "Metodika",
+      "generalTag": "Xonadon"
     },
     "nickname": {
-      "title": "Taxallus o'ylab toping",
-      "subtitle": "U reytingda boshqalarga ko'rinadi.",
+      "title": "Taxallusingizni tanlang",
+      "subtitle": "Reyting va darslarda ismingiz shu tarzda ko'rinadi.",
       "label": "Taxallus",
-      "placeholder": "Masalan, Yashil_Barg",
-      "hint": "3–20 belgi: harflar, raqamlar va _",
-      "privacyHint": "Haqiqiy ism-familiyangizni yozmang.",
+      "placeholder": "Yashil_Barg",
+      "hint": "3–20 belgi: harflar, raqamlar va _.",
+      "privacyHint": "Haqiqiy ism yoki telefon talab qilinmaydi.",
       "suggest": "🎲 Tasodifiy taxallus",
       "checking": "Tekshirilmoqda…",
       "available": "✓ Bu taxallus bo'sh",
-      "submit": "Davom etish"
+      "submit": "Davom etish",
+      "anonymous": "Anonim va xavfsiz"
     },
     "nicknameErrors": {
       "nickname_length": "Taxallus 3 tadan 20 tagacha belgidan iborat bo'lishi kerak.",
@@ -79,29 +85,57 @@
       "next": "Keyingi",
       "skip": "O'tkazib yuborish",
       "start": "Boshlash",
-      "consent": "Davom etish orqali <policy>maxfiylik siyosati</policy>ga rozilik bildirasiz."
-    }
+      "consent": "Davom etish orqali <policy>maxfiylik siyosati</policy>ga rozilik bildirasiz.",
+      "remindersTitle": "Streak o'chmasligi uchun eslatmalar",
+      "remindersText": "Kuniga bitta eslatmani botdan oling."
+    },
+    "welcome": "Xush kelibsiz!",
+    "headline": "Tabiatni asrashni o'rganamiz",
+    "subheadline": "Ekoustoz bilan har kuni kichik qadamlar orqali katta o'zgarishlar yarating."
   },
   "home": {
     "greeting": "Salom, {{name}}!",
     "points_one": "{{count}} ball",
     "points_other": "{{count}} ball",
-    "toNextLevel_one": "Keyingi darajagacha {{count}} ball",
-    "toNextLevel_other": "Keyingi darajagacha {{count}} ball",
     "topLevel": "Siz eng yuqori darajadasiz!",
     "streak_one": "🔥 {{count}} kun ketma-ket",
     "streak_other": "🔥 {{count}} kun ketma-ket",
-    "tipTitle": "💡 Kun maslahati",
-    "quiz": "Viktorina",
+    "tipTitle": "Kunlik maslahat",
+    "quiz": "Ekologik viktorina",
     "game": "Saralash o'yini",
-    "wasteTypes": "Chiqindi turlari"
+    "wasteTypes": "Chiqindi turlari va DIY darslar",
+    "subtitle": "Bugun tabiat uchun nima qilamiz?",
+    "stage": "{{n}}-bosqich",
+    "filled": "{{percent}}% to'ldirildi",
+    "nextLevel": "Keyingi: {{name}}",
+    "streakStart": "Streakni boshlang!",
+    "streakStartHint": "Bugungi topshiriqni bajaring — 7 kun ketma-ket uchun +50 ball.",
+    "taskTitle": "Bugungi topshiriq",
+    "taskDeadline": "Bugun 23:59 gacha",
+    "taskDone": "Bajarildi",
+    "quickGames": "Tezkor o'yinlar",
+    "all": "Barchasi",
+    "sortChip": "+2 ball har biriga",
+    "sortHint": "To'g'ri qutiga sol",
+    "quizChip": "10 ta savol",
+    "quizHint": "Bilimingni sinab ko'r",
+    "wasteTypesHint": "O'z qo'llaring bilan tabiatga yordam ber",
+    "start": "Boshlash",
+    "pointsWord_one": "ball",
+    "pointsWord_other": "ball",
+    "streakTitle_one": "{{count}} kunlik streak!",
+    "streakTitle_other": "{{count}} kunlik streak!",
+    "streakBonus_one": "+{{points}} ball bonusiga yana {{count}} kun qoldi",
+    "streakBonus_other": "+{{points}} ball bonusiga yana {{count}} kun qoldi"
   },
   "learn": {
     "title": "O'rganish",
     "wasteTypes": "Chiqindi turlari",
     "cards": "Ekologik muammolar",
     "projects_one": "{{count}} loyiha",
-    "projects_other": "{{count}} loyiha"
+    "projects_other": "{{count}} loyiha",
+    "subtitle": "Chiqindiga ikkinchi hayot berishni o'rganing.",
+    "cardHint": "Muammo, sabab va yechim"
   },
   "category": {
     "empty": "Bu bo'limga loyihalar tez orada qo'shiladi."
@@ -117,9 +151,9 @@
       "yellow": "Kattalar nazorati bilan",
       "red": "Faqat kattalar"
     },
-    "safetyTitle": "Xavfsizlik",
+    "safetyTitle": "Xavfsizlik qoidasi",
     "materials": "Kerakli materiallar",
-    "steps": "Qadamlar",
+    "steps": "Qadam-baqadam ko'rsatma",
     "videoSoon": "Video tez orada qo'shiladi",
     "play": "Videoni ko'rish",
     "done": "Bajardim",
@@ -127,23 +161,61 @@
     "alreadyDone": "Bajarilgan ✓",
     "earned_one": "+{{count}} ball! Barakalla!",
     "earned_other": "+{{count}} ball! Barakalla!",
-    "doneError": "Saqlab bo'lmadi. Qayta urinib ko'ring."
+    "doneError": "Saqlab bo'lmadi. Qayta urinib ko'ring.",
+    "title": "Loyiha",
+    "categoryProject": "{{name}} loyihasi",
+    "safetyShort": {
+      "green": "Bolalar uchun oson",
+      "yellow": "Kattalar bilan",
+      "red": "Faqat kattalar"
+    },
+    "ready": "{{done}}/{{total}} tayyor",
+    "silentVideo": "Ovozsiz video dars (qadamlar matnda)",
+    "doneCta": "Bajardim (+{{count}} ball olish)",
+    "doneCount_one": "{{count}} marta bajarildi",
+    "doneCount_other": "{{count}} marta bajarildi"
   },
   "card": {
     "problem": "Muammo",
     "cause": "Sabab",
     "effect": "Oqibat",
     "solution": "Yechim",
-    "action": "Men nima qila olaman?"
-  },
-  "soon": {
-    "title": "Tez orada",
-    "text": "Bu bo'lim keyingi bosqichda qo'shiladi."
+    "action": "Men nima qila olaman?",
+    "position": "{{current}}/{{total}} kartochka",
+    "chain": "Sabab-oqibat zanjiri",
+    "quizTitle": "Bilimingizni sinaysizmi?",
+    "quizText": "Viktorinada savollarga javob bering.",
+    "readTime_one": "{{count}} daqiqa o'qish",
+    "readTime_other": "{{count}} daqiqa o'qish"
   },
   "profile": {
-    "title": "Profil",
-    "language": "Til",
-    "privacy": "Maxfiylik siyosati"
+    "language": "Til / Language",
+    "privacy": "Maxfiylik siyosati",
+    "rank": "#{{rank}}-o'rin",
+    "streak": "Joriy streak",
+    "tasks": "Bajarilgan topshiriq",
+    "projects": "Yasalgan DIY loyiha",
+    "sorted": "Saralangan buyum",
+    "accuracy": "Aniqlik {{percent}}%",
+    "settings": "Sozlamalar",
+    "nickname": "Taxallus",
+    "nicknameRule": "30 kunda bir marta o'zgartirish mumkin. 3–20 belgi: harflar, raqamlar va _.",
+    "nicknameLocked": "Taxallusni {{date}} dan keyin o'zgartirish mumkin.",
+    "nicknameTooSoon": "Taxallusni 30 kunda bir marta o'zgartirish mumkin.",
+    "role": "Rol",
+    "reminders": "Kunlik eslatmalar",
+    "reminderAt": "Har kuni soat",
+    "remindersOff": "O'chirilgan",
+    "remindersNeedBot": "Eslatma olish uchun botga /start yuboring.",
+    "delete": "Ma'lumotlarimni o'chirish",
+    "deleteTitle": "Hamma ma'lumot o'chirilsinmi?",
+    "deleteText": "Profilingiz, ballaringiz va nishonlaringiz butunlay o'chiriladi. Bu amalni qaytarib bo'lmaydi.",
+    "deleteConfirm": "Ha, o'chirish",
+    "deleted": "Ma'lumotlaringiz o'chirildi",
+    "days_one": "{{count}} kun",
+    "days_other": "{{count}} kun",
+    "best_one": "Maks: {{count}} kun",
+    "best_other": "Maks: {{count}} kun"
   },
   "privacy": {
     "title": "Maxfiylik siyosati",
@@ -157,7 +229,7 @@
     "whoTitle": "Kim ko'radi",
     "whoText": "Reytingda faqat taxallusingiz ko'rinadi. Ma'lumotlaringiz reklama uchun ishlatilmaydi va sotilmaydi.",
     "deleteTitle": "Ma'lumotni o'chirish",
-    "deleteText": "Istalgan vaqtda ma'lumotlaringizni o'chirishni so'rashingiz mumkin. Hozircha buning uchun botga yozing.",
+    "deleteText": "Istalgan vaqtda Profil → «Ma'lumotlarimni o'chirish» orqali ma'lumotlaringizni o'chirishingiz mumkin.",
     "contactTitle": "Bog'lanish",
     "contactText": "Savollar bo'lsa, Ekoustoz botiga yozing."
   },
@@ -168,29 +240,34 @@
     "quizText_other": "{{count}} ta savol: bilimingizni sinab ko'ring",
     "sortTitle": "Chiqindini to'g'ri qutiga joyla",
     "sortText": "Buyumni kerakli qutiga tashlang va saralashni o'rganing.",
-    "todayPoints": "Bugun: {{points}} / {{cap}} ball",
     "quickMode": "⚡ Tezkor rejim (har buyumga 10 soniya)",
     "play": "O'ynash",
-    "empty": "Bu o'yin uchun savollar hali qo'shilmagan."
+    "empty": "Bu o'yin uchun savollar hali qo'shilmagan.",
+    "quizPoints": "+5 ball har to'g'ri javobga",
+    "dailyLimit": "Kunlik limit: {{points}} / {{cap}} ball"
   },
   "quiz": {
     "chooseTopic": "Mavzuni tanlang",
     "mixed": "Aralash",
-    "questionOf": "Savol {{current}} / {{total}}",
-    "next": "Keyingi savol",
+    "next": "Keyingi savolga o'tish",
     "finish": "Natijani ko'rish",
-    "correct": "To'g'ri!",
-    "wrong": "Noto'g'ri",
+    "correct": "Barakalla, to'g'ri!",
+    "wrong": "Afsus, noto'g'ri",
     "alreadyEarned": "Bu savol uchun ball avval olingan.",
     "answerError": "Javob yuborilmadi. Internetni tekshirib, qayta urinib ko'ring.",
     "resultTitle": "Natija",
     "resultScore": "{{correct}} / {{total}} to'g'ri javob",
     "playAgain": "Yana o'ynash",
-    "backToGames": "O'yinlarga qaytish"
+    "backToGames": "O'yinlarga qaytish",
+    "question": "Savol {{n}}",
+    "score": "Hisob",
+    "combo_one": "{{count}} ketma-ket!",
+    "combo_other": "{{count}} ketma-ket!",
+    "added_one": "{{count}} ball qo'shildi",
+    "added_other": "{{count}} ball qo'shildi"
   },
   "sort": {
-    "itemOf": "{{current}} / {{total}}",
-    "whereDoesItGo": "Bu qaysi qutiga tushadi?",
+    "whereDoesItGo": "Qaysi qutiga tashlash kerak?",
     "correct": "To'g'ri!",
     "wrongBin": "Bu «{{bin}}» qutisiga tegishli.",
     "timeUp": "Vaqt tugadi!",
@@ -198,12 +275,36 @@
     "secondsLeft_one": "{{count}} soniya qoldi",
     "secondsLeft_other": "{{count}} soniya qoldi",
     "capReached": "Bugungi o'yin ballari limiti tugadi. O'ynashda davom etishingiz mumkin, lekin ball berilmaydi.",
-    "resultScore": "{{correct}} / {{total}} buyum to'g'ri saralandi"
+    "resultScore": "{{correct}} / {{total}} buyum to'g'ri saralandi",
+    "round": "Raund: {{current}} / {{total}}",
+    "instruction": "Buyumni mos saralash qutisiga bosing!",
+    "bins": "Chiqindi konteynerlari"
   },
   "badges": {
-    "title": "Nishonlar",
+    "title": "Yutuqlar va nishonlar",
     "newTitle": "🎉 Yangi nishon!",
     "ok": "Zo'r!",
-    "locked": "Hali olinmagan"
+    "locked": "Qulflangan",
+    "earned": "Olingan"
+  },
+  "roles": {
+    "student": "O'quvchi",
+    "teacher": "O'qituvchi",
+    "general": "Ota-ona"
+  },
+  "rating": {
+    "title": "Reyting peshqadamlari",
+    "week": "Haftalik reyting",
+    "all": "Umumiy reyting",
+    "weekHint": "Hafta har dushanba 00:00 da noldan boshlanadi.",
+    "allHint": "Barcha vaqt davomida to'plangan ballar.",
+    "empty": "Hali hech kim ball to'plamadi. Birinchi bo'ling!",
+    "notRanked": "Ball to'plang va reytingga kiring!",
+    "you": "Siz",
+    "report": "Shikoyat qilish",
+    "reportTitle": "«@{{name}}» taxallusi haqida shikoyat qilasizmi?",
+    "reportText": "Agar taxallus odobsiz yoki haqoratli bo'lsa, moderator uni tekshiradi.",
+    "reportSend": "Shikoyat yuborish",
+    "reported": "Rahmat! Shikoyat moderatorga yuborildi."
   }
 }

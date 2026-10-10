@@ -1,9 +1,11 @@
+import { Hand, HelpCircle, Lightbulb } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router";
 
 import { api, type Category, type GameAnswer, type GameRound } from "../../api/client";
-import { InlineError, InlineLoading, SubpageHeader } from "../../components/common";
+import { InlineError, InlineLoading } from "../../components/common";
+import { ProgressBar, SubpageHeader, tint } from "../../components/ui";
 import { useBack } from "../../hooks/useBack";
 import { useTr } from "../../i18n/tr";
 import { useCelebrate } from "../../state/celebration";
@@ -23,8 +25,10 @@ type Play = {
   answer: GameAnswer | null;
   chosen: string | null;
   correctCount: number;
+  combo: number;
   points: number;
-  capped: boolean;
+  pointsToday: number;
+  dailyCap: number;
 };
 
 export function SortGameScreen() {
@@ -57,8 +61,10 @@ export function SortGameScreen() {
         answer: null,
         chosen: null,
         correctCount: 0,
+        combo: 0,
         points: 0,
-        capped: overview.game_points_today >= overview.game_daily_cap,
+        pointsToday: overview.game_points_today,
+        dailyCap: overview.game_daily_cap,
       });
       setSecondsLeft(QUICK_SECONDS);
     } catch (error) {
@@ -85,8 +91,10 @@ export function SortGameScreen() {
           answer,
           chosen: bin,
           correctCount: play.correctCount + (answer.correct ? 1 : 0),
+          combo: answer.correct ? play.combo + 1 : 0,
           points: play.points + answer.points,
-          capped: answer.points_today >= answer.daily_cap,
+          pointsToday: answer.points_today,
+          dailyCap: answer.daily_cap,
         });
         setUser({ ...userRef.current, points_total: answer.points_total });
         celebrate(answer.new_badges ?? []);
@@ -141,13 +149,14 @@ export function SortGameScreen() {
   }
 
   const total = play.round.items.length;
+  const capped = play.pointsToday >= play.dailyCap;
   if (play.index >= total) {
     return (
       <RoundResult
         score={t("sort.resultScore", { correct: play.correctCount, total })}
         points={play.points}
         perfect={play.correctCount === total}
-        note={play.capped ? t("sort.capReached") : undefined}
+        note={capped ? t("sort.capReached") : undefined}
         onAgain={() => void start()}
         onBack={back}
       />
@@ -167,61 +176,91 @@ export function SortGameScreen() {
 
   return (
     <main className="screen sort-game">
-      <SubpageHeader onBack={back} />
-      <div className="round-head">
-        <span className="hint">{t("sort.itemOf", { current: play.index + 1, total })}</span>
-        {play.points > 0 && <span className="badge">+{play.points}</span>}
-      </div>
-      {quick && !answer && (
-        <div className="progress progress--timer" aria-label={t("sort.secondsLeft", { count: secondsLeft })}>
-          <div className="progress__bar" style={{ width: `${(secondsLeft / QUICK_SECONDS) * 100}%` }} />
-        </div>
-      )}
+      <SubpageHeader onBack={back} title={t("games.sortTitle")} />
 
-      <section className="sort-item" aria-live="polite">
+      <section className="card round-card">
+        <div className="row row--between row--wrap">
+          <span className="row">
+            <span className="chip chip--neutral">{t("sort.round", { current: play.index + 1, total })}</span>
+            {play.combo >= 2 && <span className="chip chip--amber">🔥 {t("quiz.combo", { count: play.combo })}</span>}
+          </span>
+          {play.points > 0 && <span className="chip chip--amber">⭐ +{play.points}</span>}
+        </div>
+        <div className="row row--between small strong">
+          <span>{t("games.dailyLimit", { points: play.pointsToday, cap: play.dailyCap })}</span>
+        </div>
+        {quick && !answer ? (
+          <div aria-label={t("sort.secondsLeft", { count: secondsLeft })}>
+            <ProgressBar value={secondsLeft} max={QUICK_SECONDS} tone="amber" />
+          </div>
+        ) : (
+          <ProgressBar value={play.pointsToday} max={play.dailyCap} />
+        )}
+      </section>
+
+      <p className="note row section" style={{ background: "var(--primary-soft)", color: "var(--on-primary-soft)" }}>
+        <Hand size={18} aria-hidden="true" /> {t("sort.instruction")}
+      </p>
+
+      <section className="card sort-item section" aria-live="polite">
+        <span className="chip">
+          <HelpCircle size={14} /> {t("sort.whereDoesItGo")}
+        </span>
         <div className="sort-item__visual" aria-hidden="true">
           {item.image_url ? <img src={item.image_url} alt="" /> : item.icon}
         </div>
-        <h1>{tr(item.name)}</h1>
-        {!answer && <p className="hint">{t("sort.whereDoesItGo")}</p>}
+        <h2>{tr(item.name)}</h2>
       </section>
 
+      <div className="section-head section">
+        <h3>{t("sort.bins")}</h3>
+      </div>
       <div className="bins">
         {play.bins.map((bin) => (
           <button
             key={bin.code}
             type="button"
             className={binClass(bin.code)}
-            style={answer ? undefined : { borderColor: bin.color }}
             disabled={busy || Boolean(answer)}
             onClick={() => void choose(bin.code)}
           >
-            <span className="bin__icon" aria-hidden="true">
+            <span className="bin__icon" style={tint(bin.color, "33")} aria-hidden="true">
               {bin.icon}
             </span>
-            <span>{tr(bin.name)}</span>
+            <span className="bin__text">
+              <strong>{tr(bin.name)}</strong>
+              {bin.examples && <small>{tr(bin.examples)}</small>}
+            </span>
           </button>
         ))}
       </div>
 
       {answer && (
-        <section className={answer.correct ? "feedback feedback--ok" : "feedback feedback--bad"} role="status">
-          <strong>
-            {answer.correct
-              ? `✓ ${t("sort.correct")}${answer.points ? ` +${answer.points}` : ""}`
-              : play.chosen === null
-                ? `⏰ ${t("sort.timeUp")} ${t("sort.wrongBin", { bin: binName(answer.correct_bin) })}`
-                : `✗ ${t("sort.wrongBin", { bin: binName(answer.correct_bin) })}`}
-          </strong>
-          {!answer.correct && <p>💡 {tr(answer.explanation)}</p>}
+        <section className={`card feedback section ${answer.correct ? "feedback--ok" : "feedback--bad"}`} role="status">
+          <div className="feedback__head">
+            <strong>
+              {answer.correct
+                ? `✓ ${t("sort.correct")}`
+                : play.chosen === null
+                  ? `⏰ ${t("sort.timeUp")}`
+                  : `✗ ${t("sort.wrongBin", { bin: binName(answer.correct_bin) })}`}
+            </strong>
+            {answer.points > 0 && <span className="chip chip--sm chip--amber">+{answer.points}</span>}
+          </div>
           {!answer.correct && (
-            <button type="button" className="button button--block" onClick={next}>
-              {t("sort.next")}
-            </button>
+            <>
+              {play.chosen === null && <p className="strong">{t("sort.wrongBin", { bin: binName(answer.correct_bin) })}</p>}
+              <p className="text-2 row" style={{ alignItems: "flex-start" }}>
+                <Lightbulb size={18} style={{ flex: "none", marginTop: 2 }} /> {tr(answer.explanation)}
+              </p>
+              <button type="button" className="btn btn--block" style={{ marginTop: 12 }} onClick={next}>
+                {t("sort.next")}
+              </button>
+            </>
           )}
         </section>
       )}
-      {play.capped && !answer && <p className="hint small">{t("sort.capReached")}</p>}
+      {capped && !answer && <p className="hint small section">{t("sort.capReached")}</p>}
       {answerError && (
         <p className="error-text" role="alert">
           {t("quiz.answerError")}

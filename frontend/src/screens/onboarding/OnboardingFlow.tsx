@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import type { User } from "../../api/client";
 import { useUser } from "../../state/user";
-import { useTelegramBackButton } from "../../telegram";
+import { insideTelegram, useTelegramBackButton } from "../../telegram";
 import { PrivacyContent } from "../PrivacyScreen";
 import { IntroStep } from "./IntroStep";
 import { LanguageStep } from "./LanguageStep";
@@ -34,7 +34,12 @@ export function OnboardingFlow() {
   if (privacyOpen) {
     return (
       <main className="screen">
-        <PrivacyContent onBack={() => setPrivacyOpen(false)} />
+        {!insideTelegram() && (
+          <button type="button" className="link-button" onClick={() => setPrivacyOpen(false)}>
+            ← {t("common.back")}
+          </button>
+        )}
+        <PrivacyContent />
       </main>
     );
   }

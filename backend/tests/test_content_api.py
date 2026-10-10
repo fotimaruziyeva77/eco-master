@@ -4,7 +4,7 @@ from datetime import date
 import pytest
 from sqlalchemy import select, update
 
-from app.api.content import tip_of_the_day
+from app.daily import tip_of_the_day
 from app.models import ContentStatus, Project, Tip, TipSchedule
 from app.seed import seed_categories, seed_demo
 from tests.conftest import login

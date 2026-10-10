@@ -6,7 +6,9 @@ from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.badges import award_badges
+from app.api.daily import daily_state
+from app.badges import award_badges, badges_out
+from app.daily import tip_of_the_day
 from app.deps import CurrentUser, SessionDep
 from app.models import (
     ActivityLog,
@@ -14,12 +16,9 @@ from app.models import (
     ContentStatus,
     KnowledgeCard,
     Project,
-    Tip,
-    TipSchedule,
 )
 from app.points import PROJECT_DONE_POINTS, award
 from app.schemas import (
-    BadgeOut,
     CardDetailOut,
     CardSummaryOut,
     CategoryDetailOut,
@@ -55,6 +54,7 @@ async def list_categories(session: AsyncSession) -> list[CategoryOut]:
         CategoryOut(
             code=c.code,
             name=c.name,
+            examples=c.examples,
             icon=c.icon,
             color=c.color,
             has_projects=c.has_projects,
@@ -88,31 +88,37 @@ def project_summary(project: Project, category: Category, done: set[str]) -> Pro
     )
 
 
-async def tip_of_the_day(session: AsyncSession, day: date) -> Tip | None:
-    """A tip scheduled for this date in the admin panel, otherwise the next one in rotation."""
-    scheduled = await session.scalar(
-        select(Tip)
-        .join(TipSchedule, TipSchedule.tip_id == Tip.id)
-        .where(TipSchedule.day == day, Tip.status == PUBLISHED)
-    )
-    if scheduled is not None:
-        return scheduled
-    tips = (
-        await session.scalars(
-            select(Tip).where(Tip.status == PUBLISHED).order_by(Tip.sort_order, Tip.id)
+async def featured_project(
+    session: AsyncSession, user_id: int, day: date
+) -> ProjectSummaryOut | None:
+    """A project the user has not done yet, changing every day (home screen card)."""
+    done = await done_project_ids(session, user_id)
+    rows = (
+        await session.execute(
+            select(Project, Category)
+            .join(Category, Category.id == Project.category_id)
+            .where(Project.status == PUBLISHED)
+            .order_by(Project.sort_order, Project.id)
         )
     ).all()
-    return tips[day.toordinal() % len(tips)] if tips else None
+    todo = [(p, c) for p, c in rows if str(p.id) not in done]
+    if not todo:
+        return None
+    project, category = todo[day.toordinal() % len(todo)]
+    return project_summary(project, category, done)
 
 
 @router.get("/home")
 async def home(user: CurrentUser, session: SessionDep) -> HomeOut:
-    tip = await tip_of_the_day(session, local_today())
+    today = local_today()
+    tip = await tip_of_the_day(session, today)
     categories = [c for c in await list_categories(session) if c.has_projects]
     return HomeOut(
         user=UserOut.model_validate(user),
+        daily=await daily_state(session, user),
         tip=TipOut(id=tip.id, text=tip.text) if tip else None,
         categories=categories,
+        featured=await featured_project(session, user.id, today),
     )
 
 
@@ -157,6 +163,12 @@ async def project_detail(slug: str, user: CurrentUser, session: SessionDep) -> P
     project, category = await get_published_project(session, slug)
     done = await done_project_ids(session, user.id)
     summary = project_summary(project, category, done)
+    # How many times people have made it — a little social proof on the card.
+    done_count = await session.scalar(
+        select(func.count())
+        .select_from(ActivityLog)
+        .where(ActivityLog.action == "project_done", ActivityLog.object_id == str(project.id))
+    )
     return ProjectDetailOut(
         **summary.model_dump(),
         category_name=category.name,
@@ -165,6 +177,7 @@ async def project_detail(slug: str, user: CurrentUser, session: SessionDep) -> P
         steps=project.steps,
         safety_text=project.safety_text,
         video_url=project.video_url,
+        done_count=done_count,
     )
 
 
@@ -187,10 +200,7 @@ async def project_done(slug: str, body: DoneIn, user: CurrentUser, session: Sess
         awarded=awarded,
         points=PROJECT_DONE_POINTS if awarded else 0,
         points_total=user.points_total,
-        new_badges=[
-            BadgeOut(code=b.code, name=b.name, description=b.description, icon=b.icon)
-            for b in new_badges
-        ],
+        new_badges=badges_out(new_badges),
     )
 
 

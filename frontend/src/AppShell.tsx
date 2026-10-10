@@ -3,7 +3,6 @@ import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-route
 import { BottomNav } from "./components/BottomNav";
 import { CardScreen } from "./screens/CardScreen";
 import { CategoryScreen } from "./screens/CategoryScreen";
-import { ComingSoonScreen } from "./screens/ComingSoonScreen";
 import { GamesScreen } from "./screens/games/GamesScreen";
 import { QuizScreen } from "./screens/games/QuizScreen";
 import { SortGameScreen } from "./screens/games/SortGameScreen";
@@ -12,6 +11,7 @@ import { LearnScreen } from "./screens/LearnScreen";
 import { PrivacyScreen } from "./screens/PrivacyScreen";
 import { ProfileScreen } from "./screens/ProfileScreen";
 import { ProjectScreen } from "./screens/ProjectScreen";
+import { RatingScreen } from "./screens/RatingScreen";
 import { CelebrationProvider } from "./state/celebration";
 
 const TAB_PATHS = new Set(["/", "/learn", "/games", "/rating", "/profile"]);
@@ -29,7 +29,7 @@ function Layout() {
         <Route path="/games" element={<GamesScreen />} />
         <Route path="/games/quiz" element={<QuizScreen />} />
         <Route path="/games/sort" element={<SortGameScreen />} />
-        <Route path="/rating" element={<ComingSoonScreen icon="🏆" />} />
+        <Route path="/rating" element={<RatingScreen />} />
         <Route path="/profile" element={<ProfileScreen />} />
         <Route path="/privacy" element={<PrivacyScreen />} />
         <Route path="*" element={<Navigate to="/" replace />} />

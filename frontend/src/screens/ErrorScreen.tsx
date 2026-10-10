@@ -6,12 +6,12 @@ export function ErrorScreen({ messageKey, onRetry }: Props) {
   const { t } = useTranslation();
   return (
     <main className="screen screen--center" role="alert">
-      <div className="emoji" aria-hidden="true">
+      <div className="intro__art" aria-hidden="true">
         🍂
       </div>
       <h1>{t("errors.title")}</h1>
       <p className="hint">{t(messageKey)}</p>
-      <button className="button" type="button" onClick={onRetry}>
+      <button className="btn" type="button" onClick={onRetry} style={{ marginTop: 12 }}>
         {t("common.retry")}
       </button>
     </main>

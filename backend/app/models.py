@@ -152,6 +152,8 @@ class Category(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     code: Mapped[str] = mapped_column(String(32), unique=True)
     name: Mapped[I18n]
+    # Typical items, shown under the bin in the sorting game ("bottles, cups…").
+    examples: Mapped[I18n | None]
     icon: Mapped[str] = mapped_column(String(16))
     color: Mapped[str] = mapped_column(String(7))
     sort_order: Mapped[int] = mapped_column(server_default=text("0"))

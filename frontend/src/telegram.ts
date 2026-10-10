@@ -18,14 +18,19 @@ function supports(version: string): boolean {
   return Boolean(tg?.initData) && tg!.isVersionAtLeast(version);
 }
 
+/** Follow Telegram's light/dark theme; in a normal browser follow the system setting. */
 export function setupTelegramUi(): void {
+  const media = window.matchMedia("(prefers-color-scheme: dark)");
+  const apply = () => {
+    const dark = tg?.initData ? tg.colorScheme === "dark" : media.matches;
+    document.documentElement.classList.toggle("theme-dark", dark);
+  };
+  apply();
+  media.addEventListener("change", apply);
   if (!tg) return;
   tg.ready();
   tg.expand();
-  const applyScheme = () =>
-    document.documentElement.classList.toggle("tg-dark", tg!.colorScheme === "dark");
-  applyScheme();
-  tg.onEvent("themeChanged", applyScheme);
+  tg.onEvent("themeChanged", apply);
 }
 
 /** t.me link that opens the Mini App inside Telegram, or null if the bot is not configured. */

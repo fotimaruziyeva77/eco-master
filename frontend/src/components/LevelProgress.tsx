@@ -1,31 +1,44 @@
+import { CircleCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import type { User } from "../api/client";
+import { LEVEL_EMOJI, levelProgress, ProgressBar } from "./ui";
 
+/** Level card (design: bosh_sahifa): stage, level name, points to the next level. */
 export function LevelProgress({ user }: { user: User }) {
   const { t } = useTranslation();
-  const { code, min_points: min, next_min_points: next } = user.level;
-  const points = user.points_total;
-  const percent = next ? Math.min(100, Math.round(((points - min) / (next - min)) * 100)) : 100;
+  const level = levelProgress(user);
 
   return (
-    <div className="level">
-      <div className="level__row">
-        <span className="level__name">{t(`levels.${code}`)}</span>
-        <span className="level__points">{t("home.points", { count: points })}</span>
+    <section className="card">
+      <div className="level-card__top">
+        <span className="level-emoji" aria-hidden="true">
+          {LEVEL_EMOJI[level.code]}
+        </span>
+        <div className="level-card__name">
+          <span className="hint small">{t("home.stage", { n: level.index })}</span>
+          <strong>{t(`levels.${level.code}`)}</strong>
+        </div>
+        <div className="level-card__points">
+          <strong>{user.points_total}</strong>
+          {level.next && <span className="hint"> / {level.next}</span>}
+          <div className="hint small">{t("home.pointsWord", { count: user.points_total })}</div>
+        </div>
       </div>
-      <div
-        className="progress"
-        role="progressbar"
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={percent}
-      >
-        <div className="progress__bar" style={{ width: `${percent}%` }} />
+      <div style={{ marginTop: 14 }}>
+        <ProgressBar value={level.percent} max={100} />
       </div>
-      <p className="hint level__next">
-        {next ? t("home.toNextLevel", { count: next - points }) : t("home.topLevel")}
-      </p>
-    </div>
+      <div className="level-card__foot">
+        <span className="row text-2">
+          <CircleCheck size={15} />
+          {level.next ? t("home.filled", { percent: level.percent }) : t("home.topLevel")}
+        </span>
+        {level.nextCode && (
+          <span className="ok-text">
+            {t("home.nextLevel", { name: t(`levels.${level.nextCode}`) })} {LEVEL_EMOJI[level.nextCode]}
+          </span>
+        )}
+      </div>
+    </section>
   );
 }

@@ -52,10 +52,20 @@ export interface paths {
         get: operations["get_me_api_me_get"];
         put?: never;
         post?: never;
-        delete?: never;
+        /**
+         * Delete Me
+         * @description Delete the account (TZ 8.8, QM-17).
+         *
+         *     The profile, nickname and badges are removed; the activity log stays for statistics
+         *     with the user id cleared (foreign keys use ON DELETE SET NULL / CASCADE).
+         */
+        delete: operations["delete_me_api_me_delete"];
         options?: never;
         head?: never;
-        /** Update Me */
+        /**
+         * Update Me
+         * @description Settings (TZ 8.8): language, user path, reminders.
+         */
         patch: operations["update_me_api_me_patch"];
         trace?: never;
     };
@@ -79,6 +89,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/me/nickname": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Change Nickname
+         * @description Nickname change from settings: same rules as onboarding, at most once in 30 days.
+         */
+        post: operations["change_nickname_api_me_nickname_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/me/badges": {
         parameters: {
             query?: never;
@@ -88,9 +118,29 @@ export interface paths {
         };
         /**
          * My Badges
-         * @description All badges; earned ones carry earned_at, the rest are shown greyed out with the rule.
+         * @description All badges; earned ones carry earned_at, the rest show how close the user is.
          */
         get: operations["my_badges_api_me_badges_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/me/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * My Stats
+         * @description Profile numbers (TZ 8.8).
+         */
+        get: operations["my_stats_api_me_stats_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -391,6 +441,80 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/daily": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Daily */
+        get: operations["daily_api_daily_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/daily/done": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Daily Done
+         * @description 20 points once per Tashkent day; keeps the streak and pays the 7-day bonus (QM-09, QM-10).
+         */
+        post: operations["daily_done_api_daily_done_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/leaderboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Leaderboard */
+        get: operations["leaderboard_api_leaderboard_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Report Nickname
+         * @description Complaint about an inappropriate nickname; it goes to the admin queue.
+         */
+        post: operations["report_nickname_api_reports_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/dev/init-data": {
         parameters: {
             query?: never;
@@ -437,6 +561,10 @@ export interface components {
             icon: string;
             /** Earned At */
             earned_at?: string | null;
+            /** Progress Current */
+            progress_current?: number | null;
+            /** Progress Target */
+            progress_target?: number | null;
         };
         /** CardDetailOut */
         CardDetailOut: {
@@ -478,6 +606,10 @@ export interface components {
             name: {
                 [key: string]: unknown;
             };
+            /** Examples */
+            examples?: {
+                [key: string]: unknown;
+            } | null;
             /** Icon */
             icon: string;
             /** Color */
@@ -491,6 +623,51 @@ export interface components {
              * @default 0
              */
             project_count: number;
+        };
+        /** DailyDoneOut */
+        DailyDoneOut: {
+            /** Awarded */
+            awarded: boolean;
+            /** Points */
+            points: number;
+            /** Bonus Points */
+            bonus_points: number;
+            /** Streak Current */
+            streak_current: number;
+            /** Streak Best */
+            streak_best: number;
+            /** Points Total */
+            points_total: number;
+            /**
+             * New Badges
+             * @default []
+             */
+            new_badges: components["schemas"]["BadgeOut"][];
+        };
+        /** DailyOut */
+        DailyOut: {
+            task: components["schemas"]["DailyTaskOut"] | null;
+            /** Done Today */
+            done_today: boolean;
+            /** Streak Current */
+            streak_current: number;
+            /** Streak Best */
+            streak_best: number;
+            /** Days To Bonus */
+            days_to_bonus: number;
+            /** Bonus Points */
+            bonus_points: number;
+        };
+        /** DailyTaskOut */
+        DailyTaskOut: {
+            /** Id */
+            id: number;
+            /** Text */
+            text: {
+                [key: string]: unknown;
+            };
+            /** Points */
+            points: number;
         };
         /** DevInitDataOut */
         DevInitDataOut: {
@@ -600,9 +777,39 @@ export interface components {
         /** HomeOut */
         HomeOut: {
             user: components["schemas"]["UserOut"];
+            daily: components["schemas"]["DailyOut"];
             tip: components["schemas"]["TipOut"] | null;
             /** Categories */
             categories: components["schemas"]["CategoryOut"][];
+            featured?: components["schemas"]["ProjectSummaryOut"] | null;
+        };
+        /** LeaderboardEntryOut */
+        LeaderboardEntryOut: {
+            /** Rank */
+            rank: number;
+            /** User Id */
+            user_id: number;
+            /** Nickname */
+            nickname: string;
+            /** Level Code */
+            level_code: string;
+            /** Points */
+            points: number;
+            /** Is Me */
+            is_me: boolean;
+        };
+        /** LeaderboardOut */
+        LeaderboardOut: {
+            /**
+             * Period
+             * @enum {string}
+             */
+            period: "week" | "all";
+            /** Week Start */
+            week_start: string | null;
+            /** Entries */
+            entries: components["schemas"]["LeaderboardEntryOut"][];
+            me: components["schemas"]["LeaderboardEntryOut"] | null;
         };
         /** LevelOut */
         LevelOut: {
@@ -617,6 +824,11 @@ export interface components {
         MeUpdate: {
             /** Language */
             language?: ("uz" | "ru" | "en") | null;
+            path?: components["schemas"]["UserPath"] | null;
+            /** Reminders Enabled */
+            reminders_enabled?: boolean | null;
+            /** Reminder Time */
+            reminder_time?: string | null;
         };
         /** NicknameCheckOut */
         NicknameCheckOut: {
@@ -687,6 +899,11 @@ export interface components {
             } | null;
             /** Video Url */
             video_url: string | null;
+            /**
+             * Done Count
+             * @default 0
+             */
+            done_count: number;
         };
         /** ProjectSummaryOut */
         ProjectSummaryOut: {
@@ -780,11 +997,49 @@ export interface components {
             /** Questions */
             questions: components["schemas"]["QuizQuestionOut"][];
         };
+        /** ReportIn */
+        ReportIn: {
+            /** Target User Id */
+            target_user_id: number;
+            /**
+             * Reason
+             * @default nickname
+             * @constant
+             */
+            reason: "nickname";
+        };
         /**
          * SafetyLevel
          * @enum {string}
          */
         SafetyLevel: "green" | "yellow" | "red";
+        /** StatsOut */
+        StatsOut: {
+            /** Streak Current */
+            streak_current: number;
+            /** Streak Best */
+            streak_best: number;
+            /** Tasks Done */
+            tasks_done: number;
+            /** Projects Done */
+            projects_done: number;
+            /** Projects Total */
+            projects_total: number;
+            /** Quiz Correct */
+            quiz_correct: number;
+            /** Quiz Answered */
+            quiz_answered: number;
+            /** Sorted Correct */
+            sorted_correct: number;
+            /** Sorted Total */
+            sorted_total: number;
+            /** Badges Earned */
+            badges_earned: number;
+            /** Badges Total */
+            badges_total: number;
+            /** Rank All */
+            rank_all: number | null;
+        };
         /** TelegramAuthIn */
         TelegramAuthIn: {
             /** Init Data */
@@ -827,6 +1082,14 @@ export interface components {
             reminder_time: string;
             /** Write Access */
             write_access: boolean;
+            /** Last Task Date */
+            last_task_date: string | null;
+            /** Nickname Changed At */
+            nickname_changed_at: string | null;
+            /** Done Today */
+            readonly done_today: boolean;
+            /** Nickname Change Available At */
+            readonly nickname_change_available_at: string | null;
             readonly level: components["schemas"]["LevelOut"];
         };
         /**
@@ -936,6 +1199,24 @@ export interface operations {
             };
         };
     };
+    delete_me_api_me_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     update_me_api_me_patch: {
         parameters: {
             query?: never;
@@ -1002,6 +1283,39 @@ export interface operations {
             };
         };
     };
+    change_nickname_api_me_nickname_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NicknameIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     my_badges_api_me_badges_get: {
         parameters: {
             query?: never;
@@ -1018,6 +1332,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BadgeOut"][];
+                };
+            };
+        };
+    };
+    my_stats_api_me_stats_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatsOut"];
                 };
             };
         };
@@ -1486,6 +1820,125 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GameAnswerOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    daily_api_daily_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DailyOut"];
+                };
+            };
+        };
+    };
+    daily_done_api_daily_done_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DoneIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DailyDoneOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    leaderboard_api_leaderboard_get: {
+        parameters: {
+            query?: {
+                period?: "week" | "all";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeaderboardOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    report_nickname_api_reports_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReportIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */
