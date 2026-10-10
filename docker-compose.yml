@@ -1,4 +1,4 @@
-# Local development services. Production deployment is set up in phase 8.
+# Local development database. Production: deploy/docker-compose.yml (see README).
 services:
   db:
     image: postgres:17-alpine

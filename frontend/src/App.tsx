@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 
 import { ApiError, fetchDevInitData, loginWithTelegram, type User } from "./api/client";
 import { AppShell } from "./AppShell";
-import i18n from "./i18n";
+import { NetworkStatus } from "./components/NetworkStatus";
+import { changeLanguage } from "./i18n";
 import { pickLanguage } from "./i18n/languages";
 import { ErrorScreen } from "./screens/ErrorScreen";
 import { LoadingScreen } from "./screens/LoadingScreen";
@@ -46,7 +47,7 @@ export default function App() {
       }
       const loggedIn = await loginWithTelegram(initData);
       // During onboarding the language screen decides; afterwards the saved language wins.
-      if (loggedIn.onboarding_step !== "language") await i18n.changeLanguage(loggedIn.language);
+      if (loggedIn.onboarding_step !== "language") await changeLanguage(loggedIn.language);
       setUserState(loggedIn);
       setState({ kind: "ready" });
     } catch (error) {
@@ -68,6 +69,7 @@ export default function App() {
 
   return (
     <UserProvider user={user} setUser={setUser}>
+      <NetworkStatus />
       {user.onboarding_step === "done" ? <AppShell /> : <OnboardingFlow />}
     </UserProvider>
   );

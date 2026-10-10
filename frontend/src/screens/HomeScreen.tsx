@@ -3,13 +3,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
-import { api, type Daily, type Home } from "../api/client";
+import { api, ApiError, type Daily, type Home } from "../api/client";
 import { InlineError, InlineLoading } from "../components/common";
 import { LevelProgress } from "../components/LevelProgress";
 import { PROJECT_POINTS, SAFETY_ICON } from "../components/ProjectCard";
 import { tint, TopBar } from "../components/ui";
 import { useLoad } from "../hooks/useLoad";
 import { useTr } from "../i18n/tr";
+import { enqueue } from "../outbox";
 import { useCelebrate } from "../state/celebration";
 import { useUser } from "../state/user";
 import { haptic } from "../telegram";
@@ -112,6 +113,7 @@ function DailyTaskCard({ daily, onChange }: { daily: Daily; onChange: (d: Daily)
   const celebrate = useCelebrate();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(false);
+  const [savedOffline, setSavedOffline] = useState(false);
   // One id per task: a retried request after a network error is written only once.
   const eventId = useMemo(() => crypto.randomUUID(), [daily.task?.id]);
   const task = daily.task!;
@@ -137,7 +139,14 @@ function DailyTaskCard({ daily, onChange }: { daily: Daily; onChange: (d: Daily)
         done_today: true,
       });
       celebrate(result.new_badges ?? []);
-    } catch {
+    } catch (failure) {
+      if (!(failure instanceof ApiError)) {
+        // No connection: done for today on this device, sent with the same id later (QM-18).
+        enqueue({ id: eventId, kind: "daily_done" });
+        onChange({ ...daily, done_today: true });
+        setSavedOffline(true);
+        return;
+      }
       haptic.error();
       setError(true);
     } finally {
@@ -155,6 +164,7 @@ function DailyTaskCard({ daily, onChange }: { daily: Daily; onChange: (d: Daily)
       </div>
       <p className="task-card__text">{tr(task.text)}</p>
       {error && <p className="small">{t("project.doneError")}</p>}
+      {savedOffline && <p className="small">{t("network.savedOffline")}</p>}
       <div className="task-card__foot">
         <span className="task-card__deadline">
           <AlarmClock size={16} /> {t("home.taskDeadline")}

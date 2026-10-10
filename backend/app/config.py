@@ -10,8 +10,12 @@ INSECURE_JWT_SECRET = "dev-only-change-me"
 
 
 class Settings(BaseSettings):
+    # env_ignore_empty: an optional value left blank in .env (FEEDBACK_CHAT_ID=) means "not set".
     model_config = SettingsConfigDict(
-        env_file=("../.env", ".env"), env_file_encoding="utf-8", extra="ignore"
+        env_file=("../.env", ".env"),
+        env_file_encoding="utf-8",
+        env_ignore_empty=True,
+        extra="ignore",
     )
 
     env: Literal["dev", "test", "prod"] = "dev"

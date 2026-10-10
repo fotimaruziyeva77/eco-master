@@ -45,6 +45,23 @@ let sessionToken: string | null = null;
 
 export const hasSession = () => sessionToken !== null;
 
+// Whether the last request reached the server; the offline banner listens to this.
+let reachable = true;
+const reachability = new EventTarget();
+
+export const isReachable = () => reachable;
+
+export function onReachabilityChange(listener: () => void): () => void {
+  reachability.addEventListener("change", listener);
+  return () => reachability.removeEventListener("change", listener);
+}
+
+function setReachable(value: boolean): void {
+  if (reachable === value) return;
+  reachable = value;
+  reachability.dispatchEvent(new Event("change"));
+}
+
 export class ApiError extends Error {
   constructor(
     readonly status: number,
@@ -59,7 +76,14 @@ async function send(path: string, init: RequestInit = {}): Promise<Response> {
   headers.set("Content-Type", "application/json");
   if (sessionToken) headers.set("Authorization", `Bearer ${sessionToken}`);
 
-  const response = await fetch(`/api${path}`, { ...init, headers });
+  let response: Response;
+  try {
+    response = await fetch(`/api${path}`, { ...init, headers });
+  } catch (error) {
+    setReachable(false); // no connection: a TypeError, not an ApiError
+    throw error;
+  }
+  setReachable(true);
   if (!response.ok) {
     let code = `http_${response.status}`;
     try {
@@ -96,6 +120,8 @@ export async function fetchDevInitData(languageCode: string): Promise<string> {
 }
 
 export const api = {
+  health: () => request<{ status: string }>("/health"),
+  me: () => request<User>("/me"),
   updateMe: (patch: Schemas["MeUpdate"]) =>
     request<User>("/me", { method: "PATCH", body: JSON.stringify(patch) }),
   setWriteAccess: (granted: boolean) => post<User>("/me/write-access", { granted }),

@@ -9,13 +9,13 @@ import "@fontsource-variable/plus-jakarta-sans";
 import "./styles.css";
 import { telegramLanguageCode } from "./telegram";
 
-// Until the server tells us the saved language, use the Telegram client's language.
-initI18n(pickLanguage(telegramLanguageCode() ?? navigator.language));
-
 watchErrors();
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+// Until the server tells us the saved language, use the Telegram client's language.
+void initI18n(pickLanguage(telegramLanguageCode() ?? navigator.language)).then(() =>
+  createRoot(document.getElementById("root")!).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  ),
 );

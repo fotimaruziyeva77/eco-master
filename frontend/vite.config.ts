@@ -36,5 +36,7 @@ export default defineConfig({
   },
   test: {
     environment: "node",
+    // The contrast test reads the design tokens as text (src/theme.test.ts).
+    css: { include: [/tokens\.css/] },
   },
 });

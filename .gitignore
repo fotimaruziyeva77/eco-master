@@ -27,3 +27,9 @@ Thumbs.db
 
 # Local tool settings
 .claude/
+
+# Database backups on the server
+deploy/backups/
+
+# Server-specific Compose changes (ports and the like)
+deploy/docker-compose.override.yml

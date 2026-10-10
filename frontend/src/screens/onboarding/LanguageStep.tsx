@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { api } from "../../api/client";
+import { changeLanguage } from "../../i18n";
 import { LANGUAGE_NAMES, LANGUAGES, pickLanguage, type Language } from "../../i18n/languages";
 import { useUser } from "../../state/user";
 import { haptic } from "../../telegram";
@@ -16,7 +17,7 @@ export function LanguageStep({ onDone }: { onDone: () => void }) {
 
   async function select(language: Language) {
     haptic.tap();
-    await i18n.changeLanguage(language);
+    await changeLanguage(language);
   }
 
   async function next() {

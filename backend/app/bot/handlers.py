@@ -96,7 +96,12 @@ async def on_feedback(message: Message) -> None:
             settings.feedback_chat_id, feedback_report(user, message.text)
         )
     else:
-        log.info("Feedback from user %s (no FEEDBACK_CHAT_ID set): %s", user.id, message.text)
+        # Only the size: what users write may be personal and must not land in logs (TZ 11.1).
+        log.info(
+            "Feedback from user %s (%s characters) dropped: FEEDBACK_CHAT_ID is not set",
+            user.id,
+            len(message.text),
+        )
     await message.answer(t("feedback_thanks", user.language))
 
 

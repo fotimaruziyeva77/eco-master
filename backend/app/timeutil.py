@@ -5,5 +5,10 @@ from zoneinfo import ZoneInfo
 TASHKENT = ZoneInfo("Asia/Tashkent")
 
 
+def utc_now() -> datetime:
+    """The current time. Tests replace it to check what happens around Tashkent midnight."""
+    return datetime.now(UTC)
+
+
 def local_today(now: datetime | None = None) -> date:
-    return (now or datetime.now(UTC)).astimezone(TASHKENT).date()
+    return (now or utc_now()).astimezone(TASHKENT).date()

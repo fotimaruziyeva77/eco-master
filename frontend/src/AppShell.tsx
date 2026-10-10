@@ -1,27 +1,42 @@
+import { lazy, Suspense, type ComponentType } from "react";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router";
 
 import { BottomNav } from "./components/BottomNav";
-import { CardScreen } from "./screens/CardScreen";
-import { CategoryScreen } from "./screens/CategoryScreen";
-import { GamesScreen } from "./screens/games/GamesScreen";
-import { QuizScreen } from "./screens/games/QuizScreen";
-import { SortGameScreen } from "./screens/games/SortGameScreen";
+import { InlineLoading } from "./components/common";
 import { HomeScreen } from "./screens/HomeScreen";
-import { LearnScreen } from "./screens/LearnScreen";
-import { PrivacyScreen, TermsScreen } from "./screens/PrivacyScreen";
-import { ProfileScreen } from "./screens/ProfileScreen";
-import { ProjectScreen } from "./screens/ProjectScreen";
-import { RatingScreen } from "./screens/RatingScreen";
-import { LessonScreen } from "./screens/teachers/LessonScreen";
-import { TeachersScreen } from "./screens/teachers/TeachersScreen";
 import { CelebrationProvider } from "./state/celebration";
+
+// Home ships with the app; other screens load on first visit — a smaller first load (TZ 13).
+const named = <K extends string>(load: () => Promise<Record<K, ComponentType>>, name: K) =>
+  lazy(() => load().then((m) => ({ default: m[name] })));
+const CardScreen = named(() => import("./screens/CardScreen"), "CardScreen");
+const CategoryScreen = named(() => import("./screens/CategoryScreen"), "CategoryScreen");
+const GamesScreen = named(() => import("./screens/games/GamesScreen"), "GamesScreen");
+const QuizScreen = named(() => import("./screens/games/QuizScreen"), "QuizScreen");
+const SortGameScreen = named(() => import("./screens/games/SortGameScreen"), "SortGameScreen");
+const LearnScreen = named(() => import("./screens/LearnScreen"), "LearnScreen");
+const PrivacyScreen = named(() => import("./screens/PrivacyScreen"), "PrivacyScreen");
+const TermsScreen = named(() => import("./screens/PrivacyScreen"), "TermsScreen");
+const ProfileScreen = named(() => import("./screens/ProfileScreen"), "ProfileScreen");
+const ProjectScreen = named(() => import("./screens/ProjectScreen"), "ProjectScreen");
+const RatingScreen = named(() => import("./screens/RatingScreen"), "RatingScreen");
+const LessonScreen = named(() => import("./screens/teachers/LessonScreen"), "LessonScreen");
+const TeachersScreen = named(() => import("./screens/teachers/TeachersScreen"), "TeachersScreen");
+
+function ScreenLoading() {
+  return (
+    <main className="screen">
+      <InlineLoading />
+    </main>
+  );
+}
 
 const TAB_PATHS = new Set(["/", "/learn", "/games", "/rating", "/profile"]);
 
 function Layout() {
   const { pathname } = useLocation();
   return (
-    <>
+    <Suspense fallback={<ScreenLoading />}>
       <Routes>
         <Route path="/" element={<HomeScreen />} />
         <Route path="/learn" element={<LearnScreen />} />
@@ -40,7 +55,7 @@ function Layout() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       {TAB_PATHS.has(pathname) && <BottomNav />}
-    </>
+    </Suspense>
   );
 }
 

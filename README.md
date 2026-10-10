@@ -8,6 +8,7 @@ Specification: [docs/Ekoustoz_TZ_v0.2.docx](docs/Ekoustoz_TZ_v0.2.docx).
 | API, bot, admin | Python 3.13, FastAPI, SQLAlchemy 2 (async), Alembic, aiogram 3 | `backend/` |
 | Mini App | React 19, TypeScript, Vite, i18next | `frontend/` |
 | Database | PostgreSQL 17 (Docker) | `docker-compose.yml` |
+| Production | Docker Compose, Caddy (HTTPS), daily backups | `deploy/` |
 
 ## Run locally
 
@@ -83,13 +84,76 @@ authenticator app (Google Authenticator, Authy, 2FAS...); the app is connected o
 - The admin page is a separate build entry (`frontend/admin/index.html`), so the Mini App
   never loads its code. A web server must answer `/admin/*` with `dist/admin/index.html`.
 
+## Production
+
+Everything runs with Docker Compose on one Linux server (`deploy/`): PostgreSQL, the API,
+the bot (long polling, also sends reminders), Caddy (Mini App, admin panel, automatic HTTPS
+from Let's Encrypt) and a daily database backup. Sized for TZ 13: up to 5,000 users and
+500 daily users; the API is stateless apart from in-memory rate limits.
+
+1. A server with Docker, a domain whose DNS A record points to it, ports 80 and 443 open.
+2. Settings — fill in the secrets yourself, never share them in chats:
+
+   ```bash
+   cp deploy/.env.example deploy/.env
+   ```
+
+3. Start:
+
+   ```bash
+   cd deploy && docker compose up -d --build
+   ```
+
+   Updating later: make a backup (below), `git pull`, the same command again. The API applies
+   new database migrations itself on start.
+
+4. Reference data, content drafts for review and the first administrator:
+
+   ```bash
+   docker compose exec api python -m app.seed --content
+   docker compose exec api python -m app.admin_cli create --login ali --name "Ali" --role admin
+   ```
+
+   `--demo` would also publish the sample content right away — only after the team has
+   reviewed it.
+5. In @BotFather: `/newapp` with the URL `https://<DOMAIN>`, optionally `/setinline`.
+   The bot sets its commands and menu button itself on start.
+
+**Backups (TZ 11.1).** Every day at 03:00 Tashkent time into `deploy/backups/` (readable by
+root only), kept for 14 days. Copy that folder to another machine or storage as well. A
+backup right away, e.g. before an update, and the monthly check that the newest backup
+restores (into a scratch database, the live one is not touched):
+
+```bash
+cd deploy && docker compose exec backup sh /usr/local/bin/backup.sh now
+sh deploy/restore-test.sh
+```
+
+Restoring for real: `sh deploy/restore.sh deploy/backups/<file>.dump`. The backup goes into
+a new database first and replaces the live one only if that worked; the old one is kept as
+`ekoustoz_before_restore`. The API and the bot are stopped for the switch.
+
+**Monitoring.** Point an uptime checker at `https://<DOMAIN>/api/health` (TZ 13: 99% a month).
+`docker compose logs -f api bot` shows the logs; they contain internal ids only, no
+initData, names or message texts (TZ 11.1).
+
+**Security.** HTTPS with HSTS; Content-Security-Policy that allows only Telegram's script
+and lets only Telegram Web frame the Mini App; the admin panel can not be framed at all.
+Per-user request limit (TZ 11.1), admin sign-in with password + authenticator code and
+lockout, secrets only in `deploy/.env`.
+
 ## Checks
 
 ```bash
-cd backend && .venv/Scripts/python -m pytest && .venv/Scripts/ruff check app tests
-cd frontend && npm run typecheck && npm test && npm run build
+cd backend && .venv/Scripts/python -m pytest && .venv/Scripts/ruff check .
+cd frontend && npm run typecheck && npm test && npm run build && npm run size
 npm run gen:api   # regenerate src/api/schema.ts after API changes (backend must be running)
 ```
+
+GitHub Actions runs the same on every push (`.github/workflows/ci.yml`) and builds both
+Docker images. `npm run size` fails when the first-load JavaScript goes over the TZ 13
+budget of 250 KB (gzip). Acceptance criteria and how each is checked:
+[docs/qa/QM-checklist.md](docs/qa/QM-checklist.md).
 
 ## Database migrations
 

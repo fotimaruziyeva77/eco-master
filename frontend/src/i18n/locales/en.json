@@ -375,5 +375,10 @@
     "changesText": "If these terms change, we'll let you know in the app or through the bot.",
     "contactTitle": "Contact",
     "contactText": "If you have questions, message the Ekoustoz bot."
+  },
+  "network": {
+    "offline": "No internet. What you do is saved and sent when the connection is back.",
+    "savedOffline": "Saved! Points will be added when you're back online.",
+    "synced": "Back online — your saved progress has been sent."
   }
 }

@@ -1974,6 +1974,32 @@ button {
   justify-self: center;
 }
 
+/* ------------------------------------------------------------------ network */
+
+.net-banner {
+  position: fixed;
+  top: calc(8px + var(--tg-content-safe-area-inset-top, 0px));
+  left: var(--gutter);
+  right: var(--gutter);
+  z-index: 90;
+  max-width: 528px;
+  margin: 0 auto;
+  padding: 10px 14px;
+  border-radius: var(--r-input);
+  background: var(--amber-soft);
+  color: var(--on-amber-soft);
+  box-shadow: var(--shadow-2);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  animation: fade-in 0.2s ease-out;
+}
+
+.net-banner--ok {
+  background: var(--primary-soft-2);
+  color: var(--on-primary-soft);
+}
+
 /* ------------------------------------------------------------- dialogs/nav */
 
 .overlay {

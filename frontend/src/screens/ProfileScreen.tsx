@@ -24,6 +24,7 @@ import { InlineError, InlineLoading } from "../components/common";
 import { ShareButton } from "../components/ShareButton";
 import { Avatar, LEVEL_EMOJI, ProgressBar, Toggle, TopBar } from "../components/ui";
 import { useLoad } from "../hooks/useLoad";
+import { changeLanguage } from "../i18n";
 import { LANGUAGE_NAMES, LANGUAGES, type Language } from "../i18n/languages";
 import { useUser } from "../state/user";
 import { botChatLink, haptic, openTelegramLink, requestWriteAccess } from "../telegram";
@@ -389,14 +390,14 @@ function PathSheet({ onClose }: { onClose: () => void }) {
 }
 
 function LanguageSheet({ onClose }: { onClose: () => void }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { user, setUser } = useUser();
   async function choose(language: Language) {
-    await i18n.changeLanguage(language);
     try {
+      await changeLanguage(language);
       setUser(await api.updateMe({ language }));
     } catch {
-      await i18n.changeLanguage(user.language);
+      await changeLanguage(user.language);
     }
     onClose();
   }

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 
-import { api } from "../api/client";
+import { api, ApiError } from "../api/client";
 import { InlineError, InlineLoading } from "../components/common";
 import { PROJECT_POINTS, SAFETY_ICON } from "../components/ProjectCard";
 import { ShareButton } from "../components/ShareButton";
@@ -13,6 +13,7 @@ import { useBack } from "../hooks/useBack";
 import { useLoad } from "../hooks/useLoad";
 import { useTr } from "../i18n/tr";
 import { trackVideo } from "../analytics";
+import { enqueue } from "../outbox";
 import { useCelebrate } from "../state/celebration";
 import { useUser } from "../state/user";
 import { haptic } from "../telegram";
@@ -61,7 +62,14 @@ export function ProjectScreen() {
       haptic.success();
       if (result.awarded) setMessage({ kind: "ok", text: t("project.earned", { count: result.points }) });
       celebrate(result.new_badges ?? []);
-    } catch {
+    } catch (error) {
+      if (!(error instanceof ApiError)) {
+        // No connection: keep it on the device and send it later with the same id (QM-18).
+        enqueue({ id: eventId, kind: "project_done", slug: project.slug });
+        setDone(true);
+        setMessage({ kind: "ok", text: t("network.savedOffline") });
+        return;
+      }
       haptic.error();
       setMessage({ kind: "error", text: t("project.doneError") });
     } finally {

@@ -11,12 +11,15 @@ from app.bot.client import get_bot
 from app.config import Settings, get_settings
 from app.db import get_session
 from app.models import User
+from app.ratelimit import RateLimiter
 from app.security import decode_session_token
 
 bearer = HTTPBearer(auto_error=False)
 
 # Writing last_active_at on every request is wasteful; once a minute is enough for DAU.
 ACTIVITY_TOUCH_INTERVAL = timedelta(minutes=1)
+# Requests per user and minute (TZ 11.1). Normal play stays far below; scripts do not.
+request_limit = RateLimiter(limit=120, window=60)
 
 SessionDep = Annotated[AsyncSession, Depends(get_session)]
 SettingsDep = Annotated[Settings, Depends(get_settings)]
@@ -34,6 +37,8 @@ async def get_current_user(
     except jwt.InvalidTokenError as exc:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "invalid_token") from exc
 
+    if not request_limit.allow(user_id):
+        raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS, "too_many_requests")
     user = await session.get(User, user_id)
     if user is None:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "user_not_found")

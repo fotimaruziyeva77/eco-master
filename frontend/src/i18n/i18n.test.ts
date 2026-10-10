@@ -8,6 +8,13 @@ import uz from "./locales/uz.json";
 const LOCALES = { uz, ru, en } as const;
 const PLURAL_SUFFIX = /_(zero|one|two|few|many|other)$/;
 
+const SOURCES = import.meta.glob(["../**/*.{ts,tsx}", "!../**/*.test.ts", "!../api/schema.ts"], {
+  query: "?raw",
+  import: "default",
+  eager: true,
+}) as Record<string, string>;
+const USED_KEY = /\bt\(\s*["']([A-Za-z0-9_.]+)["']|i18nKey=["']([A-Za-z0-9_.]+)["']/g;
+
 type Tree = { [key: string]: string | Tree };
 
 function flatten(tree: Tree, prefix = ""): Map<string, string> {
@@ -56,6 +63,25 @@ describe("locale files (QM-04)", () => {
         }
       }
     }
+  });
+
+  // A key missing from the files would show up on screen as is, e.g. "home.title".
+  // Keys built at run time (`levels.${code}`) are not covered here.
+  it("contain every key the code uses", () => {
+    const keys = [...flat.uz.keys()];
+    const missing: string[] = [];
+    let checked = 0;
+    for (const [file, source] of Object.entries(SOURCES)) {
+      for (const match of source.matchAll(USED_KEY)) {
+        const key = match[1] ?? match[2];
+        const known =
+          flat.uz.has(key) || keys.some((k) => k.startsWith(`${key}.`) || k.startsWith(`${key}_`));
+        if (!known) missing.push(`${file}: ${key}`);
+        checked += 1;
+      }
+    }
+    expect(missing).toEqual([]);
+    expect(checked).toBeGreaterThan(200);
   });
 });
 

@@ -1,6 +1,7 @@
-"""Run the bot with long polling (local development): python -m app.bot
+"""Run the bot with long polling: python -m app.bot
 
-Production uses a webhook on the API server (phase 8).
+Production runs it the same way as its own service (deploy/docker-compose.yml): polling needs
+no public webhook endpoint, and the same process sends the daily reminders.
 """
 
 import asyncio

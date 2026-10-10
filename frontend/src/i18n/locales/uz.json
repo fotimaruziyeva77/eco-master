@@ -375,5 +375,10 @@
     "changesText": "Shartlar o'zgarsa, bu haqda ilova yoki bot orqali xabar beramiz.",
     "contactTitle": "Bog'lanish",
     "contactText": "Savollar bo'lsa, Ekoustoz botiga yozing."
+  },
+  "network": {
+    "offline": "Internet yo'q. Bajargan ishlaringiz saqlanadi va aloqa tiklanganda yuboriladi.",
+    "savedOffline": "Saqlandi! Internet qaytganda ball qo'shiladi.",
+    "synced": "Aloqa tiklandi — saqlangan ishlaringiz yuborildi."
   }
 }

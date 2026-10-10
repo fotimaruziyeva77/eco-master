@@ -1,0 +1,91 @@
+# Production. From this folder:
+#   cp .env.example .env   # then fill it in
+#   docker compose up -d --build
+name: ekoustoz
+
+x-backend: &backend
+  build: ../backend
+  restart: unless-stopped
+  env_file: .env
+  environment:
+    ENV: prod
+    DATABASE_URL: postgresql+asyncpg://ekoustoz:${POSTGRES_PASSWORD}@db:5432/ekoustoz
+    WEBAPP_URL: https://${DOMAIN}
+    CORS_ORIGINS: https://${DOMAIN}
+  depends_on:
+    db:
+      condition: service_healthy
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ekoustoz
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in deploy/.env}
+      POSTGRES_DB: ekoustoz
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ekoustoz -d ekoustoz"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Runs the database migrations, then serves /api.
+  api:
+    <<: *backend
+
+  # Long polling: needs no public webhook. Also sends the daily reminders.
+  bot:
+    <<: *backend
+    command: ["python", "-m", "app.bot"]
+    healthcheck:
+      disable: true
+    depends_on:
+      api:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/web.Dockerfile
+      args:
+        VITE_BOT_USERNAME: ${BOT_USERNAME:?Set BOT_USERNAME in deploy/.env}
+        VITE_WEBAPP_SHORT_NAME: ${WEBAPP_SHORT_NAME:-app}
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:?Set DOMAIN in deploy/.env}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      api:
+        condition: service_healthy
+
+  # Daily dump at 03:00 Tashkent, kept 14 days (TZ 11.1). Files: deploy/backups/.
+  backup:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      PGHOST: db
+      PGUSER: ekoustoz
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ekoustoz
+      KEEP_DAYS: "14"
+    volumes:
+      - ./backups:/backups
+      - ./backup.sh:/usr/local/bin/backup.sh:ro
+    entrypoint: ["/bin/sh", "/usr/local/bin/backup.sh"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db-data:
+  caddy-data:
+  caddy-config:

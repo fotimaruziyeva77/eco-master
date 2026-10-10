@@ -8,7 +8,7 @@ import {
   Target,
   Waypoints,
 } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 
@@ -17,6 +17,7 @@ import { InlineError, InlineLoading } from "../../components/common";
 import { SubpageHeader } from "../../components/ui";
 import { useBack } from "../../hooks/useBack";
 import { useLoad } from "../../hooks/useLoad";
+import { loadLanguage } from "../../i18n";
 import { DEFAULT_LANGUAGE, LANGUAGE_NAMES, LANGUAGES, type Language } from "../../i18n/languages";
 import { useUser } from "../../state/user";
 import { botChatLink, haptic, insideTelegram, openTelegramLink } from "../../telegram";
@@ -33,6 +34,11 @@ export function LessonScreen() {
   // A teacher may use the app in one language and teach in another (TZ 8.9: three languages).
   const [language, setLanguage] = useState<Language>(user.language);
   const [status, setStatus] = useState<Status>(null);
+  // Headings follow the lesson language, whose texts may still need to be fetched.
+  const [, setLoaded] = useState(0);
+  useEffect(() => {
+    void loadLanguage(language).then(() => setLoaded((n) => n + 1), () => {});
+  }, [language]);
 
   const lesson = data.data;
   const lang = lesson && language in lesson.body ? language : DEFAULT_LANGUAGE;
