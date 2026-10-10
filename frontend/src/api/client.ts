@@ -12,6 +12,14 @@ export type ProjectDetail = Schemas["ProjectDetailOut"];
 export type CardSummary = Schemas["CardSummaryOut"];
 export type CardDetail = Schemas["CardDetailOut"];
 export type DoneResult = Schemas["DoneOut"];
+export type Badge = Schemas["BadgeOut"];
+export type GamesOverview = Schemas["GamesOut"];
+export type QuizRound = Schemas["QuizRoundOut"];
+export type QuizQuestion = Schemas["QuizQuestionOut"];
+export type QuizAnswer = Schemas["QuizAnswerOut"];
+export type GameRound = Schemas["GameRoundOut"];
+export type GameItem = Schemas["GameItemOut"];
+export type GameAnswer = Schemas["GameAnswerOut"];
 
 let sessionToken: string | null = null;
 
@@ -83,4 +91,17 @@ export const api = {
     }),
   cards: () => request<CardSummary[]>("/cards"),
   card: (slug: string) => request<CardDetail>(`/cards/${encodeURIComponent(slug)}`),
+
+  myBadges: () => request<Badge[]>("/me/badges"),
+  games: () => request<GamesOverview>("/games"),
+  quizRound: (category: string | null) => post<QuizRound>("/quiz/rounds", { category }),
+  quizAnswer: (roundToken: string, questionId: number, optionIndex: number) =>
+    post<QuizAnswer>("/quiz/answer", {
+      round_token: roundToken,
+      question_id: questionId,
+      option_index: optionIndex,
+    }),
+  gameRound: () => post<GameRound>("/game/rounds"),
+  gameAnswer: (roundToken: string, itemId: number, bin: string | null) =>
+    post<GameAnswer>("/game/answer", { round_token: roundToken, item_id: itemId, bin }),
 };

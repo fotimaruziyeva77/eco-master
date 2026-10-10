@@ -160,5 +160,50 @@
     "deleteText": "Istalgan vaqtda ma'lumotlaringizni o'chirishni so'rashingiz mumkin. Hozircha buning uchun botga yozing.",
     "contactTitle": "Bog'lanish",
     "contactText": "Savollar bo'lsa, Ekoustoz botiga yozing."
+  },
+  "games": {
+    "title": "O'yinlar",
+    "quizTitle": "Viktorina",
+    "quizText_one": "{{count}} ta savol: bilimingizni sinab ko'ring",
+    "quizText_other": "{{count}} ta savol: bilimingizni sinab ko'ring",
+    "sortTitle": "Chiqindini to'g'ri qutiga joyla",
+    "sortText": "Buyumni kerakli qutiga tashlang va saralashni o'rganing.",
+    "todayPoints": "Bugun: {{points}} / {{cap}} ball",
+    "quickMode": "⚡ Tezkor rejim (har buyumga 10 soniya)",
+    "play": "O'ynash",
+    "empty": "Bu o'yin uchun savollar hali qo'shilmagan."
+  },
+  "quiz": {
+    "chooseTopic": "Mavzuni tanlang",
+    "mixed": "Aralash",
+    "questionOf": "Savol {{current}} / {{total}}",
+    "next": "Keyingi savol",
+    "finish": "Natijani ko'rish",
+    "correct": "To'g'ri!",
+    "wrong": "Noto'g'ri",
+    "alreadyEarned": "Bu savol uchun ball avval olingan.",
+    "answerError": "Javob yuborilmadi. Internetni tekshirib, qayta urinib ko'ring.",
+    "resultTitle": "Natija",
+    "resultScore": "{{correct}} / {{total}} to'g'ri javob",
+    "playAgain": "Yana o'ynash",
+    "backToGames": "O'yinlarga qaytish"
+  },
+  "sort": {
+    "itemOf": "{{current}} / {{total}}",
+    "whereDoesItGo": "Bu qaysi qutiga tushadi?",
+    "correct": "To'g'ri!",
+    "wrongBin": "Bu «{{bin}}» qutisiga tegishli.",
+    "timeUp": "Vaqt tugadi!",
+    "next": "Keyingi",
+    "secondsLeft_one": "{{count}} soniya qoldi",
+    "secondsLeft_other": "{{count}} soniya qoldi",
+    "capReached": "Bugungi o'yin ballari limiti tugadi. O'ynashda davom etishingiz mumkin, lekin ball berilmaydi.",
+    "resultScore": "{{correct}} / {{total}} buyum to'g'ri saralandi"
+  },
+  "badges": {
+    "title": "Nishonlar",
+    "newTitle": "🎉 Yangi nishon!",
+    "ok": "Zo'r!",
+    "locked": "Hali olinmagan"
   }
 }

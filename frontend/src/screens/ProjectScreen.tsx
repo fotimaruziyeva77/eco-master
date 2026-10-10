@@ -9,6 +9,7 @@ import { VideoPlayer } from "../components/VideoPlayer";
 import { useBack } from "../hooks/useBack";
 import { useLoad } from "../hooks/useLoad";
 import { useTr } from "../i18n/tr";
+import { useCelebrate } from "../state/celebration";
 import { useUser } from "../state/user";
 import { haptic } from "../telegram";
 
@@ -20,6 +21,7 @@ export function ProjectScreen() {
   const { t } = useTranslation();
   const tr = useTr();
   const { user, setUser } = useUser();
+  const celebrate = useCelebrate();
   const data = useLoad(() => api.project(slug), [slug]);
   const project = data.data;
   const back = useBack(project ? `/learn/${project.category_code}` : "/learn");
@@ -51,6 +53,7 @@ export function ProjectScreen() {
       setUser({ ...user, points_total: result.points_total });
       haptic.success();
       if (result.awarded) setMessage({ kind: "ok", text: t("project.earned", { count: result.points }) });
+      celebrate(result.new_badges ?? []);
     } catch {
       haptic.error();
       setMessage({ kind: "error", text: t("project.doneError") });

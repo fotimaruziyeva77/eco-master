@@ -1,5 +1,5 @@
 import uuid
-from datetime import time
+from datetime import datetime, time
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, computed_field
@@ -122,6 +122,14 @@ class CategoryDetailOut(BaseModel):
     projects: list[ProjectSummaryOut]
 
 
+class BadgeOut(BaseModel):
+    code: str
+    name: I18nText
+    description: I18nText
+    icon: str
+    earned_at: datetime | None = None
+
+
 class DoneIn(BaseModel):
     client_event_id: uuid.UUID
 
@@ -130,6 +138,7 @@ class DoneOut(BaseModel):
     awarded: bool
     points: int
     points_total: int
+    new_badges: list[BadgeOut] = []
 
 
 class CardSummaryOut(BaseModel):
@@ -151,3 +160,83 @@ class HomeOut(BaseModel):
     user: UserOut
     tip: TipOut | None
     categories: list[CategoryOut]
+
+
+# ----------------------------------------------------------------------- games
+
+
+class QuizCategoryOut(BaseModel):
+    code: str
+    name: I18nText
+    icon: str
+    question_count: int
+
+
+class GamesOut(BaseModel):
+    quiz_categories: list[QuizCategoryOut]
+    quiz_total: int
+    bins: list[CategoryOut]
+    game_item_count: int
+    game_points_today: int
+    game_daily_cap: int
+
+
+class QuizRoundIn(BaseModel):
+    category: str | None = None  # None = mixed, including general ecology questions
+
+
+class QuizQuestionOut(BaseModel):
+    id: int
+    category_code: str | None
+    text: I18nText
+    options: I18nText
+    image_url: str | None
+
+
+class QuizRoundOut(BaseModel):
+    round_token: str
+    questions: list[QuizQuestionOut]
+
+
+class QuizAnswerIn(BaseModel):
+    round_token: str = Field(max_length=4096)
+    question_id: int
+    option_index: int = Field(ge=0, le=9)
+
+
+class QuizAnswerOut(BaseModel):
+    correct: bool
+    correct_index: int
+    explanation: I18nText
+    points: int
+    points_total: int
+    new_badges: list[BadgeOut] = []
+
+
+class GameItemOut(BaseModel):
+    id: int
+    name: I18nText
+    icon: str | None
+    image_url: str | None
+
+
+class GameRoundOut(BaseModel):
+    round_token: str
+    items: list[GameItemOut]
+
+
+class GameAnswerIn(BaseModel):
+    round_token: str = Field(max_length=4096)
+    item_id: int
+    bin: str | None = Field(default=None, max_length=32)  # None = time ran out
+
+
+class GameAnswerOut(BaseModel):
+    correct: bool
+    correct_bin: str
+    explanation: I18nText
+    points: int
+    points_today: int
+    daily_cap: int
+    points_total: int
+    new_badges: list[BadgeOut] = []

@@ -3,14 +3,33 @@
 import uuid
 from datetime import date
 
-from sqlalchemy import update
+from sqlalchemy import func, select, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import ActivityLog, User
 from app.timeutil import local_today
 
+# TZ 8.6 (proposed values, tuned during the closed test).
 PROJECT_DONE_POINTS = 15
+QUIZ_CORRECT_POINTS = 5
+GAME_CORRECT_POINTS = 2
+GAME_DAILY_CAP = 40
+
+
+async def lock_user(session: AsyncSession, user_id: int) -> None:
+    """Serialize one user's point-changing requests, so daily limits hold under parallel taps."""
+    await session.execute(select(User.id).where(User.id == user_id).with_for_update())
+
+
+async def points_today(session: AsyncSession, user_id: int, action: str, day: date) -> int:
+    return await session.scalar(
+        select(func.coalesce(func.sum(ActivityLog.points), 0)).where(
+            ActivityLog.user_id == user_id,
+            ActivityLog.action == action,
+            ActivityLog.local_date == day,
+        )
+    )
 
 
 async def award(

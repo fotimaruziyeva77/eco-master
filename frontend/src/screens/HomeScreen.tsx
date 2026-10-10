@@ -44,13 +44,13 @@ export function HomeScreen() {
       )}
 
       <section className="quick-actions">
-        <Link className="tile" to="/games">
+        <Link className="tile" to="/games/quiz">
           <span className="tile__icon" aria-hidden="true">
             ❓
           </span>
           <span>{t("home.quiz")}</span>
         </Link>
-        <Link className="tile" to="/games">
+        <Link className="tile" to="/games/sort">
           <span className="tile__icon" aria-hidden="true">
             🗑️
           </span>

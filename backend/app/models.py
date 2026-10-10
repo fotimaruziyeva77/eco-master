@@ -199,6 +199,8 @@ class GameItem(ContentMixin, Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[I18n]
     image_url: Mapped[str | None] = mapped_column(String(512))
+    # Emoji shown until (or instead of) a photo is uploaded.
+    icon: Mapped[str | None] = mapped_column(String(16))
     correct_category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"), index=True)
     explanation: Mapped[I18n]
 

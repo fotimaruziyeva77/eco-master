@@ -79,6 +79,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/me/badges": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * My Badges
+         * @description All badges; earned ones carry earned_at, the rest are shown greyed out with the rule.
+         */
+        get: operations["my_badges_api_me_badges_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/onboarding/language": {
         parameters: {
             query?: never;
@@ -286,6 +306,91 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/games": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Games Overview */
+        get: operations["games_overview_api_games_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/quiz/rounds": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Start Quiz */
+        post: operations["start_quiz_api_quiz_rounds_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/quiz/answer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Answer Quiz */
+        post: operations["answer_quiz_api_quiz_answer_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/game/rounds": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Start Game */
+        post: operations["start_game_api_game_rounds_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/game/answer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Answer Game */
+        post: operations["answer_game_api_game_answer_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/dev/init-data": {
         parameters: {
             query?: never;
@@ -315,6 +420,23 @@ export interface components {
             /** Token */
             token: string;
             user: components["schemas"]["UserOut"];
+        };
+        /** BadgeOut */
+        BadgeOut: {
+            /** Code */
+            code: string;
+            /** Name */
+            name: {
+                [key: string]: unknown;
+            };
+            /** Description */
+            description: {
+                [key: string]: unknown;
+            };
+            /** Icon */
+            icon: string;
+            /** Earned At */
+            earned_at?: string | null;
         };
         /** CardDetailOut */
         CardDetailOut: {
@@ -396,6 +518,79 @@ export interface components {
             points: number;
             /** Points Total */
             points_total: number;
+            /**
+             * New Badges
+             * @default []
+             */
+            new_badges: components["schemas"]["BadgeOut"][];
+        };
+        /** GameAnswerIn */
+        GameAnswerIn: {
+            /** Round Token */
+            round_token: string;
+            /** Item Id */
+            item_id: number;
+            /** Bin */
+            bin?: string | null;
+        };
+        /** GameAnswerOut */
+        GameAnswerOut: {
+            /** Correct */
+            correct: boolean;
+            /** Correct Bin */
+            correct_bin: string;
+            /** Explanation */
+            explanation: {
+                [key: string]: unknown;
+            };
+            /** Points */
+            points: number;
+            /** Points Today */
+            points_today: number;
+            /** Daily Cap */
+            daily_cap: number;
+            /** Points Total */
+            points_total: number;
+            /**
+             * New Badges
+             * @default []
+             */
+            new_badges: components["schemas"]["BadgeOut"][];
+        };
+        /** GameItemOut */
+        GameItemOut: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: {
+                [key: string]: unknown;
+            };
+            /** Icon */
+            icon: string | null;
+            /** Image Url */
+            image_url: string | null;
+        };
+        /** GameRoundOut */
+        GameRoundOut: {
+            /** Round Token */
+            round_token: string;
+            /** Items */
+            items: components["schemas"]["GameItemOut"][];
+        };
+        /** GamesOut */
+        GamesOut: {
+            /** Quiz Categories */
+            quiz_categories: components["schemas"]["QuizCategoryOut"][];
+            /** Quiz Total */
+            quiz_total: number;
+            /** Bins */
+            bins: components["schemas"]["CategoryOut"][];
+            /** Game Item Count */
+            game_item_count: number;
+            /** Game Points Today */
+            game_points_today: number;
+            /** Game Daily Cap */
+            game_daily_cap: number;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -513,6 +708,77 @@ export interface components {
             has_video: boolean;
             /** Done */
             done: boolean;
+        };
+        /** QuizAnswerIn */
+        QuizAnswerIn: {
+            /** Round Token */
+            round_token: string;
+            /** Question Id */
+            question_id: number;
+            /** Option Index */
+            option_index: number;
+        };
+        /** QuizAnswerOut */
+        QuizAnswerOut: {
+            /** Correct */
+            correct: boolean;
+            /** Correct Index */
+            correct_index: number;
+            /** Explanation */
+            explanation: {
+                [key: string]: unknown;
+            };
+            /** Points */
+            points: number;
+            /** Points Total */
+            points_total: number;
+            /**
+             * New Badges
+             * @default []
+             */
+            new_badges: components["schemas"]["BadgeOut"][];
+        };
+        /** QuizCategoryOut */
+        QuizCategoryOut: {
+            /** Code */
+            code: string;
+            /** Name */
+            name: {
+                [key: string]: unknown;
+            };
+            /** Icon */
+            icon: string;
+            /** Question Count */
+            question_count: number;
+        };
+        /** QuizQuestionOut */
+        QuizQuestionOut: {
+            /** Id */
+            id: number;
+            /** Category Code */
+            category_code: string | null;
+            /** Text */
+            text: {
+                [key: string]: unknown;
+            };
+            /** Options */
+            options: {
+                [key: string]: unknown;
+            };
+            /** Image Url */
+            image_url: string | null;
+        };
+        /** QuizRoundIn */
+        QuizRoundIn: {
+            /** Category */
+            category?: string | null;
+        };
+        /** QuizRoundOut */
+        QuizRoundOut: {
+            /** Round Token */
+            round_token: string;
+            /** Questions */
+            questions: components["schemas"]["QuizQuestionOut"][];
         };
         /**
          * SafetyLevel
@@ -732,6 +998,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    my_badges_api_me_badges_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BadgeOut"][];
                 };
             };
         };
@@ -1061,6 +1347,145 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CardDetailOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    games_overview_api_games_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GamesOut"];
+                };
+            };
+        };
+    };
+    start_quiz_api_quiz_rounds_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["QuizRoundIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QuizRoundOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    answer_quiz_api_quiz_answer_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["QuizAnswerIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QuizAnswerOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    start_game_api_game_rounds_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GameRoundOut"];
+                };
+            };
+        };
+    };
+    answer_game_api_game_answer_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GameAnswerIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GameAnswerOut"];
                 };
             };
             /** @description Validation Error */

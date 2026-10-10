@@ -4,11 +4,15 @@ import { BottomNav } from "./components/BottomNav";
 import { CardScreen } from "./screens/CardScreen";
 import { CategoryScreen } from "./screens/CategoryScreen";
 import { ComingSoonScreen } from "./screens/ComingSoonScreen";
+import { GamesScreen } from "./screens/games/GamesScreen";
+import { QuizScreen } from "./screens/games/QuizScreen";
+import { SortGameScreen } from "./screens/games/SortGameScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { LearnScreen } from "./screens/LearnScreen";
 import { PrivacyScreen } from "./screens/PrivacyScreen";
 import { ProfileScreen } from "./screens/ProfileScreen";
 import { ProjectScreen } from "./screens/ProjectScreen";
+import { CelebrationProvider } from "./state/celebration";
 
 const TAB_PATHS = new Set(["/", "/learn", "/games", "/rating", "/profile"]);
 
@@ -22,7 +26,9 @@ function Layout() {
         <Route path="/learn/:code" element={<CategoryScreen />} />
         <Route path="/projects/:slug" element={<ProjectScreen />} />
         <Route path="/cards/:slug" element={<CardScreen />} />
-        <Route path="/games" element={<ComingSoonScreen icon="🎮" />} />
+        <Route path="/games" element={<GamesScreen />} />
+        <Route path="/games/quiz" element={<QuizScreen />} />
+        <Route path="/games/sort" element={<SortGameScreen />} />
         <Route path="/rating" element={<ComingSoonScreen icon="🏆" />} />
         <Route path="/profile" element={<ProfileScreen />} />
         <Route path="/privacy" element={<PrivacyScreen />} />
@@ -36,7 +42,9 @@ function Layout() {
 export function AppShell() {
   return (
     <BrowserRouter>
-      <Layout />
+      <CelebrationProvider>
+        <Layout />
+      </CelebrationProvider>
     </BrowserRouter>
   );
 }

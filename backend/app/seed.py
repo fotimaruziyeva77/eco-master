@@ -11,7 +11,18 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import SessionLocal
-from app.models import BannedWord, Category, ContentStatus, KnowledgeCard, Project, Tip, WordKind
+from app.models import (
+    Badge,
+    BannedWord,
+    Category,
+    ContentStatus,
+    GameItem,
+    KnowledgeCard,
+    Project,
+    Question,
+    Tip,
+    WordKind,
+)
 from app.seed_data import (
     CATEGORIES,
     DEMO_CARDS,
@@ -20,6 +31,7 @@ from app.seed_data import (
     PROFANITY,
     RESERVED_WORDS,
 )
+from app.seed_data_games import BADGES, DEMO_GAME_ITEMS, DEMO_QUESTIONS
 
 
 async def seed_categories(session: AsyncSession) -> None:
@@ -37,6 +49,20 @@ async def seed_banned_words(session: AsyncSession) -> None:
         {"word": w, "kind": WordKind.PROFANITY} for w in PROFANITY
     ]
     await session.execute(insert(BannedWord).values(rows).on_conflict_do_nothing())
+
+
+async def seed_badges(session: AsyncSession) -> None:
+    for order, data in enumerate(BADGES, start=1):
+        values = {**data, "sort_order": order}
+        stmt = insert(Badge).values(**values)
+        stmt = stmt.on_conflict_do_update(
+            index_elements=[Badge.code], set_={k: v for k, v in values.items() if k != "code"}
+        )
+        await session.execute(stmt)
+
+
+async def is_empty(session: AsyncSession, model: type) -> bool:
+    return not await session.scalar(select(func.count()).select_from(model))
 
 
 async def seed_demo(session: AsyncSession) -> None:
@@ -60,11 +86,36 @@ async def seed_demo(session: AsyncSession) -> None:
         )
         await session.execute(stmt)
 
-    # Tips have no natural key; add the demo set only to an empty table.
-    if not await session.scalar(select(func.count()).select_from(Tip)):
+    # Tips, questions and game items have no natural key: demo sets go only into empty tables.
+    if await is_empty(session, Tip):
         session.add_all(
             Tip(text=text, sort_order=i, status=ContentStatus.PUBLISHED)
             for i, text in enumerate(DEMO_TIPS, start=1)
+        )
+    if await is_empty(session, Question):
+        session.add_all(
+            Question(
+                category_id=category_ids[q["category"]] if q["category"] else None,
+                text=q["text"],
+                options=q["options"],
+                correct_index=q["correct_index"],
+                explanation=q["explanation"],
+                sort_order=i,
+                status=ContentStatus.PUBLISHED,
+            )
+            for i, q in enumerate(DEMO_QUESTIONS, start=1)
+        )
+    if await is_empty(session, GameItem):
+        session.add_all(
+            GameItem(
+                name=item["name"],
+                icon=item["icon"],
+                correct_category_id=category_ids[item["bin"]],
+                explanation=item["explanation"],
+                sort_order=i,
+                status=ContentStatus.PUBLISHED,
+            )
+            for i, item in enumerate(DEMO_GAME_ITEMS, start=1)
         )
 
 
@@ -72,6 +123,7 @@ async def run(demo: bool) -> None:
     async with SessionLocal() as session:
         await seed_categories(session)
         await seed_banned_words(session)
+        await seed_badges(session)
         if demo:
             await seed_demo(session)
         await session.commit()

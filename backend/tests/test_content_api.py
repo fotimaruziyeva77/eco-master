@@ -71,13 +71,13 @@ async def test_project_done_awards_points_once(client, headers):
     url = "/api/projects/dry-leaves-compost/done"
     event = str(uuid.uuid4())
     first = await client.post(url, json={"client_event_id": event}, headers=headers)
-    assert first.json() == {"awarded": True, "points": 15, "points_total": 15}
+    assert first.json() == {"awarded": True, "points": 15, "points_total": 15, "new_badges": []}
 
     retry = await client.post(url, json={"client_event_id": event}, headers=headers)
-    assert retry.json() == {"awarded": False, "points": 0, "points_total": 15}
+    assert retry.json() == {"awarded": False, "points": 0, "points_total": 15, "new_badges": []}
 
     again = await client.post(url, json={"client_event_id": str(uuid.uuid4())}, headers=headers)
-    assert again.json() == {"awarded": False, "points": 0, "points_total": 15}
+    assert again.json() == {"awarded": False, "points": 0, "points_total": 15, "new_badges": []}
 
     detail = await client.get("/api/projects/dry-leaves-compost", headers=headers)
     assert detail.json()["done"] is True

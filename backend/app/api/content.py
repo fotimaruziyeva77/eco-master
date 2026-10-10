@@ -6,6 +6,7 @@ from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.badges import award_badges
 from app.deps import CurrentUser, SessionDep
 from app.models import (
     ActivityLog,
@@ -18,6 +19,7 @@ from app.models import (
 )
 from app.points import PROJECT_DONE_POINTS, award
 from app.schemas import (
+    BadgeOut,
     CardDetailOut,
     CardSummaryOut,
     CategoryDetailOut,
@@ -178,12 +180,17 @@ async def project_done(slug: str, body: DoneIn, user: CurrentUser, session: Sess
         object_id=str(project.id),
         client_event_id=body.client_event_id,
     )
+    new_badges = await award_badges(session, user.id) if awarded else []
     await session.commit()
     await session.refresh(user)
     return DoneOut(
         awarded=awarded,
         points=PROJECT_DONE_POINTS if awarded else 0,
         points_total=user.points_total,
+        new_badges=[
+            BadgeOut(code=b.code, name=b.name, description=b.description, icon=b.icon)
+            for b in new_badges
+        ],
     )
 
 

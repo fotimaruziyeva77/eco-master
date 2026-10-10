@@ -22,7 +22,7 @@ python -m venv .venv
 .venv/Scripts/python -m pip install -e ".[dev]"    # Linux/macOS: .venv/bin/python
 .venv/Scripts/alembic upgrade head
 .venv/Scripts/python -m app.seed --demo                 # waste types, banned words, demo content
-.venv/Scripts/python -m uvicorn app.main:app --port 8090 --reload --reload-dir app
+.venv/Scripts/python -m uvicorn app.main:app --port 8090    # restart after backend changes
 
 cd ../frontend
 npm install

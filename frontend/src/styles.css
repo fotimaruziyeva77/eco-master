@@ -810,6 +810,269 @@ a {
   font-size: 17px;
 }
 
+/* -------------------------------------------------------------------- games */
+
+.game-card {
+  text-align: center;
+}
+
+.game-card__icon {
+  font-size: 44px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: var(--tap);
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.switch input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--accent);
+}
+
+.round-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 32px;
+}
+
+.question {
+  margin-top: 16px;
+  font-size: 21px;
+}
+
+.question__image {
+  width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+}
+
+.answers {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.answer {
+  min-height: 56px;
+  padding: 12px 16px;
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.answer:disabled {
+  cursor: default;
+}
+
+.answer.is-correct,
+.bin.is-correct {
+  border-color: #43a047;
+  background: rgba(67, 160, 71, 0.18);
+}
+
+.answer.is-wrong,
+.bin.is-wrong {
+  border-color: #e53935;
+  background: rgba(229, 57, 53, 0.16);
+}
+
+.answer.is-dimmed,
+.bin.is-dimmed {
+  opacity: 0.55;
+}
+
+.feedback {
+  margin-top: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  animation: fade-in 0.2s ease-out;
+}
+
+.feedback p {
+  margin: 8px 0 0;
+}
+
+.feedback--ok {
+  background: rgba(67, 160, 71, 0.14);
+}
+
+.feedback--bad {
+  background: rgba(229, 57, 53, 0.12);
+}
+
+.result-score {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.sort-game {
+  user-select: none;
+}
+
+.sort-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 12px 0 4px;
+}
+
+.sort-item h1 {
+  margin: 8px 0 4px;
+  font-size: 22px;
+}
+
+.sort-item p {
+  margin: 0;
+}
+
+.sort-item__visual {
+  display: grid;
+  place-items: center;
+  width: 120px;
+  height: 120px;
+  border-radius: 28px;
+  background: var(--card);
+  font-size: 68px;
+  overflow: hidden;
+}
+
+.sort-item__visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.bins {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.bin {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 64px;
+  padding: 10px 12px;
+  border: 2px solid;
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.bin:disabled {
+  cursor: default;
+}
+
+.bin__icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.progress--timer {
+  height: 6px;
+  margin-top: 6px;
+}
+
+.progress--timer .progress__bar {
+  transition: width 1s linear;
+}
+
+/* ------------------------------------------------------------------- badges */
+
+.badge-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.badge-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 6px;
+  border-radius: 12px;
+  background: var(--bg);
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.badge-tile__icon {
+  font-size: 30px;
+  line-height: 1.2;
+}
+
+.badge-tile.is-locked .badge-tile__icon {
+  filter: grayscale(1);
+  opacity: 0.4;
+}
+
+.badge-tile.is-locked strong {
+  color: var(--hint);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: var(--gap);
+  background: rgba(0, 0, 0, 0.5);
+  animation: fade-in 0.2s ease-out;
+}
+
+.dialog {
+  width: 100%;
+  max-width: 360px;
+  padding: 24px;
+  border-radius: 20px;
+  background: var(--bg);
+  text-align: center;
+}
+
+.dialog h2 {
+  font-size: 22px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
 /* --------------------------------------------------------------- bottom nav */
 
 .bottom-nav {

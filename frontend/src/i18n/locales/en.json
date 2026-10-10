@@ -160,5 +160,50 @@
     "deleteText": "You can ask us to delete your data at any time. For now, message the bot to do this.",
     "contactTitle": "Contact",
     "contactText": "If you have questions, message the Ekoustoz bot."
+  },
+  "games": {
+    "title": "Games",
+    "quizTitle": "Quiz",
+    "quizText_one": "{{count}} question: test what you know",
+    "quizText_other": "{{count}} questions: test what you know",
+    "sortTitle": "Put the waste in the right bin",
+    "sortText": "Drop each item into the right bin and learn to sort.",
+    "todayPoints": "Today: {{points}} / {{cap}} points",
+    "quickMode": "⚡ Quick mode (10 seconds per item)",
+    "play": "Play",
+    "empty": "No questions have been added for this game yet."
+  },
+  "quiz": {
+    "chooseTopic": "Choose a topic",
+    "mixed": "Mixed",
+    "questionOf": "Question {{current}} of {{total}}",
+    "next": "Next question",
+    "finish": "See the result",
+    "correct": "Correct!",
+    "wrong": "Wrong",
+    "alreadyEarned": "You already earned points for this question.",
+    "answerError": "Your answer wasn't sent. Check the internet and try again.",
+    "resultTitle": "Result",
+    "resultScore": "{{correct}} of {{total}} correct",
+    "playAgain": "Play again",
+    "backToGames": "Back to games"
+  },
+  "sort": {
+    "itemOf": "{{current}} of {{total}}",
+    "whereDoesItGo": "Which bin does it go in?",
+    "correct": "Correct!",
+    "wrongBin": "This goes in the \"{{bin}}\" bin.",
+    "timeUp": "Time's up!",
+    "next": "Next",
+    "secondsLeft_one": "{{count}} second left",
+    "secondsLeft_other": "{{count}} seconds left",
+    "capReached": "You've reached today's game points limit. You can keep playing, but no more points today.",
+    "resultScore": "{{correct}} of {{total}} items sorted correctly"
+  },
+  "badges": {
+    "title": "Badges",
+    "newTitle": "🎉 New badge!",
+    "ok": "Great!",
+    "locked": "Not earned yet"
   }
 }

@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
 
+from app.badges import award_badges
 from app.deps import SessionDep, SettingsDep
 from app.i18n import pick_language
 from app.models import User
@@ -43,6 +44,8 @@ async def auth_telegram(
     if user.is_blocked:
         raise HTTPException(status.HTTP_403_FORBIDDEN, "user_blocked")
     user.last_active_at = datetime.now(UTC)
+    # Catch up on badges whose rules were met before they existed (or changed since).
+    await award_badges(session, user.id)
     await session.commit()
 
     token = create_session_token(

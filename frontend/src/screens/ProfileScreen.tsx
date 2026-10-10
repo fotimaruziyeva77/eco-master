@@ -3,11 +3,12 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
 import { api } from "../api/client";
+import { BadgeGrid } from "../components/BadgeGrid";
 import { LevelProgress } from "../components/LevelProgress";
 import { LANGUAGE_NAMES, LANGUAGES, type Language } from "../i18n/languages";
 import { useUser } from "../state/user";
 
-/** Minimal profile for now; statistics, badges and settings come in phase 4. */
+/** Profile with level and badges; statistics and settings are completed in phase 4. */
 export function ProfileScreen() {
   const { t, i18n } = useTranslation();
   const { user, setUser } = useUser();
@@ -33,6 +34,11 @@ export function ProfileScreen() {
       </h1>
       <section className="card">
         <LevelProgress user={user} />
+      </section>
+
+      <section className="card">
+        <h2>{t("badges.title")}</h2>
+        <BadgeGrid />
       </section>
 
       <section className="card">

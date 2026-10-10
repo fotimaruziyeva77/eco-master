@@ -72,6 +72,18 @@ export function useTelegramBackButton(onBack: (() => void) | undefined): void {
   }, [onBack]);
 }
 
+/**
+ * Stop a downward swipe from closing the Mini App while the calling screen is mounted
+ * (TZ 8.4: games must not close on an accidental swipe).
+ */
+export function useNoVerticalSwipes(): void {
+  useEffect(() => {
+    if (!supports("7.7")) return;
+    tg!.disableVerticalSwipes();
+    return () => tg!.enableVerticalSwipes();
+  }, []);
+}
+
 /** Open an external link in the browser (inside Telegram) or a new tab (dev). */
 export function openExternal(url: string): void {
   if (tg?.initData) tg.openLink(url);
