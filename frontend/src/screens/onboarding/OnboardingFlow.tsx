@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { api, type User } from "../../api/client";
 import { useUser } from "../../state/user";
 import { insideTelegram, useTelegramBackButton } from "../../telegram";
-import { PrivacyContent } from "../PrivacyScreen";
+import { LegalContent, type LegalDocumentKind } from "../PrivacyScreen";
 import { IntroStep } from "./IntroStep";
 import { LanguageStep } from "./LanguageStep";
 import { NicknameStep } from "./NicknameStep";
@@ -24,13 +24,13 @@ export function OnboardingFlow() {
   // A moderator reset the nickname of someone who had finished onboarding.
   const nicknameReset = user.onboarded_at != null && user.onboarding_step === "nickname";
   const [step, setStep] = useState<Step>(() => savedStep(user));
-  const [privacyOpen, setPrivacyOpen] = useState(false);
+  const [document, setDocument] = useState<LegalDocumentKind | null>(null);
 
   const index = STEPS.indexOf(step);
   const back = useMemo(() => {
-    if (privacyOpen) return () => setPrivacyOpen(false);
+    if (document) return () => setDocument(null);
     return index > 0 ? () => setStep(STEPS[index - 1]) : undefined;
-  }, [privacyOpen, index]);
+  }, [document, index]);
   useTelegramBackButton(back);
 
   if (nicknameReset) {
@@ -44,15 +44,15 @@ export function OnboardingFlow() {
     );
   }
 
-  if (privacyOpen) {
+  if (document) {
     return (
       <main className="screen">
         {!insideTelegram() && (
-          <button type="button" className="link-button" onClick={() => setPrivacyOpen(false)}>
+          <button type="button" className="link-button" onClick={() => setDocument(null)}>
             ← {t("common.back")}
           </button>
         )}
-        <PrivacyContent />
+        <LegalContent kind={document} />
       </main>
     );
   }
@@ -72,7 +72,7 @@ export function OnboardingFlow() {
       {step === "language" && <LanguageStep onDone={() => setStep("path")} />}
       {step === "path" && <PathStep onDone={() => setStep("nickname")} />}
       {step === "nickname" && <NicknameStep onDone={() => setStep("intro")} />}
-      {step === "intro" && <IntroStep onOpenPrivacy={() => setPrivacyOpen(true)} />}
+      {step === "intro" && <IntroStep onOpenDocument={setDocument} />}
     </main>
   );
 }

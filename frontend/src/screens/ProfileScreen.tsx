@@ -2,6 +2,7 @@ import {
   AtSign,
   Bell,
   ChevronRight,
+  FileText,
   GraduationCap,
   Hammer,
   Languages,
@@ -137,6 +138,17 @@ export function ProfileScreen() {
               </span>
               <span className="list-row__text">
                 <strong>{t("profile.privacy")}</strong>
+              </span>
+              <ChevronRight className="list-row__chevron" size={20} />
+            </Link>
+          </li>
+          <li>
+            <Link className="list-row" to="/terms">
+              <span className="icon-tile" aria-hidden="true">
+                <FileText size={20} />
+              </span>
+              <span className="list-row__text">
+                <strong>{t("profile.terms")}</strong>
               </span>
               <ChevronRight className="list-row__chevron" size={20} />
             </Link>

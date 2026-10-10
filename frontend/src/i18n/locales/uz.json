@@ -86,7 +86,7 @@
       "next": "Keyingi",
       "skip": "O'tkazib yuborish",
       "start": "Boshlash",
-      "consent": "Davom etish orqali <policy>maxfiylik siyosati</policy>ga rozilik bildirasiz.",
+      "consent": "Davom etish orqali <policy>maxfiylik siyosati</policy> va <terms>foydalanish shartlari</terms>ga rozilik bildirasiz.",
       "remindersTitle": "Streak o'chmasligi uchun eslatmalar",
       "remindersText": "Kuniga bitta eslatmani botdan oling."
     },
@@ -222,7 +222,8 @@
     "best_other": "Maks: {{count}} kun",
     "teachers": "O'qituvchilar uchun",
     "feedback": "Fikr bildirish",
-    "feedbackHint": "Botga yozing — jamoamiz o'qiydi"
+    "feedbackHint": "Botga yozing — jamoamiz o'qiydi",
+    "terms": "Foydalanish shartlari"
   },
   "privacy": {
     "title": "Maxfiylik siyosati",
@@ -354,5 +355,25 @@
     "sendError": "PDF'ni yuborib bo'lmadi. Birozdan keyin qayta urinib ko'ring.",
     "download": "PDF'ni yuklab olish",
     "downloadError": "PDF'ni yuklab bo'lmadi. Qayta urinib ko'ring."
+  },
+  "terms": {
+    "title": "Foydalanish shartlari",
+    "draft": "Qoralama. Yakuniy matn yurist tekshiruvidan keyin e'lon qilinadi.",
+    "aboutTitle": "Ilova haqida",
+    "aboutText": "Ekoustoz — chiqindini saralash va undan foydali buyumlar yasashni o'rgatuvchi bepul ta'lim ilovasi. Ilovada reklama va to'lovlar yo'q.",
+    "whoTitle": "Kim foydalanishi mumkin",
+    "whoText": "Ilova maktab o'quvchilari, o'qituvchilar va ota-onalar uchun. Agar siz o'quvchi bo'lsangiz, ilovadan ota-onangiz yoki o'qituvchingiz xabardor holda foydalaning.",
+    "safetyTitle": "Xavfsizlik",
+    "safetyText": "Loyihalarni xavfsizlik belgilariga qarab bajaring: 🟡 belgili ishlar faqat kattalar nazoratida, 🔴 belgililarini esa faqat kattalar bajaradi. O'tkir, issiq va elektr buyumlar bilan ehtiyot bo'ling.",
+    "nicknameTitle": "Taxallus va xulq",
+    "nicknameText": "Taxallusda haqiqiy ism, telefon raqami yoki haqoratli so'zlar bo'lmasin. Qoidalar buzilsa, jamoa taxallusni yashirishi, uni o'zgartirishni so'rashi yoki hisobni bloklashi mumkin.",
+    "pointsTitle": "Ball va reyting",
+    "pointsText": "Ballar o'yin uchun, ularning pul qiymati yo'q. Halol o'ynang: sun'iy ko'paytirilgan ballar bekor qilinadi.",
+    "contentTitle": "Materiallar",
+    "contentText": "Ilovadagi video, matn va rasmlar Ekoustoz jamoasiga tegishli. Ulardan darslarda ta'lim maqsadida foydalanishingiz mumkin.",
+    "changesTitle": "O'zgarishlar",
+    "changesText": "Shartlar o'zgarsa, bu haqda ilova yoki bot orqali xabar beramiz.",
+    "contactTitle": "Bog'lanish",
+    "contactText": "Savollar bo'lsa, Ekoustoz botiga yozing."
   }
 }

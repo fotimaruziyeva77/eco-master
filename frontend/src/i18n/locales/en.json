@@ -86,7 +86,7 @@
       "next": "Next",
       "skip": "Skip",
       "start": "Start",
-      "consent": "By continuing you agree to the <policy>privacy policy</policy>.",
+      "consent": "By continuing you agree to the <policy>privacy policy</policy> and the <terms>terms of use</terms>.",
       "remindersTitle": "Reminders to keep your streak",
       "remindersText": "One reminder a day from the bot."
     },
@@ -222,7 +222,8 @@
     "best_other": "Best: {{count}} days",
     "teachers": "For teachers",
     "feedback": "Send feedback",
-    "feedbackHint": "Write to the bot — our team reads it"
+    "feedbackHint": "Write to the bot — our team reads it",
+    "terms": "Terms of use"
   },
   "privacy": {
     "title": "Privacy policy",
@@ -354,5 +355,25 @@
     "sendError": "Couldn't send the PDF. Please try again in a moment.",
     "download": "Download PDF",
     "downloadError": "Couldn't download the PDF. Please try again."
+  },
+  "terms": {
+    "title": "Terms of use",
+    "draft": "Draft. The final text will be published after legal review.",
+    "aboutTitle": "About the app",
+    "aboutText": "Ekoustoz is a free educational app that teaches how to sort waste and make useful things from it. There are no ads or payments in the app.",
+    "whoTitle": "Who can use it",
+    "whoText": "The app is for schoolchildren, teachers and parents. If you're a student, use it with your parents' or teacher's knowledge.",
+    "safetyTitle": "Safety",
+    "safetyText": "Follow the safety marks on projects: 🟡 work only with an adult watching, and 🔴 work is done by adults only. Be careful with sharp, hot and electrical things.",
+    "nicknameTitle": "Nickname and behaviour",
+    "nicknameText": "Your nickname must not contain a real name, a phone number or rude words. If the rules are broken, the team may hide the nickname, ask for a new one or block the account.",
+    "pointsTitle": "Points and the leaderboard",
+    "pointsText": "Points are for the game and have no money value. Play fair: points gained by cheating will be cancelled.",
+    "contentTitle": "Materials",
+    "contentText": "The videos, texts and pictures in the app belong to the Ekoustoz team. You may use them in lessons for educational purposes.",
+    "changesTitle": "Changes",
+    "changesText": "If these terms change, we'll let you know in the app or through the bot.",
+    "contactTitle": "Contact",
+    "contactText": "If you have questions, message the Ekoustoz bot."
   }
 }

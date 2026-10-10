@@ -52,6 +52,7 @@ select = ["E", "F", "I", "UP", "B", "ASYNC"]
 "app/seed_data.py" = ["E501"]
 "app/seed_data_games.py" = ["E501"]
 "app/seed_data_lessons.py" = ["E501"]
+"app/seed_data_v1.py" = ["E501"]
 
 [tool.setuptools.package-data]
 app = ["assets/fonts/*"]

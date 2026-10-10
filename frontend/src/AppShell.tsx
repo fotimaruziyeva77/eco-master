@@ -8,7 +8,7 @@ import { QuizScreen } from "./screens/games/QuizScreen";
 import { SortGameScreen } from "./screens/games/SortGameScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { LearnScreen } from "./screens/LearnScreen";
-import { PrivacyScreen } from "./screens/PrivacyScreen";
+import { PrivacyScreen, TermsScreen } from "./screens/PrivacyScreen";
 import { ProfileScreen } from "./screens/ProfileScreen";
 import { ProjectScreen } from "./screens/ProjectScreen";
 import { RatingScreen } from "./screens/RatingScreen";
@@ -34,6 +34,7 @@ function Layout() {
         <Route path="/rating" element={<RatingScreen />} />
         <Route path="/profile" element={<ProfileScreen />} />
         <Route path="/privacy" element={<PrivacyScreen />} />
+        <Route path="/terms" element={<TermsScreen />} />
         <Route path="/teachers" element={<TeachersScreen />} />
         <Route path="/teachers/:slug" element={<LessonScreen />} />
         <Route path="*" element={<Navigate to="/" replace />} />

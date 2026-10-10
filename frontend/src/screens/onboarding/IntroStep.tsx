@@ -6,6 +6,7 @@ import { api } from "../../api/client";
 import { Toggle } from "../../components/ui";
 import { useUser } from "../../state/user";
 import { haptic, requestWriteAccess } from "../../telegram";
+import type { LegalDocumentKind } from "../PrivacyScreen";
 
 const SLIDES = [
   { icon: "♻️", title: "onboarding.intro.slide1Title", text: "onboarding.intro.slide1Text" },
@@ -13,7 +14,7 @@ const SLIDES = [
   { icon: "🏆", title: "onboarding.intro.slide3Title", text: "onboarding.intro.slide3Text" },
 ];
 
-export function IntroStep({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
+export function IntroStep({ onOpenDocument }: { onOpenDocument: (kind: LegalDocumentKind) => void }) {
   const { t } = useTranslation();
   const { user, setUser } = useUser();
   const [slide, setSlide] = useState(0);
@@ -96,7 +97,10 @@ export function IntroStep({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
       <p className="hint small consent" style={{ marginTop: 12 }}>
         <Trans
           i18nKey="onboarding.intro.consent"
-          components={{ policy: <button type="button" className="link-inline" onClick={onOpenPrivacy} /> }}
+          components={{
+            policy: <button type="button" className="link-inline" onClick={() => onOpenDocument("privacy")} />,
+            terms: <button type="button" className="link-inline" onClick={() => onOpenDocument("terms")} />,
+          }}
         />
       </p>
     </section>
