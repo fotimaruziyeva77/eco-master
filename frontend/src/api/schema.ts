@@ -515,6 +515,98 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/lessons": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lessons */
+        get: operations["lessons_api_lessons_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/lessons/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lesson */
+        get: operations["lesson_api_lessons__slug__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/lessons/{slug}/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lesson Pdf File */
+        get: operations["lesson_pdf_file_api_lessons__slug__pdf_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/lessons/{slug}/send": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Send Lesson Pdf
+         * @description The bot sends the PDF to the user's Telegram chat — the most reliable way inside Telegram.
+         */
+        post: operations["send_lesson_pdf_api_lessons__slug__send_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/share": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Share
+         * @description Text and link to share. Where the bot is configured, also a prepared Telegram message
+         *     (Bot API 8.0+) and an inline query for older clients.
+         */
+        post: operations["share_api_share_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/dev/init-data": {
         parameters: {
             query?: never;
@@ -811,6 +903,37 @@ export interface components {
             entries: components["schemas"]["LeaderboardEntryOut"][];
             me: components["schemas"]["LeaderboardEntryOut"] | null;
         };
+        /** LessonOut */
+        LessonOut: {
+            /** Slug */
+            slug: string;
+            /** Title */
+            title: {
+                [key: string]: unknown;
+            };
+            /** Grade */
+            grade: string;
+            /** Body */
+            body: {
+                [key: string]: unknown;
+            };
+        };
+        /** LessonSendIn */
+        LessonSendIn: {
+            /** Language */
+            language?: ("uz" | "ru" | "en") | null;
+        };
+        /** LessonSummaryOut */
+        LessonSummaryOut: {
+            /** Slug */
+            slug: string;
+            /** Title */
+            title: {
+                [key: string]: unknown;
+            };
+            /** Grade */
+            grade: string;
+        };
         /** LevelOut */
         LevelOut: {
             /** Code */
@@ -1013,6 +1136,28 @@ export interface components {
          * @enum {string}
          */
         SafetyLevel: "green" | "yellow" | "red";
+        /** ShareIn */
+        ShareIn: {
+            /**
+             * Kind
+             * @default progress
+             * @enum {string}
+             */
+            kind: "progress" | "project" | "badge" | "quiz" | "sort";
+            /** Object Id */
+            object_id?: string | null;
+        };
+        /** ShareOut */
+        ShareOut: {
+            /** Text */
+            text: string;
+            /** Url */
+            url: string;
+            /** Prepared Message Id */
+            prepared_message_id?: string | null;
+            /** Inline Query */
+            inline_query?: string | null;
+        };
         /** StatsOut */
         StatsOut: {
             /** Streak Current */
@@ -1939,6 +2084,160 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    lessons_api_lessons_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LessonSummaryOut"][];
+                };
+            };
+        };
+    };
+    lesson_api_lessons__slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LessonOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    lesson_pdf_file_api_lessons__slug__pdf_get: {
+        parameters: {
+            query?: {
+                lang?: ("uz" | "ru" | "en") | null;
+            };
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    send_lesson_pdf_api_lessons__slug__send_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LessonSendIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    share_api_share_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ShareIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShareOut"];
                 };
             };
             /** @description Validation Error */

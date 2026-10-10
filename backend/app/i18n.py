@@ -49,7 +49,119 @@ BOT_TEXTS: dict[str, dict[str, str]] = {
     "cmd_help": {"uz": "Yordam", "ru": "Помощь", "en": "Help"},
 }
 
+BOT_TEXTS.update(
+    {
+        "reminder": {
+            "uz": "🌱 Salom, {name}! Bugungi topshiriq sizni kutmoqda:\n"
+            "\n"
+            "<b>{task}</b>\n"
+            "\n"
+            "{streak}",
+            "ru": "🌱 Привет, {name}! Тебя ждёт задание дня:\n\n<b>{task}</b>\n\n{streak}",
+            "en": "🌱 Hi {name}! Today's task is waiting for you:\n\n<b>{task}</b>\n\n{streak}",
+        },
+        "reminder_streak": {
+            "uz": "🔥 Streakingiz: {days} kun — uzib qo'ymang!",
+            "ru": "🔥 Ваша серия: {days} дн. — не прерывайте её!",
+            "en": "🔥 Your streak: {days} days — keep it going!",
+        },
+        "reminder_streak_start": {
+            "uz": "🔥 Bugun yangi streak boshlang!",
+            "ru": "🔥 Начните сегодня новую серию!",
+            "en": "🔥 Start a new streak today!",
+        },
+        "feedback_thanks": {
+            "uz": "Rahmat! Xabaringiz jamoaga yetkazildi. 💚",
+            "ru": "Спасибо! Ваше сообщение передано команде. 💚",
+            "en": "Thank you! Your message has been passed to the team. 💚",
+        },
+        "share_title": {
+            "uz": "Mening Ekoustoz natijam",
+            "ru": "Мой результат в Ekoustoz",
+            "en": "My Ekoustoz result",
+        },
+        "share_progress": {
+            "uz": "Mening Ekoustoz'dagi natijam: {projects} ta buyumga ikkinchi hayot "
+            "berdim 🌱 va {points} ball to'pladim! Sen ham qo'shil 👇",
+            "ru": "Мой результат в Ekoustoz: сделано проектов — {projects} 🌱, баллов — "
+            "{points}! Присоединяйся 👇",
+            "en": "My Ekoustoz progress: {projects} things given a second life 🌱 and "
+            "{points} points! Join me 👇",
+        },
+        "share_points": {
+            "uz": "Mening Ekoustoz'dagi natijam: {points} ball! 🌱 Sen ham qo'shil 👇",
+            "ru": "Мой результат в Ekoustoz: баллов — {points}! 🌱 Присоединяйся 👇",
+            "en": "My Ekoustoz score: {points}! 🌱 Join me 👇",
+        },
+        "share_invite": {
+            "uz": "🌱 Ekoustoz — chiqindini to'g'ri saralash, eko-loyihalar va viktorinalar. "
+            "Qo'shil 👇",
+            "ru": "🌱 Ekoustoz — учимся сортировать отходы, делаем эко-проекты и играем в "
+            "викторины. Присоединяйся 👇",
+            "en": "🌱 Ekoustoz — learn to sort waste, make eco projects and play quizzes. "
+            "Join in 👇",
+        },
+        "share_project": {
+            "uz": "Men «{title}» loyihasini yasadim! ♻️ Sen ham urinib ko'r 👇",
+            "ru": "Готов мой проект «{title}»! ♻️ Попробуй и ты 👇",
+            "en": "I made «{title}»! ♻️ Give it a try 👇",
+        },
+        "share_badge": {
+            "uz": "Ekoustoz'da «{badge}» nishonini oldim! 🏅 Sen ham qo'shil 👇",
+            "ru": "Получен значок «{badge}» в Ekoustoz! 🏅 Присоединяйся 👇",
+            "en": "I earned the «{badge}» badge in Ekoustoz! 🏅 Join me 👇",
+        },
+        "share_quiz": {
+            "uz": "Ekoustoz viktorinasida {correct}/{total} to'g'ri javob berdim! 🧠 Sen-chi? 👇",
+            "ru": "Мой результат в викторине Ekoustoz: {correct}/{total} 🧠 А у тебя? 👇",
+            "en": "I got {correct}/{total} in the Ekoustoz quiz! 🧠 Can you beat it? 👇",
+        },
+        "share_sort": {
+            "uz": "Saralash o'yinida {correct}/{total} buyumni to'g'ri saraladim! ♻️ Sen-chi? 👇",
+            "ru": "Мой результат в игре-сортировке: {correct}/{total} ♻️ А у тебя? 👇",
+            "en": "I sorted {correct}/{total} items correctly! ♻️ Can you beat it? 👇",
+        },
+        "pdf_caption": {
+            "uz": "📄 {title}\nEkoustoz — o'qituvchilar uchun dars",
+            "ru": "📄 {title}\nEkoustoz — урок для учителей",
+            "en": "📄 {title}\nEkoustoz — a lesson for teachers",
+        },
+        "pdf_header": {
+            "uz": "Ekoustoz — o'qituvchilar uchun dars",
+            "ru": "Ekoustoz — урок для учителей",
+            "en": "Ekoustoz — a lesson for teachers",
+        },
+        "pdf_grade": {"uz": "Sinf: {grade}", "ru": "Класс: {grade}", "en": "Grade: {grade}"},
+        "pdf_duration": {
+            "uz": "Davomiyligi: 45 daqiqa",
+            "ru": "Длительность: 45 минут",
+            "en": "Length: 45 minutes",
+        },
+        "pdf_goal": {"uz": "Darsning maqsadi", "ru": "Цель урока", "en": "Lesson goal"},
+        "pdf_materials": {"uz": "Kerakli materiallar", "ru": "Что понадобится", "en": "Materials"},
+        "pdf_plan": {"uz": "Dars rejasi", "ru": "План урока", "en": "Lesson plan"},
+        "pdf_minutes": {"uz": "{n} daqiqa", "ru": "{n} мин", "en": "{n} min"},
+        "pdf_questions": {
+            "uz": "Muhokama uchun savollar",
+            "ru": "Вопросы для обсуждения",
+            "en": "Discussion questions",
+        },
+        "pdf_homework": {"uz": "Uyga vazifa", "ru": "Домашнее задание", "en": "Homework"},
+        "pdf_app_task": {
+            "uz": "Ekoustoz ilovasi bilan",
+            "ru": "С приложением Ekoustoz",
+            "en": "With the Ekoustoz app",
+        },
+        "pdf_footer": {
+            "uz": "Ekoustoz — chiqindiga ikkinchi hayot",
+            "ru": "Ekoustoz — вторая жизнь для отходов",
+            "en": "Ekoustoz — a second life for waste",
+        },
+    }
+)
 
-def t(key: str, lang: str) -> str:
+
+def t(key: str, lang: str, **values: object) -> str:
     texts = BOT_TEXTS[key]
-    return texts.get(lang) or texts[DEFAULT_LANGUAGE]
+    text = texts.get(lang) or texts[DEFAULT_LANGUAGE]
+    return text.format(**values) if values else text

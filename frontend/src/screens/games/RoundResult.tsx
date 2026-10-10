@@ -1,17 +1,21 @@
 import { useTranslation } from "react-i18next";
 
+import { ShareButton } from "../../components/ShareButton";
 import { useTelegramBackButton } from "../../telegram";
 
 type Props = {
+  game: "quiz" | "sort";
+  correct: number;
+  total: number;
   score: string;
   points: number;
-  perfect: boolean;
   note?: string;
   onAgain: () => void;
   onBack: () => void;
 };
 
-export function RoundResult({ score, points, perfect, note, onAgain, onBack }: Props) {
+export function RoundResult({ game, correct, total, score, points, note, onAgain, onBack }: Props) {
+  const perfect = correct === total;
   const { t } = useTranslation();
   useTelegramBackButton(onBack);
   return (
@@ -27,7 +31,8 @@ export function RoundResult({ score, points, perfect, note, onAgain, onBack }: P
         <button type="button" className="btn btn--block" onClick={onAgain}>
           {t("quiz.playAgain")}
         </button>
-        <button type="button" className="btn btn--soft btn--block" onClick={onBack}>
+        {correct > 0 && <ShareButton kind={game} objectId={`${correct}/${total}`} label={t("share.result")} />}
+        <button type="button" className="link-button" onClick={onBack}>
           {t("quiz.backToGames")}
         </button>
       </div>

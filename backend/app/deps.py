@@ -2,10 +2,12 @@ from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
 import jwt
+from aiogram import Bot
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.bot.client import get_bot
 from app.config import Settings, get_settings
 from app.db import get_session
 from app.models import User
@@ -46,3 +48,11 @@ async def get_current_user(
 
 
 CurrentUser = Annotated[User, Depends(get_current_user)]
+
+
+def bot_dep() -> Bot | None:
+    """The Telegram bot, or None without BOT_TOKEN. Tests replace this with a fake."""
+    return get_bot()
+
+
+BotDep = Annotated[Bot | None, Depends(bot_dep)]

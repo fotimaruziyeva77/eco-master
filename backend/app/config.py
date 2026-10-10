@@ -21,6 +21,8 @@ class Settings(BaseSettings):
     bot_username: str = ""
     webapp_short_name: str = "app"
     webapp_url: str = "http://localhost:5180"
+    # Private team chat that receives messages users write to the bot (TZ 8.11).
+    feedback_chat_id: int | None = None
 
     jwt_secret: str = INSECURE_JWT_SECRET
     jwt_ttl_hours: int = 24
@@ -40,6 +42,13 @@ class Settings(BaseSettings):
         if self.is_prod:
             raise RuntimeError("BOT_TOKEN must be set in production")
         return DEV_BOT_TOKEN
+
+    @property
+    def app_link(self) -> str:
+        """Link that opens the Mini App inside Telegram (falls back to the web URL)."""
+        if self.bot_username:
+            return f"https://t.me/{self.bot_username}/{self.webapp_short_name}"
+        return self.webapp_url
 
     @property
     def cors_origin_list(self) -> list[str]:

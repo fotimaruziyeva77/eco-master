@@ -12,6 +12,8 @@ import { PrivacyScreen } from "./screens/PrivacyScreen";
 import { ProfileScreen } from "./screens/ProfileScreen";
 import { ProjectScreen } from "./screens/ProjectScreen";
 import { RatingScreen } from "./screens/RatingScreen";
+import { LessonScreen } from "./screens/teachers/LessonScreen";
+import { TeachersScreen } from "./screens/teachers/TeachersScreen";
 import { CelebrationProvider } from "./state/celebration";
 
 const TAB_PATHS = new Set(["/", "/learn", "/games", "/rating", "/profile"]);
@@ -32,6 +34,8 @@ function Layout() {
         <Route path="/rating" element={<RatingScreen />} />
         <Route path="/profile" element={<ProfileScreen />} />
         <Route path="/privacy" element={<PrivacyScreen />} />
+        <Route path="/teachers" element={<TeachersScreen />} />
+        <Route path="/teachers/:slug" element={<LessonScreen />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       {TAB_PATHS.has(pathname) && <BottomNav />}

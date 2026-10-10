@@ -26,6 +26,20 @@ export type Leaderboard = Schemas["LeaderboardOut"];
 export type LeaderboardEntry = Schemas["LeaderboardEntryOut"];
 export type Stats = Schemas["StatsOut"];
 export type Period = Leaderboard["period"];
+export type LessonSummary = Schemas["LessonSummaryOut"];
+export type Lesson = Schemas["LessonOut"];
+export type ShareKind = Schemas["ShareIn"]["kind"];
+export type ShareResult = Schemas["ShareOut"];
+
+/** One language of a lesson body (TZ 8.9); the API types it as a free-form object. */
+export type LessonBody = {
+  goal: string;
+  materials: string[];
+  plan: { minutes: number; title: string; text: string }[];
+  questions: string[];
+  homework: string;
+  app_task: string;
+};
 
 let sessionToken: string | null = null;
 
@@ -38,7 +52,7 @@ export class ApiError extends Error {
   }
 }
 
-async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+async function send(path: string, init: RequestInit = {}): Promise<Response> {
   const headers = new Headers(init.headers);
   headers.set("Content-Type", "application/json");
   if (sessionToken) headers.set("Authorization", `Bearer ${sessionToken}`);
@@ -54,6 +68,11 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
     }
     throw new ApiError(response.status, code);
   }
+  return response;
+}
+
+async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const response = await send(path, init);
   if (response.status === 204) return undefined as T;
   return (await response.json()) as T;
 }
@@ -120,4 +139,13 @@ export const api = {
   myStats: () => request<Stats>("/me/stats"),
   changeNickname: (nickname: string) => post<User>("/me/nickname", { nickname }),
   deleteMe: () => request<void>("/me", { method: "DELETE" }),
+
+  lessons: () => request<LessonSummary[]>("/lessons"),
+  lesson: (slug: string) => request<Lesson>(`/lessons/${encodeURIComponent(slug)}`),
+  lessonPdf: (slug: string, language: Language) =>
+    send(`/lessons/${encodeURIComponent(slug)}/pdf?lang=${language}`).then((r) => r.blob()),
+  sendLesson: (slug: string, language: Language) =>
+    post<{ sent: boolean }>(`/lessons/${encodeURIComponent(slug)}/send`, { language }),
+  share: (kind: ShareKind, objectId?: string) =>
+    post<ShareResult>("/share", { kind, object_id: objectId ?? null }),
 };

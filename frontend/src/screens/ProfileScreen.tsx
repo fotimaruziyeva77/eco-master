@@ -2,9 +2,11 @@ import {
   AtSign,
   Bell,
   ChevronRight,
+  GraduationCap,
   Hammer,
   Languages,
   ListChecks,
+  MessageCircle,
   ShieldCheck,
   Trash2,
   Trophy,
@@ -18,11 +20,12 @@ import { Link } from "react-router";
 import { api, ApiError, type UserPath } from "../api/client";
 import { BadgeGrid } from "../components/BadgeGrid";
 import { InlineError, InlineLoading } from "../components/common";
+import { ShareButton } from "../components/ShareButton";
 import { Avatar, LEVEL_EMOJI, ProgressBar, Toggle, TopBar } from "../components/ui";
 import { useLoad } from "../hooks/useLoad";
 import { LANGUAGE_NAMES, LANGUAGES, type Language } from "../i18n/languages";
 import { useUser } from "../state/user";
-import { haptic, requestWriteAccess } from "../telegram";
+import { botChatLink, haptic, openTelegramLink, requestWriteAccess } from "../telegram";
 import { nicknameFormatError } from "./onboarding/nickname";
 
 type Sheet = "nickname" | "path" | "language" | "delete" | null;
@@ -38,6 +41,7 @@ export function ProfileScreen() {
   const [sheet, setSheet] = useState<Sheet>(null);
 
   const s = stats.data;
+  const bot = botChatLink();
   const earned = badges.data?.filter((b) => b.earned_at).length ?? 0;
   const accuracy = s && s.sorted_total > 0 ? Math.round((s.sorted_correct / s.sorted_total) * 100) : null;
 
@@ -77,6 +81,9 @@ export function ProfileScreen() {
           />
         </div>
       )}
+      <div className="stack" style={{ marginTop: 12 }}>
+        <ShareButton kind="progress" label={t("share.progress")} />
+      </div>
 
       <section className="section">
         <div className="section-head">
@@ -103,6 +110,26 @@ export function ProfileScreen() {
           <li>
             <ReminderSetting />
           </li>
+          <li>
+            <Link className="list-row" to="/teachers">
+              <span className="icon-tile" aria-hidden="true">
+                <GraduationCap size={20} />
+              </span>
+              <span className="list-row__text">
+                <strong>{t("profile.teachers")}</strong>
+              </span>
+              <ChevronRight className="list-row__chevron" size={20} />
+            </Link>
+          </li>
+          {bot && (
+            // Whatever users write to the bot reaches the team (TZ 8.11).
+            <SettingRow
+              icon={MessageCircle}
+              title={t("profile.feedback")}
+              value={t("profile.feedbackHint")}
+              onClick={() => openTelegramLink(bot)}
+            />
+          )}
           <li>
             <Link className="list-row" to="/privacy">
               <span className="icon-tile" aria-hidden="true">

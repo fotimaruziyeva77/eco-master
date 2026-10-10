@@ -1958,6 +1958,118 @@ button {
   box-shadow: var(--shadow-2);
 }
 
+/* ----------------------------------------------------------------- teachers */
+
+.teacher-card {
+  border-color: transparent;
+  background: var(--sky-soft);
+  box-shadow: none;
+}
+
+.lesson-num {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.lesson-list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-left: 22px;
+  color: var(--text-2);
+}
+
+.lesson-list li::marker {
+  color: var(--primary-strong);
+  font-weight: 800;
+}
+
+.plan-step {
+  display: grid;
+  gap: 6px;
+}
+
+.plan-step h4 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.plan-step p {
+  margin: 0;
+}
+
+.plan-step__time {
+  justify-self: start;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--on-primary-soft);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.invite {
+  text-align: center;
+}
+
+.qr-button {
+  justify-self: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+/* White in both themes: phone cameras need dark modules on a light background. */
+.qr {
+  display: block;
+  width: 208px;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #ffffff;
+}
+
+.qr--large {
+  width: min(88vw, 64vh);
+  border: 0;
+}
+
+.invite__link {
+  padding: 8px 12px;
+  border-radius: var(--r-input);
+  background: var(--primary-soft);
+  color: var(--on-primary-soft);
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
+.invite__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.invite__actions .btn {
+  padding: 0 12px;
+  font-size: 15px;
+}
+
+.overlay.overlay--qr {
+  align-content: center;
+  justify-items: center;
+  gap: 20px;
+  padding: var(--gutter);
+  background: rgba(2, 20, 14, 0.82);
+  cursor: zoom-out;
+}
+
+.toast .btn {
+  justify-self: center;
+}
+
 /* ------------------------------------------------------------- dialogs/nav */
 
 .overlay {

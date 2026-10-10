@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useState, type ReactNode } from
 import { useTranslation } from "react-i18next";
 
 import type { Badge } from "../api/client";
+import { ShareButton } from "../components/ShareButton";
 import { useTr } from "../i18n/tr";
 import { haptic } from "../telegram";
 
@@ -44,6 +45,7 @@ export function CelebrationProvider({ children }: { children: ReactNode }) {
             >
               {t("badges.ok")}
             </button>
+            <ShareButton kind="badge" objectId={current.code} />
           </div>
         </div>
       )}

@@ -14,6 +14,7 @@ from aiogram.types import BotCommand, MenuButtonWebApp, WebAppInfo
 from app.bot.handlers import router
 from app.config import get_settings
 from app.i18n import SUPPORTED_LANGUAGES, t
+from app.reminders import reminder_loop
 
 
 async def configure(bot: Bot) -> None:
@@ -47,7 +48,11 @@ async def main() -> None:
     dispatcher = Dispatcher()
     dispatcher.include_router(router)
     await configure(bot)
-    await dispatcher.start_polling(bot)
+    reminders = asyncio.create_task(reminder_loop(bot))
+    try:
+        await dispatcher.start_polling(bot)
+    finally:
+        reminders.cancel()
 
 
 if __name__ == "__main__":

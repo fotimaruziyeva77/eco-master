@@ -7,7 +7,8 @@
     "minutes_one": "{{count}} daqiqa",
     "minutes_other": "{{count}} daqiqa",
     "cancel": "Bekor qilish",
-    "save": "Saqlash"
+    "save": "Saqlash",
+    "close": "Yopish"
   },
   "errors": {
     "title": "Nimadir xato ketdi",
@@ -126,7 +127,9 @@
     "streakTitle_one": "{{count}} kunlik streak!",
     "streakTitle_other": "{{count}} kunlik streak!",
     "streakBonus_one": "+{{points}} ball bonusiga yana {{count}} kun qoldi",
-    "streakBonus_other": "+{{points}} ball bonusiga yana {{count}} kun qoldi"
+    "streakBonus_other": "+{{points}} ball bonusiga yana {{count}} kun qoldi",
+    "teacherTitle": "O'qituvchilar uchun darslar",
+    "teacherText": "Tayyor darslar, PDF va sinf uchun QR-kod"
   },
   "learn": {
     "title": "O'rganish",
@@ -215,7 +218,10 @@
     "days_one": "{{count}} kun",
     "days_other": "{{count}} kun",
     "best_one": "Maks: {{count}} kun",
-    "best_other": "Maks: {{count}} kun"
+    "best_other": "Maks: {{count}} kun",
+    "teachers": "O'qituvchilar uchun",
+    "feedback": "Fikr bildirish",
+    "feedbackHint": "Botga yozing — jamoamiz o'qiydi"
   },
   "privacy": {
     "title": "Maxfiylik siyosati",
@@ -306,5 +312,46 @@
     "reportText": "Agar taxallus odobsiz yoki haqoratli bo'lsa, moderator uni tekshiradi.",
     "reportSend": "Shikoyat yuborish",
     "reported": "Rahmat! Shikoyat moderatorga yuborildi."
+  },
+  "share": {
+    "button": "Ulashish",
+    "progress": "Natijamni do'stlarga ulashish",
+    "project": "Do'stlarga ulashish",
+    "result": "Natijani ulashish",
+    "error": "Ulashib bo'lmadi. Qayta urinib ko'ring."
+  },
+  "teachers": {
+    "title": "O'qituvchilar uchun",
+    "subtitle": "Har biri 45 daqiqaga mo'ljallangan: reja, savollar va uyga vazifa. Matn va PDF — uch tilda.",
+    "lessons": "Darslar",
+    "grade": "{{grade}}-sinflar",
+    "empty": "Darslar tez orada qo'shiladi.",
+    "inviteTitle": "O'quvchilarni ilovaga ulang",
+    "inviteText": "QR-kodni doskada ko'rsating yoki havolani sinf guruhiga yuboring.",
+    "inviteUnavailable": "Havola bot ulangandan keyin shu yerda paydo bo'ladi.",
+    "copy": "Nusxalash",
+    "copied": "Nusxalandi",
+    "enlarge": "QR-kodni kattalashtirish",
+    "qrLabel": "Ekoustoz ilovasini ochadigan QR-kod",
+    "inviteShareText": "Ekoustoz ilovasiga qo'shiling — chiqindini to'g'ri saralashni birga o'rganamiz! 🌱",
+    "headline": "Tayyor ekologiya darslari"
+  },
+  "lesson": {
+    "title": "Dars",
+    "language": "Dars tili",
+    "goal": "Maqsad",
+    "materials": "Kerakli materiallar",
+    "plan": "Dars rejasi",
+    "questions": "Savollar",
+    "homework": "Uyga vazifa",
+    "appTask": "Ilova bilan topshiriq",
+    "sendPdf": "PDF'ni chatga yuborish",
+    "sending": "Yuborilmoqda…",
+    "sent": "PDF bot bilan chatingizga yuborildi ✓",
+    "needStart": "Bot sizga hali yoza olmaydi. Botni oching, «Start»ni bosing va qayta urinib ko'ring.",
+    "openBot": "Botni ochish",
+    "sendError": "PDF'ni yuborib bo'lmadi. Birozdan keyin qayta urinib ko'ring.",
+    "download": "PDF'ni yuklab olish",
+    "downloadError": "PDF'ni yuklab bo'lmadi. Qayta urinib ko'ring."
   }
 }

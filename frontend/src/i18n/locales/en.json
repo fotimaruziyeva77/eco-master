@@ -7,7 +7,8 @@
     "minutes_one": "{{count}} minute",
     "minutes_other": "{{count}} minutes",
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "close": "Close"
   },
   "errors": {
     "title": "Something went wrong",
@@ -126,7 +127,9 @@
     "streakTitle_one": "{{count}}-day streak!",
     "streakTitle_other": "{{count}}-day streak!",
     "streakBonus_one": "{{count}} more day to the +{{points}} bonus",
-    "streakBonus_other": "{{count}} more days to the +{{points}} bonus"
+    "streakBonus_other": "{{count}} more days to the +{{points}} bonus",
+    "teacherTitle": "Lessons for teachers",
+    "teacherText": "Ready lessons, PDFs and a QR code for your class"
   },
   "learn": {
     "title": "Learn",
@@ -215,7 +218,10 @@
     "days_one": "{{count}} day",
     "days_other": "{{count}} days",
     "best_one": "Best: {{count}} day",
-    "best_other": "Best: {{count}} days"
+    "best_other": "Best: {{count}} days",
+    "teachers": "For teachers",
+    "feedback": "Send feedback",
+    "feedbackHint": "Write to the bot — our team reads it"
   },
   "privacy": {
     "title": "Privacy policy",
@@ -306,5 +312,46 @@
     "reportText": "If the nickname is rude or offensive, a moderator will check it.",
     "reportSend": "Send report",
     "reported": "Thank you! The report was sent to a moderator."
+  },
+  "share": {
+    "button": "Share",
+    "progress": "Share my progress",
+    "project": "Share with friends",
+    "result": "Share my result",
+    "error": "Couldn't share. Please try again."
+  },
+  "teachers": {
+    "title": "For teachers",
+    "subtitle": "Each one fits a 45-minute class: plan, questions and homework. Text and PDF in three languages.",
+    "lessons": "Lessons",
+    "grade": "Grades {{grade}}",
+    "empty": "Lessons are coming soon.",
+    "inviteTitle": "Bring your class to the app",
+    "inviteText": "Show the QR code on the board or send the link to your class chat.",
+    "inviteUnavailable": "The link will appear here once the bot is connected.",
+    "copy": "Copy link",
+    "copied": "Copied",
+    "enlarge": "Enlarge the QR code",
+    "qrLabel": "QR code that opens Ekoustoz",
+    "inviteShareText": "Join Ekoustoz — let's learn to sort waste the right way! 🌱",
+    "headline": "Ready-made ecology lessons"
+  },
+  "lesson": {
+    "title": "Lesson",
+    "language": "Lesson language",
+    "goal": "Goal",
+    "materials": "Materials",
+    "plan": "Lesson plan",
+    "questions": "Questions",
+    "homework": "Homework",
+    "appTask": "Task in the app",
+    "sendPdf": "Send the PDF to chat",
+    "sending": "Sending…",
+    "sent": "The PDF is in your chat with the bot ✓",
+    "needStart": "The bot can't message you yet. Open the bot, press Start and try again.",
+    "openBot": "Open the bot",
+    "sendError": "Couldn't send the PDF. Please try again in a moment.",
+    "download": "Download PDF",
+    "downloadError": "Couldn't download the PDF. Please try again."
   }
 }

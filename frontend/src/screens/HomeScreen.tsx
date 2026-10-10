@@ -1,4 +1,4 @@
-import { AlarmClock, Check, ChevronRight, ClipboardList, Lightbulb } from "lucide-react";
+import { AlarmClock, Check, ChevronRight, ClipboardList, GraduationCap, Lightbulb } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
@@ -42,6 +42,7 @@ export function HomeScreen() {
 
       <div className="stack stack--lg">
         <LevelProgress user={user} />
+        {user.path === "teacher" && <TeacherCard />}
         {home.loading && !data && <InlineLoading />}
         {home.error !== undefined && !data && <InlineError error={home.error} onRetry={home.reload} />}
         {daily && <StreakBanner daily={daily} />}
@@ -62,6 +63,23 @@ export function HomeScreen() {
         {data?.featured && <FeaturedProject project={data.featured} categories={data.categories} />}
       </div>
     </main>
+  );
+}
+
+/** On the teacher path the lessons are one tap away (TZ 8.9). */
+function TeacherCard() {
+  const { t } = useTranslation();
+  return (
+    <Link className="list-row teacher-card" to="/teachers">
+      <span className="icon-tile icon-tile--sky" aria-hidden="true">
+        <GraduationCap size={22} />
+      </span>
+      <span className="list-row__text">
+        <strong>{t("home.teacherTitle")}</strong>
+        <span className="hint small">{t("home.teacherText")}</span>
+      </span>
+      <ChevronRight className="list-row__chevron" size={20} />
+    </Link>
   );
 }
 

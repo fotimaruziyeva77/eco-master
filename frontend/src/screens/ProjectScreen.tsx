@@ -6,6 +6,7 @@ import { useParams } from "react-router";
 import { api } from "../api/client";
 import { InlineError, InlineLoading } from "../components/common";
 import { PROJECT_POINTS, SAFETY_ICON } from "../components/ProjectCard";
+import { ShareButton } from "../components/ShareButton";
 import { SubpageHeader } from "../components/ui";
 import { VideoPlayer } from "../components/VideoPlayer";
 import { useBack } from "../hooks/useBack";
@@ -97,6 +98,7 @@ export function ProjectScreen() {
               </span>
               <span className="chip chip--neutral">⏱ {t("common.minutes", { count: project.duration_min })}</span>
               <span className="chip chip--amber">⭐ +{t("home.points", { count: PROJECT_POINTS })}</span>
+              {isDone && <span className="chip">{t("project.alreadyDone")}</span>}
             </div>
             {project.done_count > 0 && (
               <span className="hint small">{t("project.doneCount", { count: project.done_count })}</span>
@@ -166,19 +168,21 @@ export function ProjectScreen() {
               {message.text}
             </p>
           )}
-          <button
-            type="button"
-            className="btn btn--block"
-            disabled={isDone || !unlocked || saving}
-            onClick={() => void markDone()}
-          >
-            <PartyPopper size={20} aria-hidden="true" />
-            {isDone
-              ? t("project.alreadyDone")
-              : unlocked
+          {isDone ? (
+            <ShareButton kind="project" objectId={project.slug} label={t("share.project")} className="btn btn--block" />
+          ) : (
+            <button
+              type="button"
+              className="btn btn--block"
+              disabled={!unlocked || saving}
+              onClick={() => void markDone()}
+            >
+              <PartyPopper size={20} aria-hidden="true" />
+              {unlocked
                 ? t("project.doneCta", { count: PROJECT_POINTS })
                 : t("project.doneWait", { count: secondsLeft })}
-          </button>
+            </button>
+          )}
         </div>
       )}
     </main>

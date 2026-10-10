@@ -6,6 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field, computed_field, field_validat
 
 from app.levels import level_for
 from app.models import Difficulty, OnboardingStep, SafetyLevel, UserPath
+from app.sharing import ShareKind
 from app.timeutil import local_today
 
 Language = Literal["uz", "ru", "en"]
@@ -347,3 +348,35 @@ class GameAnswerOut(BaseModel):
     daily_cap: int
     points_total: int
     new_badges: list[BadgeOut] = []
+
+
+# ---------------------------------------------------------------- teachers, share
+
+
+class LessonSummaryOut(BaseModel):
+    slug: str
+    title: I18nText
+    grade: str
+
+
+class LessonOut(LessonSummaryOut):
+    body: I18nText  # {"uz": {"goal": ..., "materials": [...], "plan": [...], ...}, ...}
+
+
+class LessonSendIn(BaseModel):
+    language: Language | None = None
+
+
+class ShareIn(BaseModel):
+    kind: ShareKind = "progress"
+    # project slug, badge code, or "correct/total" for game results
+    object_id: str | None = Field(default=None, max_length=64)
+
+
+class ShareOut(BaseModel):
+    text: str
+    url: str
+    # Telegram 8.0+: id for WebApp.shareMessage.
+    prepared_message_id: str | None = None
+    # Older clients: query for WebApp.switchInlineQuery (only when inline mode is on).
+    inline_query: str | None = None

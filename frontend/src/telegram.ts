@@ -41,6 +41,12 @@ export function telegramAppLink(): string | null {
   return `https://t.me/${bot}/${app}`;
 }
 
+/** Chat with the bot (feedback, /start), or null if the bot is not configured. */
+export function botChatLink(): string | null {
+  const bot = import.meta.env.VITE_BOT_USERNAME;
+  return bot ? `https://t.me/${bot}` : null;
+}
+
 export const haptic = {
   success() {
     if (supports("6.1")) tg!.HapticFeedback.notificationOccurred("success");
@@ -93,4 +99,43 @@ export function useNoVerticalSwipes(): void {
 export function openExternal(url: string): void {
   if (tg?.initData) tg.openLink(url);
   else window.open(url, "_blank", "noopener");
+}
+
+/** Open a t.me link inside Telegram itself (a new tab outside Telegram). */
+export function openTelegramLink(url: string): void {
+  if (tg?.initData) tg.openTelegramLink(url);
+  else window.open(url, "_blank", "noopener");
+}
+
+type Shareable = {
+  text: string;
+  url: string;
+  prepared_message_id?: string | null;
+  inline_query?: string | null;
+};
+
+/**
+ * Open Telegram's chat picker with a ready message (TZ 8.11, QM-16). Telegram 8.0+ sends the
+ * prepared message with an "Open the app" button; older clients go through the bot's inline
+ * mode; without either, Telegram's share link carries the text and the app link.
+ */
+export async function shareToChat(item: Shareable): Promise<void> {
+  if (item.prepared_message_id && supports("8.0")) {
+    tg!.shareMessage(item.prepared_message_id);
+    return;
+  }
+  if (item.inline_query && supports("6.7")) {
+    tg!.switchInlineQuery(item.inline_query, ["users", "groups"]);
+    return;
+  }
+  const link = `https://t.me/share/url?url=${encodeURIComponent(item.url)}&text=${encodeURIComponent(item.text)}`;
+  if (insideTelegram() || !navigator.share) {
+    openTelegramLink(link);
+    return;
+  }
+  try {
+    await navigator.share({ text: item.text, url: item.url });
+  } catch {
+    // The share sheet was closed.
+  }
 }

@@ -39,13 +39,25 @@ Telegram only opens Mini Apps over HTTPS.
 
 1. Create a bot with @BotFather, then a Mini App with `/newapp`.
 2. Put the token into `.env` as `BOT_TOKEN` yourself (never share it in chats or commits),
-   and set `BOT_USERNAME`.
+   and set `BOT_USERNAME`. The frontend needs the username too, for the class invite QR code
+   and the feedback link: put `VITE_BOT_USERNAME=...` into `frontend/.env.development.local`
+   (git-ignored; `frontend/.env.production` for builds).
 3. Start a tunnel to the Vite server, e.g. `cloudflared tunnel --url http://localhost:5180`
    or `ngrok http 5180`, and set `WEBAPP_URL` to the HTTPS address it prints
    (also use it as the Mini App URL in BotFather).
 4. Run the bot: `cd backend && .venv/Scripts/python -m app.bot`, then send `/start` to it.
+   The same process sends the daily reminders (TZ 8.5), so keep it running.
 
 The Vite server proxies `/api` to the backend, so one tunnel is enough.
+
+Optional bot settings in @BotFather:
+
+- `/setinline` turns on inline mode. Telegram 8.0+ shares results as a prepared message
+  with an "Open the app" button; with inline mode on, older clients get the same message
+  through the bot (TZ 8.11). Without it they fall back to Telegram's plain share link.
+- Feedback: set `FEEDBACK_CHAT_ID` in `.env` to a private team group with the bot in it;
+  everything users write to the bot is forwarded there with an internal user id only
+  (no names or usernames, TZ 11.2).
 
 ## Checks
 

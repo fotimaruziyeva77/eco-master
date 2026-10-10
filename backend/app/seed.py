@@ -21,6 +21,7 @@ from app.models import (
     KnowledgeCard,
     Project,
     Question,
+    TeacherLesson,
     Tip,
     WordKind,
 )
@@ -34,6 +35,7 @@ from app.seed_data import (
     RESERVED_WORDS,
 )
 from app.seed_data_games import BADGES, DEMO_GAME_ITEMS, DEMO_QUESTIONS
+from app.seed_data_lessons import DEMO_LESSONS
 
 
 async def seed_categories(session: AsyncSession) -> None:
@@ -84,6 +86,15 @@ async def seed_demo(session: AsyncSession) -> None:
         stmt = insert(KnowledgeCard).values(**values)
         stmt = stmt.on_conflict_do_update(
             index_elements=[KnowledgeCard.slug],
+            set_={k: v for k, v in values.items() if k != "slug"},
+        )
+        await session.execute(stmt)
+
+    for order, data in enumerate(DEMO_LESSONS, start=1):
+        values = {**data, "sort_order": order, "status": ContentStatus.PUBLISHED}
+        stmt = insert(TeacherLesson).values(**values)
+        stmt = stmt.on_conflict_do_update(
+            index_elements=[TeacherLesson.slug],
             set_={k: v for k, v in values.items() if k != "slug"},
         )
         await session.execute(stmt)

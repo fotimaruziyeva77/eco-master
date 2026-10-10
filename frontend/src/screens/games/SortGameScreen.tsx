@@ -153,9 +153,11 @@ export function SortGameScreen() {
   if (play.index >= total) {
     return (
       <RoundResult
+        game="sort"
+        correct={play.correctCount}
+        total={total}
         score={t("sort.resultScore", { correct: play.correctCount, total })}
         points={play.points}
-        perfect={play.correctCount === total}
         note={capped ? t("sort.capReached") : undefined}
         onAgain={() => void start()}
         onBack={back}

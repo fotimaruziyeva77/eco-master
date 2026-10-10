@@ -8,6 +8,10 @@ os.environ.update(
         "ENV": "test",
         "DATABASE_URL": "postgresql+asyncpg://ekoustoz:ekoustoz@127.0.0.1:55440/ekoustoz_test",
         "BOT_TOKEN": "123456:test-token",
+        # Pinned so values from a developer's .env never leak into tests.
+        "BOT_USERNAME": "",
+        "WEBAPP_SHORT_NAME": "app",
+        "WEBAPP_URL": "http://localhost:5180",
         "JWT_SECRET": "test-secret-0123456789-0123456789",
         "DEV_AUTH": "false",
     }
@@ -19,6 +23,7 @@ from sqlalchemy import text  # noqa: E402
 
 from app import models  # noqa: E402, F401
 from app.db import Base, SessionLocal, engine  # noqa: E402
+from app.deps import bot_dep  # noqa: E402
 from app.main import app  # noqa: E402
 from app.security import sign_init_data  # noqa: E402
 
@@ -40,6 +45,14 @@ async def clean_tables(schema):
     tables = ", ".join(t.name for t in Base.metadata.sorted_tables)
     async with engine.begin() as conn:
         await conn.execute(text(f"TRUNCATE {tables} RESTART IDENTITY CASCADE"))
+
+
+@pytest.fixture(autouse=True)
+def no_telegram():
+    """Tests never call the real Telegram API; tests that need a bot install a fake one."""
+    app.dependency_overrides[bot_dep] = lambda: None
+    yield
+    app.dependency_overrides.pop(bot_dep, None)
 
 
 @pytest.fixture

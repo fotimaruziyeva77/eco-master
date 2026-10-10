@@ -131,9 +131,11 @@ export function QuizScreen() {
   if (play.index >= total) {
     return (
       <RoundResult
+        game="quiz"
+        correct={play.correctCount}
+        total={total}
         score={t("quiz.resultScore", { correct: play.correctCount, total })}
         points={play.points}
-        perfect={play.correctCount === total}
         onAgain={() => void start(topic)}
         onBack={back}
       />

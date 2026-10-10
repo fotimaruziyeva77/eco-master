@@ -122,6 +122,8 @@ class User(Base):
     reminder_time: Mapped[time] = mapped_column(server_default=text("'18:00'"))
     # True once the user has started the bot or granted requestWriteAccess.
     write_access: Mapped[bool] = mapped_column(server_default=text("false"))
+    # Tashkent date of the last reminder, so a restart never sends a second one that day.
+    last_reminder_date: Mapped[date | None]
 
     is_blocked: Mapped[bool] = mapped_column(server_default=text("false"))
     nickname_hidden: Mapped[bool] = mapped_column(server_default=text("false"))
