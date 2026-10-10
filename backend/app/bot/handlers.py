@@ -43,8 +43,14 @@ async def upsert_bot_user(
     return user
 
 
-def open_app_keyboard(lang: str) -> InlineKeyboardMarkup | None:
-    url = get_settings().webapp_url
+def open_app_keyboard(lang: str, start: str | None = None) -> InlineKeyboardMarkup | None:
+    """ "Open the app" button. With `start`, a t.me link passes it to the app as start_param."""
+    settings = get_settings()
+    if start and settings.bot_username:
+        url = f"{settings.app_link}?startapp={start}"
+        button = InlineKeyboardButton(text=t("open_app", lang), url=url)
+        return InlineKeyboardMarkup(inline_keyboard=[[button]])
+    url = settings.webapp_url
     if not url.startswith("https://"):
         # Telegram only accepts HTTPS Mini App URLs; in local dev use a tunnel.
         log.warning("WEBAPP_URL is not https (%s); sending /start without the app button", url)

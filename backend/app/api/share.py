@@ -6,6 +6,7 @@ from aiogram import Bot
 from aiogram.exceptions import TelegramAPIError
 from fastapi import APIRouter, HTTPException
 
+from app.analytics import track
 from app.deps import BotDep, CurrentUser, SessionDep, SettingsDep
 from app.schemas import ShareIn, ShareOut
 from app.sharing import ShareError, inline_query_for, share_article, share_text, share_url
@@ -33,6 +34,8 @@ async def share(
     except ShareError as exc:
         raise HTTPException(exc.status, exc.code) from exc
     url = share_url(settings)
+    track(session, user, "share_click", kind=body.kind)
+    await session.commit()
 
     out = ShareOut(text=text, url=url)
     if bot is None or not settings.bot_username:

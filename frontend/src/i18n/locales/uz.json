@@ -92,7 +92,8 @@
     },
     "welcome": "Xush kelibsiz!",
     "headline": "Tabiatni asrashni o'rganamiz",
-    "subheadline": "Ekoustoz bilan har kuni kichik qadamlar orqali katta o'zgarishlar yarating."
+    "subheadline": "Ekoustoz bilan har kuni kichik qadamlar orqali katta o'zgarishlar yarating.",
+    "nicknameReset": "Moderator taxallusingizni o'zgartirishni so'radi. Iltimos, yangi taxallus tanlang."
   },
   "home": {
     "greeting": "Salom, {{name}}!",

@@ -92,7 +92,8 @@
     },
     "welcome": "Welcome!",
     "headline": "Let's learn to protect nature",
-    "subheadline": "With Ekoustoz, small steps every day add up to big changes."
+    "subheadline": "With Ekoustoz, small steps every day add up to big changes.",
+    "nicknameReset": "A moderator asked you to change your nickname. Please choose a new one."
   },
   "home": {
     "greeting": "Hi, {{name}}!",

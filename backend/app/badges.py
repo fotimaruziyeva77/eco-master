@@ -4,6 +4,7 @@ from sqlalchemy import String, cast, func, select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.analytics import track
 from app.models import ActivityLog, Badge, Category, ContentStatus, Project, User, UserBadge
 from app.schemas import BadgeOut
 
@@ -107,7 +108,10 @@ async def award_badges(session: AsyncSession, user_id: int) -> list[Badge]:
         .returning(UserBadge.badge_id)
     )
     new_ids = set(inserted.all())
-    return sorted((b for b in badges if b.id in new_ids), key=lambda b: b.sort_order)
+    new = sorted((b for b in badges if b.id in new_ids), key=lambda b: b.sort_order)
+    for badge in new:
+        track(session, user, "badge_earned", badge=badge.code)
+    return new
 
 
 def badges_out(badges: list[Badge]) -> list[BadgeOut]:

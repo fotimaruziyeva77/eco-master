@@ -10,7 +10,7 @@ import { nicknameFormatError, randomNickname } from "./nickname";
 
 type Check = { state: "idle" | "checking" | "ok" } | { state: "error"; code: string };
 
-export function NicknameStep({ onDone }: { onDone: () => void }) {
+export function NicknameStep({ onDone, notice }: { onDone: () => void; notice?: string }) {
   const { t, i18n } = useTranslation();
   const { user, setUser } = useUser();
   const [value, setValue] = useState(user.nickname ?? "");
@@ -78,6 +78,11 @@ export function NicknameStep({ onDone }: { onDone: () => void }) {
           </span>
         </div>
         <p className="hint">{t("onboarding.nickname.subtitle")}</p>
+        {notice && (
+          <p className="note" role="status">
+            {notice}
+          </p>
+        )}
       </div>
 
       <div className="card stack">

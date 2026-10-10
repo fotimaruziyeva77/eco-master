@@ -15,10 +15,16 @@ export function parseVideo(url: string): Source {
   return { kind: "link", url };
 }
 
-type Props = { url: string | null; poster: string | null; icon: string; onEnded: () => void };
+type Props = {
+  url: string | null;
+  poster: string | null;
+  icon: string;
+  onEnded: () => void;
+  onPlay?: () => void;
+};
 
 /** Loads nothing until tapped — saves traffic on slow connections (TZ 8.3). */
-export function VideoPlayer({ url, poster, icon, onEnded }: Props) {
+export function VideoPlayer({ url, poster, icon, onEnded, onPlay }: Props) {
   const { t } = useTranslation();
   const [playing, setPlaying] = useState(false);
 
@@ -40,7 +46,11 @@ export function VideoPlayer({ url, poster, icon, onEnded }: Props) {
         type="button"
         className="video video--poster"
         style={poster ? { backgroundImage: `url(${poster})` } : undefined}
-        onClick={() => (source.kind === "link" ? openExternal(source.url) : setPlaying(true))}
+        onClick={() => {
+          onPlay?.();
+          if (source.kind === "link") openExternal(source.url);
+          else setPlaying(true);
+        }}
         aria-label={t("project.play")}
       >
         {!poster && (

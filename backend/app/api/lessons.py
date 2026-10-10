@@ -1,7 +1,7 @@
 """Ready-made lessons for teachers (TZ 8.9, QM-15)."""
 
 import html
-from typing import Annotated
+from typing import Annotated, NamedTuple
 
 from aiogram.exceptions import TelegramAPIError, TelegramBadRequest, TelegramForbiddenError
 from aiogram.types import BufferedInputFile
@@ -9,6 +9,7 @@ from fastapi import APIRouter, HTTPException, Query, Response, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.analytics import track
 from app.deps import BotDep, CurrentUser, SessionDep
 from app.i18n import DEFAULT_LANGUAGE, t
 from app.models import ContentStatus, TeacherLesson
@@ -29,20 +30,27 @@ async def get_lesson(session: AsyncSession, slug: str) -> TeacherLesson:
     return lesson
 
 
-def render(lesson: TeacherLesson, lang: str) -> tuple[bytes, str, str]:
-    """PDF bytes, file name and title in the requested language (Uzbek as a fallback)."""
-    if lang not in lesson.body:
+class RenderedPdf(NamedTuple):
+    content: bytes
+    filename: str
+    title: str
+    lang: str  # the language actually used
+
+
+def render(lesson: TeacherLesson, lang: str) -> RenderedPdf:
+    """The lesson PDF in the requested language (Uzbek as a fallback)."""
+    if lang not in (lesson.body or {}):
         lang = DEFAULT_LANGUAGE
-    title = lesson.title.get(lang) or lesson.title[DEFAULT_LANGUAGE]
+    title = lesson.title.get(lang) or lesson.title.get(DEFAULT_LANGUAGE) or lesson.slug
     pdf = lesson_pdf(
         lesson.slug,
         lesson.updated_at.isoformat(),
         lang,
         title,
         lesson.grade,
-        lesson.body[lang],
+        (lesson.body or {}).get(lang) or {},
     )
-    return pdf, f"ekoustoz-{lesson.slug}-{lang}.pdf", title
+    return RenderedPdf(pdf, f"ekoustoz-{lesson.slug}-{lang}.pdf", title, lang)
 
 
 @router.get("")
@@ -68,11 +76,18 @@ async def lesson_pdf_file(
     session: SessionDep,
     lang: Annotated[Language | None, Query()] = None,
 ) -> Response:
-    pdf, filename, _ = render(await get_lesson(session, slug), lang or user.language)
+    lesson = await get_lesson(session, slug)
+    pdf = render(lesson, lang or user.language)
+    track(session, user, "teacher_pdf", lesson=lesson.slug, lang=pdf.lang, via="download")
+    await session.commit()
+    return pdf_response(pdf)
+
+
+def pdf_response(pdf: RenderedPdf) -> Response:
     return Response(
-        content=pdf,
+        content=pdf.content,
         media_type="application/pdf",
-        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+        headers={"Content-Disposition": f'attachment; filename="{pdf.filename}"'},
     )
 
 
@@ -83,13 +98,13 @@ async def send_lesson_pdf(
     """The bot sends the PDF to the user's Telegram chat — the most reliable way inside Telegram."""
     if bot is None:
         raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "bot_not_configured")
-    lang = body.language or user.language
-    pdf, filename, title = render(await get_lesson(session, slug), lang)
+    lesson = await get_lesson(session, slug)
+    pdf = render(lesson, body.language or user.language)
     try:
         await bot.send_document(
             chat_id=user.telegram_id,
-            document=BufferedInputFile(pdf, filename=filename),
-            caption=t("pdf_caption", lang, title=html.escape(title)),
+            document=BufferedInputFile(pdf.content, filename=pdf.filename),
+            caption=t("pdf_caption", pdf.lang, title=html.escape(pdf.title)),
         )
     except (TelegramForbiddenError, TelegramBadRequest) as exc:
         # Blocked bot, or the user never opened the bot chat: they need to press /start.
@@ -98,4 +113,6 @@ async def send_lesson_pdf(
         raise HTTPException(status.HTTP_409_CONFLICT, "bot_not_started") from exc
     except TelegramAPIError as exc:
         raise HTTPException(status.HTTP_502_BAD_GATEWAY, "telegram_error") from exc
+    track(session, user, "teacher_pdf", lesson=lesson.slug, lang=pdf.lang, via="chat")
+    await session.commit()
     return {"sent": True}

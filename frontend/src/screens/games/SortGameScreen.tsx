@@ -83,7 +83,7 @@ export function SortGameScreen() {
       setBusy(true);
       setAnswerError(false);
       try {
-        const answer = await api.gameAnswer(play.round.round_token, item.id, bin);
+        const answer = await api.gameAnswer(play.round.round_token, item.id, bin, quick);
         if (answer.correct) haptic.success();
         else haptic.error();
         setPlay({

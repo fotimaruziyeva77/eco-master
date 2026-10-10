@@ -76,21 +76,22 @@ def _render(slug: str, version: str, lang: str, title: str, grade: str, body_jso
         f"{t('pdf_grade', lang, grade=grade)} · {t('pdf_duration', lang)}", size=10, color=GREY
     )
 
+    # .get(): admins preview drafts whose parts may still be empty.
     pdf.section(t("pdf_goal", lang))
-    pdf.write_text(body["goal"])
+    pdf.write_text(body.get("goal") or "")
     pdf.section(t("pdf_materials", lang))
-    pdf.items(body["materials"])
+    pdf.items(body.get("materials") or [])
     pdf.section(t("pdf_plan", lang))
-    for step in body["plan"]:
+    for step in body.get("plan") or []:
         pdf.write_text(f"{step['title']} — {t('pdf_minutes', lang, n=step['minutes'])}", bold=True)
         pdf.write_text(step["text"])
         pdf.ln(1.5)
     pdf.section(t("pdf_questions", lang))
-    pdf.items(body["questions"], numbered=True)
+    pdf.items(body.get("questions") or [], numbered=True)
     pdf.section(t("pdf_homework", lang))
-    pdf.write_text(body["homework"])
+    pdf.write_text(body.get("homework") or "")
     pdf.section(t("pdf_app_task", lang))
-    pdf.write_text(body["app_task"])
+    pdf.write_text(body.get("app_task") or "")
     return bytes(pdf.output())
 
 

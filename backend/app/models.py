@@ -300,6 +300,10 @@ class ActivityLog(Base):
     # Idempotency key sent by the client; a retried request never adds points twice.
     client_event_id: Mapped[uuid.UUID | None]
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    # Points cancelled by an admin (TZ 8.12): the row stays for the record, but its action
+    # becomes "voided" and points 0, so every sum and count leaves it out.
+    # {"action": ..., "points": ..., "at": ..., "admin_id": ..., "reason": ...}
+    voided: Mapped[dict[str, Any] | None]
 
     __table_args__ = (
         UniqueConstraint("user_id", "client_event_id", name="uq_activity_log_client_event"),
@@ -340,6 +344,9 @@ class Report(Base):
     resolution: Mapped[str | None] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     resolved_at: Mapped[datetime | None]
+    resolved_by: Mapped[int | None] = mapped_column(
+        ForeignKey("admin_users.id", ondelete="SET NULL")
+    )
 
 
 class BannedWord(Base):
@@ -353,15 +360,28 @@ class BannedWord(Base):
 
 
 class AdminUser(Base):
+    """Admin panel account: login, password and a mandatory authenticator code (TZ 8.12)."""
+
     __tablename__ = "admin_users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    login: Mapped[str] = mapped_column(String(64), unique=True)
+    # Shown in the audit log and as the default "tested by" name.
+    name: Mapped[str] = mapped_column(String(64))
     telegram_id: Mapped[int | None] = mapped_column(BigInteger, unique=True)
-    email: Mapped[str | None] = mapped_column(String(255), unique=True)
     password_hash: Mapped[str | None] = mapped_column(String(255))
     totp_secret: Mapped[str | None] = mapped_column(String(64))
+    # Set once the authenticator app is confirmed; until then login asks to set it up.
+    totp_confirmed_at: Mapped[datetime | None]
+    # Last accepted 30-second step: the same code can not be used twice.
+    totp_last_step: Mapped[int | None] = mapped_column(BigInteger)
     role: Mapped[AdminRole] = mapped_column(str_enum(AdminRole))
     is_active: Mapped[bool] = mapped_column(server_default=text("true"))
+    failed_logins: Mapped[int] = mapped_column(server_default=text("0"))
+    locked_until: Mapped[datetime | None]
+    # Part of every session token; raising it signs the admin out everywhere.
+    session_version: Mapped[int] = mapped_column(server_default=text("0"))
+    last_login_at: Mapped[datetime | None]
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
 
@@ -384,6 +404,14 @@ class AnalyticsEvent(Base):
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
     user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"))
-    name: Mapped[str] = mapped_column(String(48), index=True)
+    name: Mapped[str] = mapped_column(String(48))
     props: Mapped[dict[str, Any] | None]
+    # The user's language and path when the event happened (TZ 14).
+    language: Mapped[str | None] = mapped_column(String(2))
+    path: Mapped[str | None] = mapped_column(String(16))
     created_at: Mapped[datetime] = mapped_column(server_default=func.now(), index=True)
+
+    __table_args__ = (
+        Index("ix_analytics_events_name_created", "name", "created_at"),
+        Index("ix_analytics_events_user_name", "user_id", "name"),
+    )

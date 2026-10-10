@@ -6,6 +6,7 @@ from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.analytics import track
 from app.api.content import list_categories
 from app.badges import award_badges, badges_out
 from app.deps import CurrentUser, SessionDep, SettingsDep
@@ -53,6 +54,25 @@ async def already_answered(session: AsyncSession, user_id: int, event: str, prop
             )
         )
     )
+
+
+async def round_progress(
+    session: AsyncSession, user_id: int, event: str, round_id: str
+) -> tuple[int, int]:
+    """(answers, correct answers) given so far in a round, the one being recorded included."""
+    answered, correct = (
+        await session.execute(
+            select(
+                func.count(),
+                func.count().filter(AnalyticsEvent.props["correct"].as_boolean().is_(True)),
+            ).where(
+                AnalyticsEvent.user_id == user_id,
+                AnalyticsEvent.name == event,
+                AnalyticsEvent.props.contains({"round": round_id}),
+            )
+        )
+    ).one()
+    return answered, correct
 
 
 def read_round(settings, token: str, user_id: int, kind: str) -> tuple[str, list[int]]:
@@ -170,9 +190,10 @@ async def answer_quiz(
     ):
         # Only the first correct answer to a question ever earns points (TZ 8.6).
         points = QUIZ_CORRECT_POINTS
-    session.add(
-        AnalyticsEvent(user_id=user.id, name="quiz_answer", props={**props, "correct": correct})
-    )
+    track(session, user, "quiz_answer", **props, correct=correct)
+    answered, right = await round_progress(session, user.id, "quiz_answer", round_id)
+    if answered == len(ids):
+        track(session, user, "quiz_finish", round=round_id, correct=right, total=len(ids))
     new_badges = await award_badges(session, user.id) if points else []
     await session.commit()
     await session.refresh(user)
@@ -244,9 +265,13 @@ async def answer_game(
             day=today,
         )
         points = points if recorded else 0
-    session.add(
-        AnalyticsEvent(user_id=user.id, name="game_answer", props={**props, "correct": correct})
-    )
+    track(session, user, "game_answer", **props, correct=correct)
+    answered, right = await round_progress(session, user.id, "game_answer", round_id)
+    if answered == len(ids):
+        mode = "quick" if body.quick else "normal"
+        track(
+            session, user, "game_finish", round=round_id, correct=right, total=len(ids), mode=mode
+        )
     new_badges = await award_badges(session, user.id) if correct else []
     await session.commit()
     await session.refresh(user)

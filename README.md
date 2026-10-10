@@ -59,6 +59,29 @@ Optional bot settings in @BotFather:
   everything users write to the bot is forwarded there with an internal user id only
   (no names or usernames, TZ 11.2).
 
+## Admin panel
+
+Content, moderation, statistics and the audit log (TZ 8.12) live at **/admin/**
+(locally http://localhost:5180/admin/). Sign-in is a login and password plus a code from an
+authenticator app (Google Authenticator, Authy, 2FAS...); the app is connected on the first sign-in.
+
+- **Administrator**: everything. **Content editor**: content and the daily schedule only.
+- Local development: `python -m app.seed --demo` creates a test admin (login `admin`, password
+  in `backend/app/seed.py`; only with `ENV=dev`).
+- Production: create the first administrator on the server (the password is asked at a hidden
+  prompt), then add the team in the panel under "Adminlar":
+
+  ```bash
+  cd backend && .venv/Scripts/python -m app.admin_cli create --login ali --name "Ali" --role admin
+  ```
+
+- Lost phone: another administrator presses "2FA ni tiklash", or
+  `python -m app.admin_cli reset-2fa --login ali`.
+- Five wrong passwords or codes lock an account for 15 minutes; every admin action is written
+  to the audit log.
+- The admin page is a separate build entry (`frontend/admin/index.html`), so the Mini App
+  never loads its code. A web server must answer `/admin/*` with `dist/admin/index.html`.
+
 ## Checks
 
 ```bash

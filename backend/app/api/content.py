@@ -6,6 +6,7 @@ from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.analytics import track
 from app.api.daily import daily_state
 from app.badges import award_badges, badges_out
 from app.daily import tip_of_the_day
@@ -169,6 +170,9 @@ async def project_detail(slug: str, user: CurrentUser, session: SessionDep) -> P
         .select_from(ActivityLog)
         .where(ActivityLog.action == "project_done", ActivityLog.object_id == str(project.id))
     )
+    # "Most viewed lessons" in the admin statistics (TZ 8.12).
+    track(session, user, "project_view", project=project.slug)
+    await session.commit()
     return ProjectDetailOut(
         **summary.model_dump(),
         category_name=category.name,
@@ -194,6 +198,8 @@ async def project_done(slug: str, body: DoneIn, user: CurrentUser, session: Sess
         client_event_id=body.client_event_id,
     )
     new_badges = await award_badges(session, user.id) if awarded else []
+    if awarded:
+        track(session, user, "project_done", project=project.slug)
     await session.commit()
     await session.refresh(user)
     return DoneOut(

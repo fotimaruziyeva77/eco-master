@@ -25,6 +25,7 @@ from app import models  # noqa: E402, F401
 from app.db import Base, SessionLocal, engine  # noqa: E402
 from app.deps import bot_dep  # noqa: E402
 from app.main import app  # noqa: E402
+from app.ratelimit import reset_all  # noqa: E402
 from app.security import sign_init_data  # noqa: E402
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
@@ -45,6 +46,11 @@ async def clean_tables(schema):
     tables = ", ".join(t.name for t in Base.metadata.sorted_tables)
     async with engine.begin() as conn:
         await conn.execute(text(f"TRUNCATE {tables} RESTART IDENTITY CASCADE"))
+
+
+@pytest.fixture(autouse=True)
+def fresh_rate_limits():
+    reset_all()
 
 
 @pytest.fixture(autouse=True)

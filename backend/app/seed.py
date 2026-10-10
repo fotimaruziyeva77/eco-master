@@ -1,6 +1,10 @@
 """Load reference data (and optionally demo content): python -m app.seed [--demo]
 
-Safe to run repeatedly: rows are matched by their natural keys and updated in place.
+Safe to run repeatedly. Content, waste types and word lists are managed in the admin panel,
+so existing rows are never overwritten: only missing ones are added. Badges are defined by
+code and are kept in sync.
+
+With --demo in development (ENV=dev) a test admin is created as well; see DEV_ADMIN_* below.
 """
 
 import argparse
@@ -10,8 +14,12 @@ from sqlalchemy import func, select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.admin.security import hash_password
+from app.config import get_settings
 from app.db import SessionLocal
 from app.models import (
+    AdminRole,
+    AdminUser,
     Badge,
     BannedWord,
     Category,
@@ -37,18 +45,23 @@ from app.seed_data import (
 from app.seed_data_games import BADGES, DEMO_GAME_ITEMS, DEMO_QUESTIONS
 from app.seed_data_lessons import DEMO_LESSONS
 
+# Local development only (ENV=dev): the admin panel at http://localhost:5180/admin/.
+# The first sign-in asks to connect an authenticator app (2FA is required for everyone).
+DEV_ADMIN_LOGIN = "admin"
+DEV_ADMIN_PASSWORD = "ekoustoz-dev-admin"
+
 
 async def seed_categories(session: AsyncSession) -> None:
     for order, data in enumerate(CATEGORIES, start=1):
-        values = {**data, "sort_order": order}
-        stmt = insert(Category).values(**values)
-        stmt = stmt.on_conflict_do_update(
-            index_elements=[Category.code], set_={k: v for k, v in values.items() if k != "code"}
+        await session.execute(
+            insert(Category).values(**data, sort_order=order).on_conflict_do_nothing()
         )
-        await session.execute(stmt)
 
 
 async def seed_banned_words(session: AsyncSession) -> None:
+    """Only into an empty list: words deleted in the admin panel must stay deleted."""
+    if not await is_empty(session, BannedWord):
+        return
     rows = [{"word": w, "kind": WordKind.RESERVED} for w in RESERVED_WORDS] + [
         {"word": w, "kind": WordKind.PROFANITY} for w in PROFANITY
     ]
@@ -75,29 +88,15 @@ async def seed_demo(session: AsyncSession) -> None:
         values = {k: v for k, v in data.items() if k != "category"}
         values["category_id"] = category_ids[data["category"]]
         values["status"] = ContentStatus.PUBLISHED
-        stmt = insert(Project).values(**values)
-        stmt = stmt.on_conflict_do_update(
-            index_elements=[Project.slug], set_={k: v for k, v in values.items() if k != "slug"}
-        )
-        await session.execute(stmt)
+        await session.execute(insert(Project).values(**values).on_conflict_do_nothing())
 
     for data in DEMO_CARDS:
         values = {**data, "status": ContentStatus.PUBLISHED}
-        stmt = insert(KnowledgeCard).values(**values)
-        stmt = stmt.on_conflict_do_update(
-            index_elements=[KnowledgeCard.slug],
-            set_={k: v for k, v in values.items() if k != "slug"},
-        )
-        await session.execute(stmt)
+        await session.execute(insert(KnowledgeCard).values(**values).on_conflict_do_nothing())
 
     for order, data in enumerate(DEMO_LESSONS, start=1):
         values = {**data, "sort_order": order, "status": ContentStatus.PUBLISHED}
-        stmt = insert(TeacherLesson).values(**values)
-        stmt = stmt.on_conflict_do_update(
-            index_elements=[TeacherLesson.slug],
-            set_={k: v for k, v in values.items() if k != "slug"},
-        )
-        await session.execute(stmt)
+        await session.execute(insert(TeacherLesson).values(**values).on_conflict_do_nothing())
 
     # Tips, questions and game items have no natural key: demo sets go only into empty tables.
     if await is_empty(session, Tip):
@@ -137,6 +136,22 @@ async def seed_demo(session: AsyncSession) -> None:
         )
 
 
+async def seed_dev_admin(session: AsyncSession) -> bool:
+    if get_settings().env != "dev":
+        return False
+    if await session.scalar(select(AdminUser.id).where(AdminUser.login == DEV_ADMIN_LOGIN)):
+        return False
+    session.add(
+        AdminUser(
+            login=DEV_ADMIN_LOGIN,
+            name="Dev Admin",
+            role=AdminRole.ADMIN,
+            password_hash=hash_password(DEV_ADMIN_PASSWORD),
+        )
+    )
+    return True
+
+
 async def run(demo: bool) -> None:
     async with SessionLocal() as session:
         await seed_categories(session)
@@ -144,6 +159,8 @@ async def run(demo: bool) -> None:
         await seed_badges(session)
         if demo:
             await seed_demo(session)
+            if await seed_dev_admin(session):
+                print(f"Dev admin created: login {DEV_ADMIN_LOGIN!r} (password in app/seed.py)")
         await session.commit()
 
 

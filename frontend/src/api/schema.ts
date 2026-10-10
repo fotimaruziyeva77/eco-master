@@ -607,6 +607,626 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Record Events */
+        post: operations["record_events_api_events_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Login */
+        post: operations["login_api_admin_auth_login_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/auth/code": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Confirm Code */
+        post: operations["confirm_code_api_admin_auth_code_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/auth/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Me */
+        get: operations["me_api_admin_auth_me_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/auth/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Logout */
+        post: operations["logout_api_admin_auth_logout_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/auth/password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Change Password */
+        post: operations["change_password_api_admin_auth_password_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/admins": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Admins */
+        get: operations["list_admins_api_admin_admins_get"];
+        put?: never;
+        /**
+         * Create Admin
+         * @description The new person signs in with this password and then connects an authenticator app.
+         */
+        post: operations["create_admin_api_admin_admins_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/admins/{admin_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Admin */
+        patch: operations["update_admin_api_admin_admins__admin_id__patch"];
+        trace?: never;
+    };
+    "/api/admin/admins/{admin_id}/reset-2fa": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reset 2Fa
+         * @description For a lost phone: the next sign-in sets up a new authenticator app.
+         */
+        post: operations["reset_2fa_api_admin_admins__admin_id__reset_2fa_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/admins/{admin_id}/password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Set Password
+         * @description A temporary password for someone who forgot theirs; it also lifts a lockout.
+         */
+        post: operations["set_password_api_admin_admins__admin_id__password_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/content": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Content Types */
+        get: operations["content_types_api_admin_content_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/content/{type_key}/meta": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Content Meta
+         * @description Field descriptions the admin UI builds its form from.
+         */
+        get: operations["content_meta_api_admin_content__type_key__meta_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/content/{type_key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Items */
+        get: operations["list_items_api_admin_content__type_key__get"];
+        put?: never;
+        /**
+         * Create Content
+         * @description New items start as drafts.
+         */
+        post: operations["create_content_api_admin_content__type_key__post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/content/{type_key}/{item_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Content */
+        get: operations["get_content_api_admin_content__type_key___item_id__get"];
+        /** Update Content */
+        put: operations["update_content_api_admin_content__type_key___item_id__put"];
+        post?: never;
+        /**
+         * Delete Content
+         * @description Only drafts can be deleted; anything that was live goes to the archive instead.
+         */
+        delete: operations["delete_content_api_admin_content__type_key___item_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/content/{type_key}/{item_id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Change Status */
+        post: operations["change_status_api_admin_content__type_key___item_id__status_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/content/lessons/{item_id}/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Lesson Pdf Preview
+         * @description The PDF exactly as teachers will get it, also for drafts (preview, TZ 8.12).
+         */
+        get: operations["lesson_pdf_preview_api_admin_content_lessons__item_id__pdf_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/schedule/{kind}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Schedule */
+        get: operations["get_schedule_api_admin_schedule__kind__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/schedule/{kind}/{day}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Set Day
+         * @description Pin an item to a date, or clear it (item_id null) to fall back to the rotation.
+         */
+        put: operations["set_day_api_admin_schedule__kind___day__put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Search Users
+         * @description By nickname, internal id or Telegram id (TZ 8.12).
+         */
+        get: operations["search_users_api_admin_users_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/users/{user_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** User Card */
+        get: operations["user_card_api_admin_users__user_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/users/{user_id}/block": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Block User */
+        post: operations["block_user_api_admin_users__user_id__block_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/users/{user_id}/nickname": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Nickname Action */
+        post: operations["nickname_action_api_admin_users__user_id__nickname_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/users/{user_id}/void": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Void Points
+         * @description Cancel fake points (TZ 8.12): totals, streak and dependent badges are recalculated.
+         */
+        post: operations["void_points_api_admin_users__user_id__void_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/reports/open": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Open Reports
+         * @description Open complaints grouped by the reported user, most reported first.
+         */
+        get: operations["open_reports_api_admin_reports_open_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Report History
+         * @description Resolved and rejected complaints with the decision.
+         */
+        get: operations["report_history_api_admin_reports_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/reports/resolve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Resolve
+         * @description Decide on every open complaint about one user at once.
+         */
+        post: operations["resolve_api_admin_reports_resolve_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/words": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Words */
+        get: operations["list_words_api_admin_words_get"];
+        put?: never;
+        /**
+         * Add Word
+         * @description Applies to new nicknames right away; existing ones are handled through reports.
+         */
+        post: operations["add_word_api_admin_words_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/words/{word_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Word */
+        delete: operations["delete_word_api_admin_words__word_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Stats */
+        get: operations["stats_api_admin_stats_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/stats/questions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Questions
+         * @description Correct-answer rate per question; without `days`, over all time.
+         */
+        get: operations["questions_api_admin_stats_questions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/stats/flags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Flags
+         * @description Suspicious activity (TZ 11.1): > 300 points a day, or rounds answered too fast.
+         */
+        get: operations["flags_api_admin_stats_flags_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/stats/export/{kind}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Export Csv
+         * @description CSV for spreadsheets (TZ 8.12). The user list has no Telegram ids (TZ 11.2).
+         */
+        get: operations["export_csv_api_admin_stats_export__kind__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/audit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Audit Log
+         * @description Newest first; pass `before_id` from the previous page to read further back.
+         */
+        get: operations["audit_log_api_admin_audit_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/dev/init-data": {
         parameters: {
             query?: never;
@@ -631,6 +1251,250 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** ActivityRowOut */
+        ActivityRowOut: {
+            /** Id */
+            id: number;
+            /** Action */
+            action: string;
+            /** Object Id */
+            object_id: string | null;
+            /** Points */
+            points: number;
+            /**
+             * Local Date
+             * Format: date
+             */
+            local_date: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Voided */
+            voided: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /** AdminCreateIn */
+        AdminCreateIn: {
+            /** Login */
+            login: string;
+            /** Name */
+            name: string;
+            role: components["schemas"]["AdminRole"];
+            /** Password */
+            password: string;
+        };
+        /** AdminMeOut */
+        AdminMeOut: {
+            /** Id */
+            id: number;
+            /** Login */
+            login: string;
+            /** Name */
+            name: string;
+            role: components["schemas"]["AdminRole"];
+        };
+        /** AdminOut */
+        AdminOut: {
+            /** Id */
+            id: number;
+            /** Login */
+            login: string;
+            /** Name */
+            name: string;
+            role: components["schemas"]["AdminRole"];
+            /** Is Active */
+            is_active: boolean;
+            /** Totp Enabled */
+            totp_enabled: boolean;
+            /** Locked */
+            locked: boolean;
+            /** Last Login At */
+            last_login_at: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /**
+         * AdminRole
+         * @enum {string}
+         */
+        AdminRole: "admin" | "editor";
+        /** AdminStatsOut */
+        AdminStatsOut: {
+            /**
+             * Start
+             * Format: date
+             */
+            start: string;
+            /**
+             * End
+             * Format: date
+             */
+            end: string;
+            /** Users Total */
+            users_total: number;
+            /** Users Onboarded */
+            users_onboarded: number;
+            /** New Users */
+            new_users: number;
+            /** Dau Today */
+            dau_today: number;
+            /** Wau */
+            wau: number;
+            /** Mau */
+            mau: number;
+            d1: components["schemas"]["RateOut"];
+            d7: components["schemas"]["RateOut"];
+            onboarding: components["schemas"]["RateOut"];
+            lesson_and_task: components["schemas"]["RateOut"];
+            funnel: components["schemas"]["FunnelOut"];
+            /** Criteria */
+            criteria: components["schemas"]["CriterionOut"][];
+            /** Daily */
+            daily: components["schemas"]["DayStatOut"][];
+            /** Sources */
+            sources: components["schemas"]["SourceOut"][];
+            /** Projects */
+            projects: components["schemas"]["ProjectStatOut"][];
+            /** Lessons */
+            lessons: components["schemas"]["LessonStatOut"][];
+        };
+        /** AdminUpdateIn */
+        AdminUpdateIn: {
+            /** Name */
+            name?: string | null;
+            role?: components["schemas"]["AdminRole"] | null;
+            /** Is Active */
+            is_active?: boolean | null;
+        };
+        /** AdminUserDetailOut */
+        AdminUserDetailOut: {
+            /** Id */
+            id: number;
+            /** Nickname */
+            nickname: string | null;
+            /** Language */
+            language: string;
+            /** Path */
+            path: string | null;
+            /** Source */
+            source: string | null;
+            /** Points Total */
+            points_total: number;
+            /** Streak Current */
+            streak_current: number;
+            /** Onboarding Done */
+            onboarding_done: boolean;
+            /** Is Blocked */
+            is_blocked: boolean;
+            /** Nickname Hidden */
+            nickname_hidden: boolean;
+            /** Open Reports */
+            open_reports: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Last Active At
+             * Format: date-time
+             */
+            last_active_at: string;
+            /** Telegram Id */
+            telegram_id: number;
+            /** Streak Best */
+            streak_best: number;
+            /** Last Task Date */
+            last_task_date: string | null;
+            /** Reminders Enabled */
+            reminders_enabled: boolean;
+            /** Write Access */
+            write_access: boolean;
+            /** Badges */
+            badges: components["schemas"]["BadgeRefOut"][];
+            /** Counts */
+            counts: {
+                [key: string]: number;
+            };
+            /** Flags */
+            flags: components["schemas"]["UserFlagOut"][];
+            /** Reports */
+            reports: components["schemas"]["ReportOut"][];
+            /** Activity */
+            activity: components["schemas"]["ActivityRowOut"][];
+        };
+        /** AdminUserRowOut */
+        AdminUserRowOut: {
+            /** Id */
+            id: number;
+            /** Nickname */
+            nickname: string | null;
+            /** Language */
+            language: string;
+            /** Path */
+            path: string | null;
+            /** Source */
+            source: string | null;
+            /** Points Total */
+            points_total: number;
+            /** Streak Current */
+            streak_current: number;
+            /** Onboarding Done */
+            onboarding_done: boolean;
+            /** Is Blocked */
+            is_blocked: boolean;
+            /** Nickname Hidden */
+            nickname_hidden: boolean;
+            /** Open Reports */
+            open_reports: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Last Active At
+             * Format: date-time
+             */
+            last_active_at: string;
+        };
+        /** AuditPageOut */
+        AuditPageOut: {
+            /** Rows */
+            rows: components["schemas"]["AuditRowOut"][];
+            /** Next Before Id */
+            next_before_id: number | null;
+        };
+        /** AuditRowOut */
+        AuditRowOut: {
+            /** Id */
+            id: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Admin Id */
+            admin_id: number | null;
+            /** Admin Name */
+            admin_name: string | null;
+            /** Action */
+            action: string;
+            /** Object Type */
+            object_type: string;
+            /** Object Id */
+            object_id: string | null;
+            /** Details */
+            details: {
+                [key: string]: unknown;
+            } | null;
+        };
         /** AuthOut */
         AuthOut: {
             /** Token */
@@ -657,6 +1521,22 @@ export interface components {
             progress_current?: number | null;
             /** Progress Target */
             progress_target?: number | null;
+        };
+        /** BadgeRefOut */
+        BadgeRefOut: {
+            /** Code */
+            code: string;
+            /** Name */
+            name: string;
+            /** Icon */
+            icon: string;
+        };
+        /** BlockIn */
+        BlockIn: {
+            /** Blocked */
+            blocked: boolean;
+            /** Reason */
+            reason?: string | null;
         };
         /** CardDetailOut */
         CardDetailOut: {
@@ -716,6 +1596,130 @@ export interface components {
              */
             project_count: number;
         };
+        /**
+         * ClientEventIn
+         * @description An event reported by the Mini App; only known names and fields are accepted.
+         */
+        ClientEventIn: {
+            /**
+             * Name
+             * @enum {string}
+             */
+            name: "video_play" | "video_complete" | "error";
+            /** Props */
+            props?: {
+                [key: string]: string | number | boolean | null;
+            };
+        };
+        /** CodeIn */
+        CodeIn: {
+            /** Token */
+            token: string;
+            /** Code */
+            code: string;
+        };
+        /** ContentItemOut */
+        ContentItemOut: {
+            /** Id */
+            id: number;
+            status: components["schemas"]["ContentStatus"] | null;
+            /** Values */
+            values: {
+                [key: string]: unknown;
+            };
+            /** Issues */
+            issues: components["schemas"]["IssueOut"][];
+            /** Created At */
+            created_at: string | null;
+            /** Updated At */
+            updated_at: string | null;
+        };
+        /** ContentMetaOut */
+        ContentMetaOut: {
+            /** Key */
+            key: string;
+            /** Title */
+            title: string;
+            /** Has Status */
+            has_status: boolean;
+            /** Deletable */
+            deletable: boolean;
+            /** Preview */
+            preview: string;
+            /** Counts */
+            counts: {
+                [key: string]: number;
+            };
+            /** Fields */
+            fields: components["schemas"]["FieldSpecOut"][];
+            /** Defaults */
+            defaults: {
+                [key: string]: unknown;
+            };
+        };
+        /** ContentRowOut */
+        ContentRowOut: {
+            /** Id */
+            id: number;
+            /** Title */
+            title: string;
+            /** Subtitle */
+            subtitle: string;
+            status: components["schemas"]["ContentStatus"] | null;
+            /** Updated At */
+            updated_at: string | null;
+            /** Errors */
+            errors: number;
+            /** Warnings */
+            warnings: number;
+        };
+        /**
+         * ContentStatus
+         * @enum {string}
+         */
+        ContentStatus: "draft" | "review" | "published" | "archived";
+        /** ContentTypeOut */
+        ContentTypeOut: {
+            /** Key */
+            key: string;
+            /** Title */
+            title: string;
+            /** Has Status */
+            has_status: boolean;
+            /** Deletable */
+            deletable: boolean;
+            /** Preview */
+            preview: string;
+            /** Counts */
+            counts: {
+                [key: string]: number;
+            };
+        };
+        /** ContentValuesIn */
+        ContentValuesIn: {
+            /** Values */
+            values: {
+                [key: string]: unknown;
+            };
+        };
+        /** CriterionOut */
+        CriterionOut: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Target */
+            target: number;
+            /** Value */
+            value: number | null;
+            /** Ok */
+            ok: boolean | null;
+            /**
+             * Unit
+             * @enum {string}
+             */
+            unit: "percent" | "count";
+        };
         /** DailyDoneOut */
         DailyDoneOut: {
             /** Awarded */
@@ -761,6 +1765,24 @@ export interface components {
             /** Points */
             points: number;
         };
+        /** DayStatOut */
+        DayStatOut: {
+            /**
+             * Day
+             * Format: date
+             */
+            day: string;
+            /** New Users */
+            new_users: number;
+            /** Dau */
+            dau: number;
+            /** Daily Tasks */
+            daily_tasks: number;
+            /** Projects Done */
+            projects_done: number;
+            /** Quiz Answers */
+            quiz_answers: number;
+        };
         /** DevInitDataOut */
         DevInitDataOut: {
             /** Init Data */
@@ -793,6 +1815,84 @@ export interface components {
              */
             new_badges: components["schemas"]["BadgeOut"][];
         };
+        /** EventsIn */
+        EventsIn: {
+            /** Events */
+            events: components["schemas"]["ClientEventIn"][];
+        };
+        /** FastFlagOut */
+        FastFlagOut: {
+            /** User Id */
+            user_id: number;
+            /** Nickname */
+            nickname: string | null;
+            /**
+             * Game
+             * @enum {string}
+             */
+            game: "quiz" | "sort";
+            /**
+             * Day
+             * Format: date
+             */
+            day: string;
+            /** Answers */
+            answers: number;
+            /** Avg Seconds */
+            avg_seconds: number;
+        };
+        /** FieldOptionOut */
+        FieldOptionOut: {
+            /** Value */
+            value: string;
+            /** Label */
+            label: string;
+        };
+        /** FieldSpecOut */
+        FieldSpecOut: {
+            /** Name */
+            name: string;
+            /** Label */
+            label: string;
+            /** Kind */
+            kind: string;
+            /** Required */
+            required: boolean;
+            /** Nullable */
+            nullable: boolean;
+            /** Fixed */
+            fixed: boolean;
+            /** Help */
+            help?: string | null;
+            /** Options */
+            options?: components["schemas"]["FieldOptionOut"][] | null;
+            /** Min */
+            min?: number | null;
+            /** Max */
+            max?: number | null;
+            /** Max Length */
+            max_length?: number | null;
+        };
+        /** FlagsOut */
+        FlagsOut: {
+            /** Points */
+            points: components["schemas"]["PointsFlagOut"][];
+            /** Fast */
+            fast: components["schemas"]["FastFlagOut"][];
+        };
+        /** FunnelOut */
+        FunnelOut: {
+            /** Started */
+            started: number;
+            /** Language */
+            language: number;
+            /** Path */
+            path: number;
+            /** Nickname */
+            nickname: number;
+            /** Done */
+            done: number;
+        };
         /** GameAnswerIn */
         GameAnswerIn: {
             /** Round Token */
@@ -801,6 +1901,11 @@ export interface components {
             item_id: number;
             /** Bin */
             bin?: string | null;
+            /**
+             * Quick
+             * @default false
+             */
+            quick: boolean;
         };
         /** GameAnswerOut */
         GameAnswerOut: {
@@ -875,6 +1980,20 @@ export interface components {
             categories: components["schemas"]["CategoryOut"][];
             featured?: components["schemas"]["ProjectSummaryOut"] | null;
         };
+        /** IssueOut */
+        IssueOut: {
+            /**
+             * Level
+             * @enum {string}
+             */
+            level: "error" | "warning";
+            /** Message */
+            message: string;
+            /** Field */
+            field?: string | null;
+            /** Lang */
+            lang?: string | null;
+        };
         /** LeaderboardEntryOut */
         LeaderboardEntryOut: {
             /** Rank */
@@ -923,6 +2042,17 @@ export interface components {
             /** Language */
             language?: ("uz" | "ru" | "en") | null;
         };
+        /** LessonStatOut */
+        LessonStatOut: {
+            /** Slug */
+            slug: string;
+            /** Title */
+            title: string;
+            /** Downloads */
+            downloads: number;
+            /** Sent To Chat */
+            sent_to_chat: number;
+        };
         /** LessonSummaryOut */
         LessonSummaryOut: {
             /** Slug */
@@ -943,6 +2073,19 @@ export interface components {
             /** Next Min Points */
             next_min_points: number | null;
         };
+        /** LoginIn */
+        LoginIn: {
+            /** Login */
+            login: string;
+            /** Password */
+            password: string;
+        };
+        /** LoginOut */
+        LoginOut: {
+            /** Token */
+            token: string;
+            setup?: components["schemas"]["TotpSetupOut"] | null;
+        };
         /** MeUpdate */
         MeUpdate: {
             /** Language */
@@ -952,6 +2095,16 @@ export interface components {
             reminders_enabled?: boolean | null;
             /** Reminder Time */
             reminder_time?: string | null;
+        };
+        /** NicknameActionIn */
+        NicknameActionIn: {
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "hide" | "show" | "reset";
+            /** Reason */
+            reason?: string | null;
         };
         /** NicknameCheckOut */
         NicknameCheckOut: {
@@ -982,6 +2135,32 @@ export interface components {
          * @enum {string}
          */
         OnboardingStep: "language" | "path" | "nickname" | "intro" | "done";
+        /** PasswordChangeIn */
+        PasswordChangeIn: {
+            /** Current */
+            current: string;
+            /** New */
+            new: string;
+        };
+        /** PasswordSetIn */
+        PasswordSetIn: {
+            /** Password */
+            password: string;
+        };
+        /** PointsFlagOut */
+        PointsFlagOut: {
+            /** User Id */
+            user_id: number;
+            /** Nickname */
+            nickname: string | null;
+            /**
+             * Day
+             * Format: date
+             */
+            day: string;
+            /** Points */
+            points: number;
+        };
         /** ProjectDetailOut */
         ProjectDetailOut: {
             /** Slug */
@@ -1028,6 +2207,23 @@ export interface components {
              */
             done_count: number;
         };
+        /** ProjectStatOut */
+        ProjectStatOut: {
+            /** Id */
+            id: number;
+            /** Slug */
+            slug: string;
+            /** Title */
+            title: string;
+            /** Views */
+            views: number;
+            /** Viewers */
+            viewers: number;
+            /** Video Plays */
+            video_plays: number;
+            /** Done */
+            done: number;
+        };
         /** ProjectSummaryOut */
         ProjectSummaryOut: {
             /** Slug */
@@ -1048,6 +2244,23 @@ export interface components {
             has_video: boolean;
             /** Done */
             done: boolean;
+        };
+        /** QuestionStatOut */
+        QuestionStatOut: {
+            /** Id */
+            id: number;
+            /** Text */
+            text: string;
+            /** Category */
+            category: string;
+            /** Answers */
+            answers: number;
+            /** Correct */
+            correct: number;
+            /** Rate */
+            rate: number | null;
+            /** Flag */
+            flag: ("hard" | "easy") | null;
         };
         /** QuizAnswerIn */
         QuizAnswerIn: {
@@ -1120,6 +2333,33 @@ export interface components {
             /** Questions */
             questions: components["schemas"]["QuizQuestionOut"][];
         };
+        /** RateOut */
+        RateOut: {
+            /** Size */
+            size: number;
+            /** Value */
+            value: number;
+            /** Rate */
+            rate: number | null;
+        };
+        /** ReportGroupOut */
+        ReportGroupOut: {
+            target: components["schemas"]["AdminUserRowOut"];
+            /** Count */
+            count: number;
+            /** Reasons */
+            reasons: string[];
+            /**
+             * First At
+             * Format: date-time
+             */
+            first_at: string;
+            /**
+             * Last At
+             * Format: date-time
+             */
+            last_at: string;
+        };
         /** ReportIn */
         ReportIn: {
             /** Target User Id */
@@ -1131,11 +2371,93 @@ export interface components {
              */
             reason: "nickname";
         };
+        /** ReportOut */
+        ReportOut: {
+            /** Id */
+            id: number;
+            /** Reporter Id */
+            reporter_id: number | null;
+            /** Target User Id */
+            target_user_id: number;
+            /** Target Nickname */
+            target_nickname: string | null;
+            /** Reason */
+            reason: string;
+            status: components["schemas"]["ReportStatus"];
+            /** Resolution */
+            resolution: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Resolved At */
+            resolved_at: string | null;
+            /** Resolved By */
+            resolved_by: string | null;
+        };
+        /**
+         * ReportStatus
+         * @enum {string}
+         */
+        ReportStatus: "open" | "resolved" | "rejected";
+        /** ResolveIn */
+        ResolveIn: {
+            /** Target User Id */
+            target_user_id: number;
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "dismiss" | "hide" | "reset" | "block";
+            /** Note */
+            note?: string | null;
+        };
         /**
          * SafetyLevel
          * @enum {string}
          */
         SafetyLevel: "green" | "yellow" | "red";
+        /** ScheduleDayOut */
+        ScheduleDayOut: {
+            /**
+             * Day
+             * Format: date
+             */
+            day: string;
+            /** Item Id */
+            item_id: number | null;
+            /** Item Title */
+            item_title: string | null;
+            /** Auto Item Id */
+            auto_item_id: number | null;
+            /** Auto Item Title */
+            auto_item_title: string | null;
+        };
+        /** ScheduleOptionOut */
+        ScheduleOptionOut: {
+            /** Id */
+            id: number;
+            /** Title */
+            title: string;
+        };
+        /** ScheduleOut */
+        ScheduleOut: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "daily" | "tips";
+            /** Days */
+            days: components["schemas"]["ScheduleDayOut"][];
+            /** Items */
+            items: components["schemas"]["ScheduleOptionOut"][];
+        };
+        /** ScheduleSetIn */
+        ScheduleSetIn: {
+            /** Item Id */
+            item_id: number | null;
+        };
         /** ShareIn */
         ShareIn: {
             /**
@@ -1157,6 +2479,13 @@ export interface components {
             prepared_message_id?: string | null;
             /** Inline Query */
             inline_query?: string | null;
+        };
+        /** SourceOut */
+        SourceOut: {
+            /** Source */
+            source: string;
+            /** Users */
+            users: number;
         };
         /** StatsOut */
         StatsOut: {
@@ -1185,6 +2514,10 @@ export interface components {
             /** Rank All */
             rank_all: number | null;
         };
+        /** StatusIn */
+        StatusIn: {
+            status: components["schemas"]["ContentStatus"];
+        };
         /** TelegramAuthIn */
         TelegramAuthIn: {
             /** Init Data */
@@ -1198,6 +2531,28 @@ export interface components {
             text: {
                 [key: string]: unknown;
             };
+        };
+        /** TotpSetupOut */
+        TotpSetupOut: {
+            /** Secret */
+            secret: string;
+            /** Uri */
+            uri: string;
+        };
+        /** UserFlagOut */
+        UserFlagOut: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "points" | "fast";
+            /** Message */
+            message: string;
+            /**
+             * Day
+             * Format: date
+             */
+            day: string;
         };
         /** UserOut */
         UserOut: {
@@ -1231,6 +2586,8 @@ export interface components {
             last_task_date: string | null;
             /** Nickname Changed At */
             nickname_changed_at: string | null;
+            /** Onboarded At */
+            onboarded_at?: string | null;
             /** Done Today */
             readonly done_today: boolean;
             /** Nickname Change Available At */
@@ -1254,6 +2611,32 @@ export interface components {
             input?: unknown;
             /** Context */
             ctx?: Record<string, never>;
+        };
+        /** VoidIn */
+        VoidIn: {
+            /** Entry Ids */
+            entry_ids: number[];
+            /** Reason */
+            reason: string;
+        };
+        /** WordIn */
+        WordIn: {
+            /** Word */
+            word: string;
+            kind: components["schemas"]["WordKind"];
+        };
+        /**
+         * WordKind
+         * @enum {string}
+         */
+        WordKind: "profanity" | "reserved";
+        /** WordOut */
+        WordOut: {
+            /** Id */
+            id: number;
+            /** Word */
+            word: string;
+            kind: components["schemas"]["WordKind"];
         };
         /** WriteAccessIn */
         WriteAccessIn: {
@@ -2238,6 +3621,1180 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ShareOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    record_events_api_events_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EventsIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    login_api_admin_auth_login_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoginOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    confirm_code_api_admin_auth_code_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CodeIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminMeOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    me_api_admin_auth_me_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminMeOut"];
+                };
+            };
+        };
+    };
+    logout_api_admin_auth_logout_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    change_password_api_admin_auth_password_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PasswordChangeIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminMeOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_admins_api_admin_admins_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminOut"][];
+                };
+            };
+        };
+    };
+    create_admin_api_admin_admins_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminCreateIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_admin_api_admin_admins__admin_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                admin_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminUpdateIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reset_2fa_api_admin_admins__admin_id__reset_2fa_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                admin_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_password_api_admin_admins__admin_id__password_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                admin_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PasswordSetIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    content_types_api_admin_content_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentTypeOut"][];
+                };
+            };
+        };
+    };
+    content_meta_api_admin_content__type_key__meta_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                type_key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentMetaOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_items_api_admin_content__type_key__get: {
+        parameters: {
+            query?: {
+                status?: components["schemas"]["ContentStatus"] | null;
+                q?: string | null;
+            };
+            header?: never;
+            path: {
+                type_key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentRowOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_content_api_admin_content__type_key__post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                type_key: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ContentValuesIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentItemOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_content_api_admin_content__type_key___item_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                type_key: string;
+                item_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentItemOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_content_api_admin_content__type_key___item_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                type_key: string;
+                item_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ContentValuesIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentItemOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_content_api_admin_content__type_key___item_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                type_key: string;
+                item_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    change_status_api_admin_content__type_key___item_id__status_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                type_key: string;
+                item_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StatusIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentItemOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    lesson_pdf_preview_api_admin_content_lessons__item_id__pdf_get: {
+        parameters: {
+            query?: {
+                lang?: "uz" | "ru" | "en";
+            };
+            header?: never;
+            path: {
+                item_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_schedule_api_admin_schedule__kind__get: {
+        parameters: {
+            query?: {
+                start?: string | null;
+                days?: number;
+            };
+            header?: never;
+            path: {
+                kind: "daily" | "tips";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScheduleOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_day_api_admin_schedule__kind___day__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                kind: "daily" | "tips";
+                day: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScheduleSetIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    search_users_api_admin_users_get: {
+        parameters: {
+            query?: {
+                q?: string | null;
+                filter?: "all" | "blocked" | "hidden" | "reported" | "flagged";
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserRowOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    user_card_api_admin_users__user_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserDetailOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    block_user_api_admin_users__user_id__block_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BlockIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserDetailOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    nickname_action_api_admin_users__user_id__nickname_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NicknameActionIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserDetailOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    void_points_api_admin_users__user_id__void_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VoidIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserDetailOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    open_reports_api_admin_reports_open_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportGroupOut"][];
+                };
+            };
+        };
+    };
+    report_history_api_admin_reports_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    resolve_api_admin_reports_resolve_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResolveIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_words_api_admin_words_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WordOut"][];
+                };
+            };
+        };
+    };
+    add_word_api_admin_words_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WordIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WordOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_word_api_admin_words__word_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                word_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    stats_api_admin_stats_get: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminStatsOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    questions_api_admin_stats_questions_get: {
+        parameters: {
+            query?: {
+                days?: number | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QuestionStatOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    flags_api_admin_stats_flags_get: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FlagsOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    export_csv_api_admin_stats_export__kind__get: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path: {
+                kind: "daily" | "questions" | "projects" | "users";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    audit_log_api_admin_audit_get: {
+        parameters: {
+            query?: {
+                before_id?: number | null;
+                admin_id?: number | null;
+                object_type?: string | null;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditPageOut"];
                 };
             };
             /** @description Validation Error */

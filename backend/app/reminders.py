@@ -14,6 +14,7 @@ from aiogram.exceptions import TelegramAPIError, TelegramForbiddenError, Telegra
 from sqlalchemy import or_, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.analytics import track
 from app.bot.handlers import open_app_keyboard
 from app.daily import current_streak, task_of_the_day
 from app.db import SessionLocal, engine
@@ -89,6 +90,7 @@ async def _send_all(session: AsyncSession, bot: Bot, now: datetime, today: date)
         try:
             await _send(bot, user, reminder_text(user, task_text, today))
             sent += 1
+            track(session, user, "reminder_sent")
         except TelegramForbiddenError:
             # The user blocked the bot: stop reminding them (TZ 8.5).
             user.reminders_enabled = False
@@ -103,7 +105,8 @@ async def _send_all(session: AsyncSession, bot: Bot, now: datetime, today: date)
 
 
 async def _send(bot: Bot, user: User, message: str) -> None:
-    keyboard = open_app_keyboard(user.language)
+    # startapp=reminder lets analytics count launches from reminders (reminder_open).
+    keyboard = open_app_keyboard(user.language, start="reminder")
     try:
         await bot.send_message(user.telegram_id, message, reply_markup=keyboard)
     except TelegramRetryAfter as exc:

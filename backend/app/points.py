@@ -7,6 +7,8 @@ from sqlalchemy import func, select, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.analytics import event_row
+from app.levels import level_for
 from app.models import ActivityLog, User
 from app.timeutil import local_today
 
@@ -63,7 +65,16 @@ async def award(
     if (await session.execute(stmt)).scalar_one_or_none() is None:
         return False
     if points:
-        await session.execute(
-            update(User).where(User.id == user_id).values(points_total=User.points_total + points)
-        )
+        row = (
+            await session.execute(
+                update(User)
+                .where(User.id == user_id)
+                .values(points_total=User.points_total + points)
+                .returning(User.points_total, User.language, User.path)
+            )
+        ).one()
+        level = level_for(row.points_total)
+        if level.code != level_for(row.points_total - points).code:
+            props = {"level": level.code}
+            session.add(event_row(user_id, row.language, row.path, "level_up", props))
     return True

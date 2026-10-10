@@ -12,6 +12,7 @@ import { VideoPlayer } from "../components/VideoPlayer";
 import { useBack } from "../hooks/useBack";
 import { useLoad } from "../hooks/useLoad";
 import { useTr } from "../i18n/tr";
+import { trackVideo } from "../analytics";
 import { useCelebrate } from "../state/celebration";
 import { useUser } from "../state/user";
 import { haptic } from "../telegram";
@@ -109,7 +110,11 @@ export function ProjectScreen() {
             url={project.video_url}
             poster={project.poster_url}
             icon={project.category_icon}
-            onEnded={() => setVideoEnded(true)}
+            onPlay={() => trackVideo("video_play", project.slug)}
+            onEnded={() => {
+              setVideoEnded(true);
+              trackVideo("video_complete", project.slug);
+            }}
           />
 
           {project.safety_text && (

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import type { User } from "../../api/client";
+import { api, type User } from "../../api/client";
 import { useUser } from "../../state/user";
 import { insideTelegram, useTelegramBackButton } from "../../telegram";
 import { PrivacyContent } from "../PrivacyScreen";
@@ -20,7 +20,9 @@ function savedStep(user: User): Step {
 /** TZ 8.1: language → path → nickname → intro. Resumes at the step saved on the server. */
 export function OnboardingFlow() {
   const { t } = useTranslation();
-  const { user } = useUser();
+  const { user, setUser } = useUser();
+  // A moderator reset the nickname of someone who had finished onboarding.
+  const nicknameReset = user.onboarded_at != null && user.onboarding_step === "nickname";
   const [step, setStep] = useState<Step>(() => savedStep(user));
   const [privacyOpen, setPrivacyOpen] = useState(false);
 
@@ -30,6 +32,17 @@ export function OnboardingFlow() {
     return index > 0 ? () => setStep(STEPS[index - 1]) : undefined;
   }, [privacyOpen, index]);
   useTelegramBackButton(back);
+
+  if (nicknameReset) {
+    return (
+      <main className="screen onboarding">
+        <NicknameStep
+          notice={t("onboarding.nicknameReset")}
+          onDone={() => void api.onboardingComplete().then(setUser)}
+        />
+      </main>
+    );
+  }
 
   if (privacyOpen) {
     return (

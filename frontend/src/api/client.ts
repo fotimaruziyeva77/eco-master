@@ -43,6 +43,8 @@ export type LessonBody = {
 
 let sessionToken: string | null = null;
 
+export const hasSession = () => sessionToken !== null;
+
 export class ApiError extends Error {
   constructor(
     readonly status: number,
@@ -128,8 +130,8 @@ export const api = {
       option_index: optionIndex,
     }),
   gameRound: () => post<GameRound>("/game/rounds"),
-  gameAnswer: (roundToken: string, itemId: number, bin: string | null) =>
-    post<GameAnswer>("/game/answer", { round_token: roundToken, item_id: itemId, bin }),
+  gameAnswer: (roundToken: string, itemId: number, bin: string | null, quick: boolean) =>
+    post<GameAnswer>("/game/answer", { round_token: roundToken, item_id: itemId, bin, quick }),
 
   daily: () => request<Daily>("/daily"),
   dailyDone: (clientEventId: string) =>
@@ -148,4 +150,5 @@ export const api = {
     post<{ sent: boolean }>(`/lessons/${encodeURIComponent(slug)}/send`, { language }),
   share: (kind: ShareKind, objectId?: string) =>
     post<ShareResult>("/share", { kind, object_id: objectId ?? null }),
+  events: (events: Schemas["EventsIn"]["events"]) => post<void>("/events", { events }),
 };

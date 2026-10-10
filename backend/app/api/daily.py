@@ -3,6 +3,7 @@
 from fastapi import APIRouter, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.analytics import track
 from app.badges import award_badges, badges_out
 from app.daily import (
     STREAK_BONUS_POINTS,
@@ -51,6 +52,8 @@ async def daily_done(body: DoneIn, user: CurrentUser, session: SessionDep) -> Da
     await session.refresh(user)  # streak fields as of the lock, not as of the request start
     done, bonus = await complete_daily_task(session, user, task, today, body.client_event_id)
     new_badges = await award_badges(session, user.id) if done else []
+    if done:
+        track(session, user, "daily_task_done", date=today.isoformat(), streak=user.streak_current)
     await session.commit()
     await session.refresh(user)
     return DailyDoneOut(

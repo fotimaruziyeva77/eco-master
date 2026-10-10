@@ -4,6 +4,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, computed_field, field_validator, model_validator
 
+from app.analytics import CLIENT_EVENT_PROPS
 from app.levels import level_for
 from app.models import Difficulty, OnboardingStep, SafetyLevel, UserPath
 from app.sharing import ShareKind
@@ -40,6 +41,9 @@ class UserOut(BaseModel):
     write_access: bool
     last_task_date: date | None
     nickname_changed_at: datetime | None
+    # Set once onboarding was finished; with onboarding_step "nickname" it means a moderator
+    # asked for a new nickname.
+    onboarded_at: datetime | None = None
 
     @model_validator(mode="after")
     def _live_streak(self) -> "UserOut":
@@ -337,6 +341,7 @@ class GameAnswerIn(BaseModel):
     round_token: str = Field(max_length=4096)
     item_id: int
     bin: str | None = Field(default=None, max_length=32)  # None = time ran out
+    quick: bool = False  # quick mode with a timer, for analytics (TZ 14 game_finish)
 
 
 class GameAnswerOut(BaseModel):
@@ -380,3 +385,23 @@ class ShareOut(BaseModel):
     prepared_message_id: str | None = None
     # Older clients: query for WebApp.switchInlineQuery (only when inline mode is on).
     inline_query: str | None = None
+
+
+class ClientEventIn(BaseModel):
+    """An event reported by the Mini App; only known names and fields are accepted."""
+
+    name: Literal["video_play", "video_complete", "error"]
+    props: dict[str, str | int | bool | None] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def known_props(self) -> "ClientEventIn":
+        unknown = set(self.props) - CLIENT_EVENT_PROPS[self.name]
+        if unknown:
+            raise ValueError(f"unknown fields: {', '.join(sorted(unknown))}")
+        if any(isinstance(v, str) and len(v) > 64 for v in self.props.values()):
+            raise ValueError("values are limited to 64 characters")
+        return self
+
+
+class EventsIn(BaseModel):
+    events: list[ClientEventIn] = Field(min_length=1, max_length=20)

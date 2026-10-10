@@ -8,6 +8,7 @@ from datetime import UTC, datetime
 from fastapi import APIRouter, HTTPException, Query, status
 from sqlalchemy.exc import IntegrityError
 
+from app.analytics import track
 from app.deps import CurrentUser, SessionDep
 from app.models import OnboardingStep, User
 from app.nickname import NicknameError, validate_nickname
@@ -36,6 +37,7 @@ async def set_language(
 ) -> UserOut:
     user.language = body.language
     advance(user, OnboardingStep.PATH)
+    track(session, user, "onboarding_step", step="language")
     await session.commit()
     return UserOut.model_validate(user)
 
@@ -44,6 +46,7 @@ async def set_language(
 async def set_path(body: OnboardingPathIn, user: CurrentUser, session: SessionDep) -> UserOut:
     user.path = body.path
     advance(user, OnboardingStep.NICKNAME)
+    track(session, user, "onboarding_step", step="path")
     await session.commit()
     return UserOut.model_validate(user)
 
@@ -72,6 +75,7 @@ async def set_nickname(body: NicknameIn, user: CurrentUser, session: SessionDep)
 
     user.nickname = nickname
     advance(user, OnboardingStep.INTRO)
+    track(session, user, "onboarding_step", step="nickname")
     try:
         await session.commit()
     except IntegrityError as exc:  # someone took the same nickname a moment ago
@@ -87,5 +91,6 @@ async def complete(user: CurrentUser, session: SessionDep) -> UserOut:
     if user.onboarding_step is not OnboardingStep.DONE:
         user.onboarding_step = OnboardingStep.DONE
         user.onboarded_at = datetime.now(UTC)
+        track(session, user, "onboarding_complete")
         await session.commit()
     return UserOut.model_validate(user)
