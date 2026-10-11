@@ -5,6 +5,7 @@ import { Link } from "react-router";
 
 import { api } from "../../api/client";
 import { InlineError, InlineLoading } from "../../components/common";
+import { Emoji } from "../../components/Emoji";
 import { ProgressBar, Toggle, TopBar } from "../../components/ui";
 import { useLoad } from "../../hooks/useLoad";
 
@@ -26,7 +27,7 @@ export function GamesScreen() {
           <section className="card stack">
             <div className="row">
               <span className="icon-tile icon-tile--amber" aria-hidden="true">
-                🧠
+                <Emoji char="🧠" />
               </span>
               <div className="list-row__text">
                 <h2>{t("games.quizTitle")}</h2>
@@ -49,7 +50,7 @@ export function GamesScreen() {
           <section className="card stack">
             <div className="row">
               <span className="icon-tile icon-tile--sky" aria-hidden="true">
-                ♻️
+                <Emoji char="♻️" />
               </span>
               <div className="list-row__text">
                 <h2>{t("games.sortTitle")}</h2>

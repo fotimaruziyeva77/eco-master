@@ -5,6 +5,7 @@ import { useParams } from "react-router";
 
 import { api, ApiError } from "../api/client";
 import { InlineError, InlineLoading } from "../components/common";
+import { Emoji } from "../components/Emoji";
 import { PROJECT_POINTS, SAFETY_ICON } from "../components/ProjectCard";
 import { ShareButton } from "../components/ShareButton";
 import { SubpageHeader } from "../components/ui";
@@ -97,16 +98,20 @@ export function ProjectScreen() {
         <article className="stack stack--lg">
           <div className="stack">
             <span className="chip" style={{ alignSelf: "flex-start" }}>
-              {project.category_icon} {t("project.categoryProject", { name: tr(project.category_name) })}
+              <Emoji char={project.category_icon} /> {t("project.categoryProject", { name: tr(project.category_name) })}
             </span>
             <h1>{tr(project.title)}</h1>
             <div className="chips">
               <span className="chip chip--neutral">
-                {SAFETY_ICON[project.safety_level]} {t(`project.difficulty.${project.difficulty}`)} —{" "}
+                <Emoji char={SAFETY_ICON[project.safety_level]} /> {t(`project.difficulty.${project.difficulty}`)} —{" "}
                 {t(`project.safety.${project.safety_level}`)}
               </span>
-              <span className="chip chip--neutral">⏱ {t("common.minutes", { count: project.duration_min })}</span>
-              <span className="chip chip--amber">⭐ +{t("home.points", { count: PROJECT_POINTS })}</span>
+              <span className="chip chip--neutral">
+                <Emoji char="⏱️" /> {t("common.minutes", { count: project.duration_min })}
+              </span>
+              <span className="chip chip--amber">
+                <Emoji char="⭐" /> +{t("home.points", { count: PROJECT_POINTS })}
+              </span>
               {isDone && <span className="chip">{t("project.alreadyDone")}</span>}
             </div>
             {project.done_count > 0 && (

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import type { Badge } from "../api/client";
 import { ShareButton } from "../components/ShareButton";
+import { Medal } from "../components/Medal";
 import { useTr } from "../i18n/tr";
 import { haptic } from "../telegram";
 
@@ -29,8 +30,8 @@ export function CelebrationProvider({ children }: { children: ReactNode }) {
       {current && (
         <div className="overlay" role="dialog" aria-modal="true" aria-labelledby="badge-title">
           <div className="sheet sheet--center stack">
-            <div className="intro__art" style={{ margin: "0 auto", background: "var(--amber-soft)" }} aria-hidden="true">
-              {current.icon}
+            <div className="celebrate__medal">
+              <Medal icon={current.icon} size="lg" />
             </div>
             <span className="chip chip--amber" style={{ justifySelf: "center" }}>
               {t("badges.newTitle")}

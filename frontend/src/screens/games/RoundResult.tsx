@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 import { ShareButton } from "../../components/ShareButton";
+import { Emoji } from "../../components/Emoji";
 import { useTelegramBackButton } from "../../telegram";
 
 type Props = {
@@ -21,11 +22,15 @@ export function RoundResult({ game, correct, total, score, points, note, onAgain
   return (
     <main className="screen screen--center">
       <div className="intro__art" aria-hidden="true">
-        {perfect ? "🏆" : points > 0 ? "🌿" : "🌱"}
+        <Emoji char={perfect ? "🏆" : points > 0 ? "🌿" : "🌱"} />
       </div>
       <h1>{t("quiz.resultTitle")}</h1>
       <p className="result-score">{score}</p>
-      {points > 0 && <span className="chip chip--amber">⭐ +{t("home.points", { count: points })}</span>}
+      {points > 0 && (
+        <span className="chip chip--amber">
+          <Emoji char="⭐" /> +{t("home.points", { count: points })}
+        </span>
+      )}
       {note && <p className="hint small">{note}</p>}
       <div className="stack" style={{ width: "100%", marginTop: 16 }}>
         <button type="button" className="btn btn--block" onClick={onAgain}>

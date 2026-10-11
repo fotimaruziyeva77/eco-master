@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { openExternal } from "../telegram";
+import { Emoji } from "./Emoji";
 
 type Source = { kind: "youtube"; id: string } | { kind: "file"; url: string } | { kind: "link"; url: string };
 
@@ -32,9 +33,11 @@ export function VideoPlayer({ url, poster, icon, onEnded, onPlay }: Props) {
     return (
       <div className="video video--empty">
         <span className="video__icon" aria-hidden="true">
-          {icon}
+          <Emoji char={icon} />
         </span>
-        <span className="strong">🎬 {t("project.videoSoon")}</span>
+        <span className="strong">
+          <Emoji char="🎬" /> {t("project.videoSoon")}
+        </span>
       </div>
     );
   }
@@ -55,7 +58,7 @@ export function VideoPlayer({ url, poster, icon, onEnded, onPlay }: Props) {
       >
         {!poster && (
           <span className="video__icon" aria-hidden="true">
-            {icon}
+            <Emoji char={icon} />
           </span>
         )}
         <span className="video__play" aria-hidden="true">

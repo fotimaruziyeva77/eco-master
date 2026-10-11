@@ -5,6 +5,7 @@ import { Link } from "react-router";
 
 import { api, type MyListing, type MyRequest } from "../../api/client";
 import { InlineError, InlineLoading } from "../../components/common";
+import { Emoji } from "../../components/Emoji";
 import { SubpageHeader } from "../../components/ui";
 import { useBack } from "../../hooks/useBack";
 import { useLoad } from "../../hooks/useLoad";
@@ -78,7 +79,7 @@ export function MyMarketScreen() {
 }
 
 function Thumb({ url }: { url: string | null | undefined }) {
-  return <span className="thumb">{url ? <img src={url} alt="" loading="lazy" /> : <span aria-hidden="true">🌱</span>}</span>;
+  return <span className="thumb">{url ? <img src={url} alt="" loading="lazy" /> : <Emoji char="🌱" />}</span>;
 }
 
 function ListingRow({ item }: { item: MyListing }) {

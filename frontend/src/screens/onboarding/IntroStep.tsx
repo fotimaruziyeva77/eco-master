@@ -4,6 +4,7 @@ import { Trans, useTranslation } from "react-i18next";
 
 import { api } from "../../api/client";
 import { Toggle } from "../../components/ui";
+import { Emoji } from "../../components/Emoji";
 import { useUser } from "../../state/user";
 import { haptic, requestWriteAccess } from "../../telegram";
 import type { LegalDocumentKind } from "../PrivacyScreen";
@@ -47,7 +48,7 @@ export function IntroStep({ onOpenDocument }: { onOpenDocument: (kind: LegalDocu
     <section className="intro">
       <div className="intro__slide" key={slide}>
         <div className="intro__art" aria-hidden="true">
-          {current.icon}
+          <Emoji char={current.icon} />
         </div>
         <h1>{t(current.title)}</h1>
         <p className="hint">{t(current.text)}</p>
@@ -85,7 +86,7 @@ export function IntroStep({ onOpenDocument }: { onOpenDocument: (kind: LegalDocu
           disabled={busy}
           onClick={() => (isLast ? void finish() : setSlide(slide + 1))}
         >
-          {isLast ? `${t("onboarding.intro.start")} 🌱` : t("onboarding.intro.next")} <ArrowRight size={20} />
+          {isLast ? t("onboarding.intro.start") : t("onboarding.intro.next")} <ArrowRight size={20} />
         </button>
         {!isLast && (
           <button type="button" className="link-button" disabled={busy} onClick={() => void finish()}>

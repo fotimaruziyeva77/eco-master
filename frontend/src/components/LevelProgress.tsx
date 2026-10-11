@@ -2,6 +2,7 @@ import { CircleCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import type { User } from "../api/client";
+import { Emoji } from "./Emoji";
 import { LEVEL_EMOJI, levelProgress, ProgressBar } from "./ui";
 
 /** Level card (design: bosh_sahifa): stage, level name, points to the next level. */
@@ -13,7 +14,7 @@ export function LevelProgress({ user }: { user: User }) {
     <section className="card">
       <div className="level-card__top">
         <span className="level-emoji" aria-hidden="true">
-          {LEVEL_EMOJI[level.code]}
+          <Emoji char={LEVEL_EMOJI[level.code]} />
         </span>
         <div className="level-card__name">
           <span className="hint small">{t("home.stage", { n: level.index })}</span>
@@ -35,7 +36,7 @@ export function LevelProgress({ user }: { user: User }) {
         </span>
         {level.nextCode && (
           <span className="ok-text">
-            {t("home.nextLevel", { name: t(`levels.${level.nextCode}`) })} {LEVEL_EMOJI[level.nextCode]}
+            {t("home.nextLevel", { name: t(`levels.${level.nextCode}`) })} <Emoji char={LEVEL_EMOJI[level.nextCode]} />
           </span>
         )}
       </div>

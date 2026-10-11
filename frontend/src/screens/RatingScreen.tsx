@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { api, type LeaderboardEntry, type Period } from "../api/client";
 import { InlineError, InlineLoading } from "../components/common";
+import { Emoji } from "../components/Emoji";
 import { Avatar, LEVEL_EMOJI, TopBar } from "../components/ui";
 import { useLoad } from "../hooks/useLoad";
 import { haptic } from "../telegram";
@@ -105,8 +106,8 @@ export function RatingScreen() {
       {reporting && (
         <div className="overlay" role="dialog" aria-modal="true" aria-labelledby="report-title">
           <div className="sheet sheet--center stack">
-            <span className="emoji" aria-hidden="true">
-              🚩
+            <span className="big-emoji" aria-hidden="true">
+              <Emoji char="🚩" />
             </span>
             <h2 id="report-title">{t("rating.reportTitle", { name: reporting.nickname })}</h2>
             <p className="hint">{t("rating.reportText")}</p>
@@ -132,7 +133,7 @@ function PodiumPlace({ entry, onReport }: { entry: LeaderboardEntry; onReport: (
       <strong>{entry.is_me ? t("rating.you") : `@${entry.nickname}`}</strong>
       <span className="podium__points">{t("home.points", { count: entry.points })}</span>
       <span className="hint small">
-        {LEVEL_EMOJI[entry.level_code]} {t(`levels.${entry.level_code}`)}
+        <Emoji char={LEVEL_EMOJI[entry.level_code]} /> {t(`levels.${entry.level_code}`)}
       </span>
       {!entry.is_me && (
         <button type="button" className="link-button small" onClick={onReport} aria-label={t("rating.report")}>
@@ -140,7 +141,7 @@ function PodiumPlace({ entry, onReport }: { entry: LeaderboardEntry; onReport: (
         </button>
       )}
       <div className="podium__base" aria-hidden="true">
-        {medal}
+        <Emoji char={medal} />
       </div>
     </div>
   );
@@ -157,7 +158,7 @@ function RankRowContent({ entry }: { entry: LeaderboardEntry }) {
           @{entry.nickname} {entry.is_me && <span className="chip chip--sm">{t("rating.you")}</span>}
         </strong>
         <span className="hint small">
-          {LEVEL_EMOJI[entry.level_code]} {t(`levels.${entry.level_code}`)}
+          <Emoji char={LEVEL_EMOJI[entry.level_code]} /> {t(`levels.${entry.level_code}`)}
         </span>
       </span>
       <span className="rank-row__points">{t("home.points", { count: entry.points })}</span>

@@ -28,7 +28,7 @@ BADGES = [
     },
     {
         "code": "master_plastic",
-        "icon": "🧴",
+        "icon": "🥤",
         "name": {"uz": "Plastik ustasi", "ru": "Мастер пластика", "en": "Plastic master"},
         "description": {
             "uz": "Plastik bo'limidagi barcha loyihalarni bajaring",
@@ -38,7 +38,7 @@ BADGES = [
     },
     {
         "code": "master_glass",
-        "icon": "🍾",
+        "icon": "🫙",
         "name": {"uz": "Shisha ustasi", "ru": "Мастер стекла", "en": "Glass master"},
         "description": {
             "uz": "Shisha bo'limidagi barcha loyihalarni bajaring",
@@ -88,7 +88,7 @@ BADGES = [
     },
     {
         "code": "sorting_master",
-        "icon": "🗑️",
+        "icon": "♻️",
         "name": {"uz": "Saralash ustasi", "ru": "Мастер сортировки", "en": "Sorting master"},
         "description": {
             "uz": "O'yinda 100 ta buyumni to'g'ri saralang",
@@ -405,7 +405,7 @@ DEMO_GAME_ITEMS = [
     },
     {
         "bin": "glass",
-        "icon": "🍾",
+        "icon": "🫙",
         "name": {"uz": "Shisha butilka", "ru": "Стеклянная бутылка", "en": "Glass bottle"},
         "explanation": {
             "uz": "Shisha butilka shisha qutisiga. Shisha ko'p marta qayta ishlanadi.",

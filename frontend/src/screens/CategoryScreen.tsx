@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 
 import { api } from "../api/client";
 import { InlineError, InlineLoading } from "../components/common";
+import { Emoji } from "../components/Emoji";
 import { ProjectCard } from "../components/ProjectCard";
 import { SubpageHeader, tint } from "../components/ui";
 import { useBack } from "../hooks/useBack";
@@ -22,8 +23,8 @@ export function CategoryScreen() {
       <SubpageHeader onBack={back} title={t("nav.learn")} />
       {category && (
         <section className="card card--soft row" style={{ ...tint(category.color, "1f"), gap: 14, marginBottom: 16 }}>
-          <span className="emoji" aria-hidden="true" style={{ fontSize: 44 }}>
-            {category.icon}
+          <span className="big-emoji" aria-hidden="true" style={{ fontSize: 44 }}>
+            <Emoji char={category.icon} />
           </span>
           <div>
             <h1>{tr(category.name)}</h1>

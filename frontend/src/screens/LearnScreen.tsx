@@ -4,6 +4,7 @@ import { Link } from "react-router";
 
 import { api } from "../api/client";
 import { InlineError, InlineLoading } from "../components/common";
+import { Emoji } from "../components/Emoji";
 import { tint, TopBar } from "../components/ui";
 import { useLoad } from "../hooks/useLoad";
 import { useTr } from "../i18n/tr";
@@ -37,7 +38,7 @@ export function LearnScreen() {
                   <li key={category.code}>
                     <Link className="list-row" to={`/learn/${category.code}`}>
                       <span className="icon-tile" style={tint(category.color)} aria-hidden="true">
-                        {category.icon}
+                        <Emoji char={category.icon} />
                       </span>
                       <span className="list-row__text">
                         <strong>{tr(category.name)}</strong>

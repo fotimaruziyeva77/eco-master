@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { api, isReachable, onReachabilityChange } from "../api/client";
 import { flush, pendingCount, subscribe } from "../outbox";
 import { useUser } from "../state/user";
+import { Emoji } from "./Emoji";
 
 const PING_MS = 15_000;
 
@@ -72,7 +73,7 @@ export function NetworkStatus() {
   if (!online) {
     return (
       <div className="net-banner" role="status">
-        📡 {t("network.offline")}
+        <Emoji char="📡" /> {t("network.offline")}
       </div>
     );
   }

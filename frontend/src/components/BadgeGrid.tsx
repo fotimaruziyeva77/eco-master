@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import type { Badge } from "../api/client";
 import { useTr } from "../i18n/tr";
+import { Medal } from "./Medal";
 
 /** Earned badges in colour; the rest greyed out with progress or the rule (TZ 8.6). */
 export function BadgeGrid({ badges }: { badges: Badge[] }) {
@@ -20,9 +21,7 @@ export function BadgeGrid({ badges }: { badges: Badge[] }) {
             className={earned ? "badge-tile" : "badge-tile is-locked"}
             title={tr(badge.description)}
           >
-            <span className="badge-tile__icon" aria-hidden="true">
-              {badge.icon}
-            </span>
+            <Medal icon={badge.icon} locked={!earned} />
             <strong>{tr(badge.name)}</strong>
             {earned ? (
               <small className="row is-earned">

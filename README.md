@@ -58,6 +58,12 @@ Telegram only opens Mini Apps over HTTPS.
 
 The Vite server proxies `/api` to the backend, so one tunnel is enough.
 
+**Icons.** Emoji are drawn as pictures from Microsoft Fluent Emoji (flat style, MIT license),
+not with the phone's emoji font, so they look the same on every phone. `npm run dev` and
+`npm run build` write them to `frontend/public/emoji/` from the `@iconify-json/fluent-emoji-flat`
+package (`frontend/scripts/emoji.mjs`); an emoji the set lacks shows as the phone's own. Badges
+are drawn as medals around their emoji.
+
 Optional bot settings in @BotFather:
 
 - `/setinline` turns on inline mode. Telegram 8.0+ shares results as a prepared message

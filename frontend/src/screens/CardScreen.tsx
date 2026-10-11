@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router";
 
 import { api } from "../api/client";
 import { InlineError, InlineLoading } from "../components/common";
+import { Emoji } from "../components/Emoji";
 import { SubpageHeader } from "../components/ui";
 import { useBack } from "../hooks/useBack";
 import { useLoad } from "../hooks/useLoad";
@@ -88,7 +89,7 @@ export function CardScreen() {
               {CHAIN.filter(({ key }) => sections[key]).map(({ key, icon }, i) => (
                 <li key={key} className={`card chain__item chain__item--${key}`}>
                   <span className="chip chip--sm chip--neutral" style={{ marginBottom: 8 }}>
-                    {icon} {i + 1}. {t(`card.${key}`)}
+                    <Emoji char={icon} /> {i + 1}. {t(`card.${key}`)}
                   </span>
                   <p className="text-2">{sections[key]}</p>
                 </li>
@@ -98,7 +99,9 @@ export function CardScreen() {
 
           {actions.length > 0 && (
             <section className="card chain__item chain__item--action">
-              <h3>🙋 5. {t("card.action")}</h3>
+              <h3>
+                <Emoji char="🙋" /> 5. {t("card.action")}
+              </h3>
               <ul className="checklist">
                 {actions.map((action, i) => (
                   <li key={action}>

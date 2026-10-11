@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router";
 
 import { api, type Category, type GameAnswer, type GameRound } from "../../api/client";
 import { InlineError, InlineLoading } from "../../components/common";
+import { Emoji } from "../../components/Emoji";
 import { ProgressBar, SubpageHeader, tint } from "../../components/ui";
 import { useBack } from "../../hooks/useBack";
 import { useTr } from "../../i18n/tr";
@@ -184,9 +185,17 @@ export function SortGameScreen() {
         <div className="row row--between row--wrap">
           <span className="row">
             <span className="chip chip--neutral">{t("sort.round", { current: play.index + 1, total })}</span>
-            {play.combo >= 2 && <span className="chip chip--amber">🔥 {t("quiz.combo", { count: play.combo })}</span>}
+            {play.combo >= 2 && (
+              <span className="chip chip--amber">
+                <Emoji char="🔥" /> {t("quiz.combo", { count: play.combo })}
+              </span>
+            )}
           </span>
-          {play.points > 0 && <span className="chip chip--amber">⭐ +{play.points}</span>}
+          {play.points > 0 && (
+            <span className="chip chip--amber">
+              <Emoji char="⭐" /> +{play.points}
+            </span>
+          )}
         </div>
         <div className="row row--between small strong">
           <span>{t("games.dailyLimit", { points: play.pointsToday, cap: play.dailyCap })}</span>
@@ -209,7 +218,7 @@ export function SortGameScreen() {
           <HelpCircle size={14} /> {t("sort.whereDoesItGo")}
         </span>
         <div className="sort-item__visual" aria-hidden="true">
-          {item.image_url ? <img src={item.image_url} alt="" /> : item.icon}
+          {item.image_url ? <img src={item.image_url} alt="" /> : <Emoji char={item.icon} />}
         </div>
         <h2>{tr(item.name)}</h2>
       </section>
@@ -227,7 +236,7 @@ export function SortGameScreen() {
             onClick={() => void choose(bin.code)}
           >
             <span className="bin__icon" style={tint(bin.color, "33")} aria-hidden="true">
-              {bin.icon}
+              <Emoji char={bin.icon} />
             </span>
             <span className="bin__text">
               <strong>{tr(bin.name)}</strong>

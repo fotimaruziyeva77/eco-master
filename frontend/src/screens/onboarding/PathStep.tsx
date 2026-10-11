@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { api, type UserPath } from "../../api/client";
+import { Emoji } from "../../components/Emoji";
 import { useUser } from "../../state/user";
 import { haptic } from "../../telegram";
 
@@ -49,7 +50,7 @@ export function PathStep({ onDone }: { onDone: () => void }) {
             onClick={() => void choose(value)}
           >
             <span className="choice__icon" aria-hidden="true">
-              {icon}
+              <Emoji char={icon} />
             </span>
             <span className="choice__body">
               <span className="row row--wrap">

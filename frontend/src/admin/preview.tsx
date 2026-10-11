@@ -2,6 +2,7 @@ import { Check, ClipboardList, Lightbulb, ListChecks, MapPin, Play, ShieldAlert,
 import type { ReactNode } from "react";
 
 import { SAFETY_ICON } from "../components/ProjectCard";
+import { Emoji } from "../components/Emoji";
 import { tint } from "../components/ui";
 import i18n from "../i18n";
 import type { FieldSpec, Values } from "./api";
@@ -39,10 +40,14 @@ export function Preview({ kind, values, lang, fields }: Props) {
           <h1>{text("title") || placeholder}</h1>
           <div className="chips">
             <span className="chip chip--neutral">
-              {SAFETY_ICON[safety]} {t(`project.difficulty.${difficulty}`)} — {t(`project.safety.${safety}`)}
+              <Emoji char={SAFETY_ICON[safety]} /> {t(`project.difficulty.${difficulty}`)} — {t(`project.safety.${safety}`)}
             </span>
-            <span className="chip chip--neutral">⏱ {t("common.minutes", { count: Number(values.duration_min) || 0 })}</span>
-            <span className="chip chip--amber">⭐ +{t("home.points", { count: 15 })}</span>
+            <span className="chip chip--neutral">
+              <Emoji char="⏱️" /> {t("common.minutes", { count: Number(values.duration_min) || 0 })}
+            </span>
+            <span className="chip chip--amber">
+              <Emoji char="⭐" /> +{t("home.points", { count: 15 })}
+            </span>
           </div>
         </div>
         {values.video_url || values.poster_url ? (
@@ -57,7 +62,7 @@ export function Preview({ kind, values, lang, fields }: Props) {
         ) : (
           <div className="video video--empty">
             <span className="video__icon" aria-hidden="true">
-              🎬
+              <Emoji char="🎬" />
             </span>
             <span className="strong">{t("project.videoSoon")}</span>
           </div>
@@ -145,7 +150,7 @@ export function Preview({ kind, values, lang, fields }: Props) {
             {typeof values.image_url === "string" ? (
               <img src={values.image_url} alt="" style={{ width: 96, height: 96, objectFit: "contain" }} />
             ) : (
-              (values.icon as string) || "📦"
+              <Emoji char={(values.icon as string) || "📦"} />
             )}
           </div>
           <h2>{text("name") || placeholder}</h2>
@@ -167,7 +172,9 @@ export function Preview({ kind, values, lang, fields }: Props) {
           <span className="task-card__label">
             <ClipboardList size={15} /> {t("home.taskTitle")}
           </span>
-          <span className="task-card__points">⭐ +{t("home.points", { count: Number(values.points) || 0 })}</span>
+          <span className="task-card__points">
+            <Emoji char="⭐" /> +{t("home.points", { count: Number(values.points) || 0 })}
+          </span>
         </div>
         <p className="task-card__text">{text("text") || "—"}</p>
       </section>
@@ -197,7 +204,7 @@ export function Preview({ kind, values, lang, fields }: Props) {
           {CARD_PARTS.filter(([key]) => text(key)).map(([key, icon], i) => (
             <li key={key} className={`card chain__item chain__item--${key}`}>
               <span className="chip chip--sm chip--neutral" style={{ marginBottom: 8 }}>
-                {icon} {i + 1}. {t(`card.${key}`)}
+                <Emoji char={icon} /> {i + 1}. {t(`card.${key}`)}
               </span>
               <p className="text-2">{text(key)}</p>
             </li>
@@ -205,7 +212,9 @@ export function Preview({ kind, values, lang, fields }: Props) {
         </ol>
         {text("action") && (
           <section className="card chain__item chain__item--action">
-            <h3>🙋 5. {t("card.action")}</h3>
+            <h3>
+              <Emoji char="🙋" /> 5. {t("card.action")}
+            </h3>
             <p className="text-2">{text("action")}</p>
           </section>
         )}
@@ -225,7 +234,9 @@ export function Preview({ kind, values, lang, fields }: Props) {
       <article className="stack stack--lg" lang={lang}>
         <div className="chips">
           <span className="chip">{t("teachers.grade", { grade: values.grade ?? "" })}</span>
-          <span className="chip chip--neutral">⏱ {t("common.minutes", { count: 45 })}</span>
+          <span className="chip chip--neutral">
+            <Emoji char="⏱️" /> {t("common.minutes", { count: 45 })}
+          </span>
         </div>
         <h1>{text("title") || placeholder}</h1>
         {section(t("lesson.goal"), <p className="text-2">{text("goal") || placeholder}</p>)}
@@ -283,7 +294,7 @@ export function Preview({ kind, values, lang, fields }: Props) {
     <div className="stack">
       <span className="category-chip" style={tint((values.color as string) || "#10B981")}>
         <span className="category-chip__icon" aria-hidden="true">
-          {(values.icon as string) || "♻️"}
+          <Emoji char={(values.icon as string) || "♻️"} />
         </span>
         <span>
           <strong>{text("name") || "—"}</strong>

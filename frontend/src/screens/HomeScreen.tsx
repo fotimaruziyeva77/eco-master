@@ -5,6 +5,7 @@ import { Link } from "react-router";
 
 import { api, ApiError, type Daily, type Home } from "../api/client";
 import { InlineError, InlineLoading } from "../components/common";
+import { Emoji } from "../components/Emoji";
 import { LevelProgress } from "../components/LevelProgress";
 import { PROJECT_POINTS, SAFETY_ICON } from "../components/ProjectCard";
 import { tint, TopBar } from "../components/ui";
@@ -35,7 +36,9 @@ export function HomeScreen() {
       <TopBar subtitle={t("nav.home")} />
       <div className="greeting">
         <div>
-          <h1>{t("home.greeting", { name: user.nickname })} 🌱</h1>
+          <h1>
+            {t("home.greeting", { name: user.nickname })} <Emoji char="🌱" />
+          </h1>
           <p className="hint">{t("home.subtitle")}</p>
         </div>
         {user.path && <span className="chip">{t(`roles.${user.path}`)}</span>}
@@ -90,7 +93,7 @@ function StreakBanner({ daily }: { daily: Daily }) {
   return (
     <section className="card card--amber streak-banner">
       <span className="flame" aria-hidden="true">
-        🔥
+        <Emoji char="🔥" />
       </span>
       <div>
         <strong>
@@ -160,7 +163,9 @@ function DailyTaskCard({ daily, onChange }: { daily: Daily; onChange: (d: Daily)
         <span className="task-card__label">
           <ClipboardList size={15} /> {t("home.taskTitle")}
         </span>
-        <span className="task-card__points">⭐ +{t("home.points", { count: task.points })}</span>
+        <span className="task-card__points">
+          <Emoji char="⭐" /> +{t("home.points", { count: task.points })}
+        </span>
       </div>
       <p className="task-card__text">{tr(task.text)}</p>
       {error && <p className="small">{t("project.doneError")}</p>}
@@ -196,7 +201,7 @@ function QuickGames() {
       <div className="quick-grid">
         <Link className="game-tile" to="/games/sort">
           <span className="icon-tile icon-tile--sky" aria-hidden="true">
-            ♻️
+            <Emoji char="♻️" />
           </span>
           <span className="chip chip--sm">{t("home.sortChip")}</span>
           <strong>{t("home.game")}</strong>
@@ -204,7 +209,7 @@ function QuickGames() {
         </Link>
         <Link className="game-tile" to="/games/quiz">
           <span className="icon-tile icon-tile--amber" aria-hidden="true">
-            🧠
+            <Emoji char="🧠" />
           </span>
           <span className="chip chip--sm chip--amber">{t("home.quizChip")}</span>
           <strong>{t("home.quiz")}</strong>
@@ -230,7 +235,7 @@ function Categories({ categories }: { categories: Home["categories"] }) {
         {categories.map((c) => (
           <Link key={c.code} className="category-chip" to={`/learn/${c.code}`} style={tint(c.color)}>
             <span className="category-chip__icon" aria-hidden="true">
-              {c.icon}
+              <Emoji char={c.icon} />
             </span>
             <span>
               <strong>{tr(c.name)}</strong>
@@ -259,12 +264,16 @@ function FeaturedProject({
         {project.poster_url ? (
           <img src={project.poster_url} alt="" loading="lazy" />
         ) : (
-          <span aria-hidden="true">{category?.icon ?? "♻️"}</span>
+          <span aria-hidden="true">
+            <Emoji char={category?.icon ?? "♻️"} />
+          </span>
         )}
         <span className="chip chip--neutral featured__badge">
-          {SAFETY_ICON[project.safety_level]} {t(`project.safetyShort.${project.safety_level}`)}
+          <Emoji char={SAFETY_ICON[project.safety_level]} /> {t(`project.safetyShort.${project.safety_level}`)}
         </span>
-        <span className="featured__time">⏱ {t("common.minutes", { count: project.duration_min })}</span>
+        <span className="featured__time">
+          <Emoji char="⏱️" /> {t("common.minutes", { count: project.duration_min })}
+        </span>
       </div>
       <div className="featured__body stack">
         <span className="featured__meta">

@@ -62,7 +62,10 @@
 	handle {
 		@assets path /assets/*
 		header @assets Cache-Control "public, max-age=31536000, immutable"
-		@pages not path /assets/*
+		# Emoji pictures (frontend/scripts/emoji.mjs): the same names stay, so a month.
+		@emoji path /emoji/*
+		header @emoji Cache-Control "public, max-age=2592000"
+		@pages not path /assets/* /emoji/*
 		header @pages Cache-Control "no-cache"
 		header Content-Security-Policy "default-src 'self'; script-src 'self' https://telegram.org; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube-nocookie.com; frame-ancestors 'self' https://web.telegram.org; base-uri 'self'; form-action 'self'"
 		root * /srv

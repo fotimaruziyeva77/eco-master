@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router";
 
 import { api, type Listing, type ListingInput, type ListingKind } from "../../api/client";
 import { InlineError, InlineLoading } from "../../components/common";
+import { Emoji } from "../../components/Emoji";
 import { SubpageHeader, Toggle } from "../../components/ui";
 import { useBack } from "../../hooks/useBack";
 import { useLoad } from "../../hooks/useLoad";
@@ -149,7 +150,7 @@ function Form({ listing }: { listing: Listing | null }) {
               onClick={() => switchKind(value)}
             >
               <span className="choice__icon" aria-hidden="true">
-                {value === "handmade" ? "🎨" : "🎁"}
+                <Emoji char={value === "handmade" ? "🎨" : "🎁"} />
               </span>
               <span className="choice__body">
                 <span className="choice__title">{t(`market.kind.${value}`)}</span>

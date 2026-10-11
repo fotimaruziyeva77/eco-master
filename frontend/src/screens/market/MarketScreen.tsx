@@ -5,6 +5,7 @@ import { Link } from "react-router";
 
 import { api, type ListingCard, type ListingKind } from "../../api/client";
 import { InlineError, InlineLoading } from "../../components/common";
+import { Emoji } from "../../components/Emoji";
 import { TopBar } from "../../components/ui";
 import { useLoad } from "../../hooks/useLoad";
 import { useTr } from "../../i18n/tr";
@@ -99,7 +100,7 @@ export function MarketScreen() {
           <li key={item.id}>
             <Link to={`/market/${item.id}`} className="market-card">
               <span className="market-card__photo">
-                {item.thumb_url ? <img src={item.thumb_url} alt="" loading="lazy" /> : <span aria-hidden="true">🌱</span>}
+                {item.thumb_url ? <img src={item.thumb_url} alt="" loading="lazy" /> : <Emoji char="🌱" />}
                 {item.ready_at_point && (
                   <span className="market-card__flag" title={t("market.readyAtPoint")}>
                     <PackageCheck size={14} aria-hidden="true" />

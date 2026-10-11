@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { api, type QuizAnswer, type QuizRound } from "../../api/client";
 import { InlineError, InlineLoading } from "../../components/common";
+import { Emoji } from "../../components/Emoji";
 import { ProgressBar, SubpageHeader } from "../../components/ui";
 import { useBack } from "../../hooks/useBack";
 import { useLoad } from "../../hooks/useLoad";
@@ -96,7 +97,7 @@ export function QuizScreen() {
           <div className="stack section">
             <button type="button" className="choice" disabled={busy} onClick={() => void start(null)}>
               <span className="choice__icon" aria-hidden="true">
-                🌍
+                <Emoji char="🌍" />
               </span>
               <span className="choice__body">
                 <span className="choice__title">{t("quiz.mixed")}</span>
@@ -106,7 +107,7 @@ export function QuizScreen() {
             {games.quiz_categories.map((c) => (
               <button key={c.code} type="button" className="choice" disabled={busy} onClick={() => void start(c.code)}>
                 <span className="choice__icon" aria-hidden="true">
-                  {c.icon}
+                  <Emoji char={c.icon} />
                 </span>
                 <span className="choice__body">
                   <span className="choice__title">{tr(c.name)}</span>
@@ -165,7 +166,11 @@ export function QuizScreen() {
             <span className="hint">/ {total}</span>
           </span>
           <span className="row">
-            {play.combo >= 2 && <span className="chip chip--amber">🔥 {t("quiz.combo", { count: play.combo })}</span>}
+            {play.combo >= 2 && (
+              <span className="chip chip--amber">
+                <Emoji char="🔥" /> {t("quiz.combo", { count: play.combo })}
+              </span>
+            )}
             <span className="chip chip--neutral">
               {t("quiz.score")}: <strong className="ok-text">{play.points}</strong>
             </span>

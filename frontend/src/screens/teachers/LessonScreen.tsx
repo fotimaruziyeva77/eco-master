@@ -14,6 +14,7 @@ import { useParams } from "react-router";
 
 import { api, ApiError, type LessonBody } from "../../api/client";
 import { InlineError, InlineLoading } from "../../components/common";
+import { Emoji } from "../../components/Emoji";
 import { SubpageHeader } from "../../components/ui";
 import { useBack } from "../../hooks/useBack";
 import { useLoad } from "../../hooks/useLoad";
@@ -86,7 +87,9 @@ export function LessonScreen() {
           <div className="stack">
             <div className="chips">
               <span className="chip">{lt("teachers.grade", { grade: lesson.grade })}</span>
-              <span className="chip chip--neutral">⏱ {lt("common.minutes", { count: LESSON_MINUTES })}</span>
+              <span className="chip chip--neutral">
+                <Emoji char="⏱️" /> {lt("common.minutes", { count: LESSON_MINUTES })}
+              </span>
             </div>
             <h1>{title}</h1>
           </div>

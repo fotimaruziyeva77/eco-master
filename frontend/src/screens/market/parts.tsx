@@ -1,8 +1,10 @@
 import { Clock, MapPin, ShieldCheck } from "lucide-react";
 import type { TFunction } from "i18next";
+import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
 import { ApiError, type Category, type ListingKind, type ListingStatus, type PickupPoint } from "../../api/client";
+import { Emoji } from "../../components/Emoji";
 import { useTr } from "../../i18n/tr";
 
 const RULE_KEYS = ["rule1", "rule2", "rule3", "rule4", "rule5", "rule6"] as const;
@@ -24,10 +26,16 @@ export function marketError(t: TFunction, error: unknown): string {
 export function useCategoryLabel(categories: Category[] | undefined) {
   const { t } = useTranslation();
   const tr = useTr();
-  return (kind: ListingKind, code: string) => {
+  return (kind: ListingKind, code: string): ReactNode => {
     if (kind === "unneeded") return t(`market.itemType.${code}`, { defaultValue: code });
     const category = categories?.find((c) => c.code === code);
-    return category ? `${category.icon} ${tr(category.name)}` : code;
+    return category ? (
+      <>
+        <Emoji char={category.icon} /> {tr(category.name)}
+      </>
+    ) : (
+      code
+    );
   };
 }
 

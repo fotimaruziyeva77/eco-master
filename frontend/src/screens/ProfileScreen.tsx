@@ -21,6 +21,7 @@ import { Link } from "react-router";
 import { api, ApiError, type UserPath } from "../api/client";
 import { BadgeGrid } from "../components/BadgeGrid";
 import { InlineError, InlineLoading } from "../components/common";
+import { Emoji } from "../components/Emoji";
 import { ShareButton } from "../components/ShareButton";
 import { Avatar, LEVEL_EMOJI, ProgressBar, Toggle, TopBar } from "../components/ui";
 import { useLoad } from "../hooks/useLoad";
@@ -59,11 +60,17 @@ export function ProfileScreen() {
             {user.path && <span className="chip chip--sm">{t(`roles.${user.path}`)}</span>}
           </div>
           <span className="ok-text small">
-            {LEVEL_EMOJI[user.level.code]} {t(`levels.${user.level.code}`)}
+            <Emoji char={LEVEL_EMOJI[user.level.code]} /> {t(`levels.${user.level.code}`)}
           </span>
           <div className="row row--wrap">
-            <span className="chip chip--amber chip--sm">⭐ {t("home.points", { count: user.points_total })}</span>
-            {s?.rank_all && <span className="chip chip--sm">🏆 {t("profile.rank", { rank: s.rank_all })}</span>}
+            <span className="chip chip--amber chip--sm">
+              <Emoji char="⭐" /> {t("home.points", { count: user.points_total })}
+            </span>
+            {s?.rank_all && (
+              <span className="chip chip--sm">
+                <Emoji char="🏆" /> {t("profile.rank", { rank: s.rank_all })}
+              </span>
+            )}
           </div>
         </div>
       </section>
@@ -71,11 +78,11 @@ export function ProfileScreen() {
       {stats.error !== undefined && !s && <InlineError error={stats.error} onRetry={stats.reload} />}
       {s && (
         <div className="stat-grid" style={{ marginTop: 12 }}>
-          <Stat icon="🔥" tone="amber" note={t("profile.best", { count: s.streak_best })} value={t("profile.days", { count: s.streak_current })} label={t("profile.streak")} />
+          <Stat icon={<Emoji char="🔥" />} tone="amber" note={t("profile.best", { count: s.streak_best })} value={t("profile.days", { count: s.streak_current })} label={t("profile.streak")} />
           <Stat icon={<ListChecks size={20} />} value={String(s.tasks_done)} label={t("profile.tasks")} />
           <Stat icon={<Hammer size={20} />} note={`${s.projects_done}/${s.projects_total}`} value={String(s.projects_done)} label={t("profile.projects")} />
           <Stat
-            icon="♻️"
+            icon={<Emoji char="♻️" />}
             tone="sky"
             note={accuracy !== null ? t("profile.accuracy", { percent: accuracy }) : undefined}
             value={String(s.sorted_correct)}
@@ -438,8 +445,8 @@ function DeleteSheet({ onClose }: { onClose: () => void }) {
     return (
       <div className="overlay" role="dialog" aria-modal="true">
         <div className="sheet sheet--center stack">
-          <span className="emoji" aria-hidden="true">
-            🍃
+          <span className="big-emoji" aria-hidden="true">
+            <Emoji char="🍃" />
           </span>
           <h2>{t("profile.deleted")}</h2>
         </div>

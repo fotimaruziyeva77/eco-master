@@ -5,6 +5,7 @@ import { Link } from "react-router";
 
 import type { User } from "../api/client";
 import mark from "../assets/brand/eco-master-mark.webp";
+import { Emoji } from "./Emoji";
 import { useUser } from "../state/user";
 import { insideTelegram, useTelegramBackButton } from "../telegram";
 
@@ -18,7 +19,7 @@ export function Avatar({ id, size = "md" }: { id: number; size?: "md" | "lg" | "
   const className = size === "md" ? "avatar" : `avatar avatar--${size}`;
   return (
     <span className={className} style={{ background }} aria-hidden="true">
-      {emoji}
+      <Emoji char={emoji} />
     </span>
   );
 }
@@ -51,10 +52,10 @@ export function TopBar({ subtitle }: { subtitle: string }) {
         </span>
       </div>
       <span className="chip chip--amber" aria-label={t("home.streak", { count: user.streak_current })}>
-        🔥 {user.streak_current}
+        <Emoji char="🔥" /> {user.streak_current}
       </span>
       <span className="chip" aria-label={t("home.points", { count: user.points_total })}>
-        ⭐ {user.points_total}
+        <Emoji char="⭐" /> {user.points_total}
       </span>
       <Link to="/profile" aria-label={t("nav.profile")}>
         <Avatar id={user.id} />

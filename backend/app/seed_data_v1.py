@@ -1592,7 +1592,7 @@ V1_GAME_ITEMS = [
     ),
     item(
         "glass",
-        "🍾",
+        "🫙",
         tr(
             "Shisha limonad butilkasi",
             "Стеклянная бутылка из-под лимонада",
