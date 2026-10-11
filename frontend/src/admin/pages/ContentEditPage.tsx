@@ -43,6 +43,17 @@ function freshValues(fields: FieldSpec[], defaults: Record<string, unknown>): Va
   return { ...values, ...defaults };
 }
 
+/** Values an upload fills in: an empty field, or a cover taken from an earlier video. */
+function withUploads(values: Values | null, patch: Record<string, string>): Values | null {
+  if (!values) return values;
+  const next = { ...values };
+  for (const [name, url] of Object.entries(patch)) {
+    const current = values[name];
+    if (!current || (typeof current === "string" && current.startsWith("/media/v/"))) next[name] = url;
+  }
+  return next;
+}
+
 function displayTitle(fields: FieldSpec[], values: Values | null): string {
   const first = fields.find((f) => f.kind === "i18n_text");
   const title = first && values ? (values[first.name] as Record<string, string> | null) : null;
@@ -227,6 +238,7 @@ export function ContentEditPage() {
                 error={errors[spec.name]}
                 locked={spec.fixed && fixedLocked}
                 onChange={(v) => setValues((prev) => ({ ...prev, [spec.name]: v }))}
+                onExtra={(patch) => setValues((prev) => withUploads(prev, patch))}
               />
             ))}
           </div>

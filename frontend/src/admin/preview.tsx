@@ -1,4 +1,4 @@
-import { Check, ClipboardList, Lightbulb, ListChecks, MapPin, ShieldAlert, ShieldCheck, Waypoints } from "lucide-react";
+import { Check, ClipboardList, Lightbulb, ListChecks, MapPin, Play, ShieldAlert, ShieldCheck, Waypoints } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { SAFETY_ICON } from "../components/ProjectCard";
@@ -45,12 +45,23 @@ export function Preview({ kind, values, lang, fields }: Props) {
             <span className="chip chip--amber">⭐ +{t("home.points", { count: 15 })}</span>
           </div>
         </div>
-        <div className="video video--empty">
-          <span className="video__icon" aria-hidden="true">
-            {values.video_url ? "▶️" : "🎬"}
-          </span>
-          <span className="strong">{values.video_url ? String(values.video_url) : t("project.videoSoon")}</span>
-        </div>
+        {values.video_url || values.poster_url ? (
+          <div
+            className="video video--poster"
+            style={values.poster_url ? { backgroundImage: `url(${String(values.poster_url)})` } : undefined}
+          >
+            <span className="video__play" aria-hidden="true">
+              <Play size={30} fill="currentColor" />
+            </span>
+          </div>
+        ) : (
+          <div className="video video--empty">
+            <span className="video__icon" aria-hidden="true">
+              🎬
+            </span>
+            <span className="strong">{t("project.videoSoon")}</span>
+          </div>
+        )}
         {text("safety_text") && (
           <section className={`safety safety--${safety}`}>
             <span className="icon-tile" aria-hidden="true">
@@ -102,6 +113,7 @@ export function Preview({ kind, values, lang, fields }: Props) {
           {option("category") || "🌍 " + t("quiz.mixed")}
         </span>
         <section className="card question-card">
+          {typeof values.image_url === "string" && <img src={values.image_url} alt="" />}
           <h1>{text("text") || placeholder}</h1>
         </section>
         <div className="answers">
@@ -130,7 +142,11 @@ export function Preview({ kind, values, lang, fields }: Props) {
         <p className="hint small">{t("sort.whereDoesItGo")}</p>
         <section className="card" style={{ textAlign: "center" }}>
           <div style={{ fontSize: 64 }} aria-hidden="true">
-            {(values.icon as string) || "📦"}
+            {typeof values.image_url === "string" ? (
+              <img src={values.image_url} alt="" style={{ width: 96, height: 96, objectFit: "contain" }} />
+            ) : (
+              (values.icon as string) || "📦"
+            )}
           </div>
           <h2>{text("name") || placeholder}</h2>
         </section>
@@ -175,6 +191,7 @@ export function Preview({ kind, values, lang, fields }: Props) {
   if (kind === "card") {
     return (
       <article className="stack stack--lg">
+        {typeof values.image_url === "string" && <img className="card-picture" src={values.image_url} alt="" />}
         <h1>{text("title") || placeholder}</h1>
         <ol className="chain">
           {CARD_PARTS.filter(([key]) => text(key)).map(([key, icon], i) => (

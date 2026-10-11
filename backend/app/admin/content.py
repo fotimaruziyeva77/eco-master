@@ -40,6 +40,9 @@ Kind = Literal[
     "bool",
     "date",
     "url",
+    "video",
+    "image",
+    "item_image",
     "emoji",
     "color",
     "select",
@@ -52,6 +55,8 @@ Kind = Literal[
 I18N_KINDS = {"i18n_text", "i18n_textarea", "i18n_list", "i18n_plan"}
 
 SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
+# Files uploaded in the admin panel (app.content_media): /media/i/<hash>.webp, /media/v/<hash>.mp4.
+MEDIA_FILE = re.compile(r"/media/[iv]/[0-9a-f]{24}\.(?:webp|mp4)")
 COLOR = re.compile(r"#[0-9a-fA-F]{6}")
 MAX_LIST_ITEMS = 30
 MAX_PLAN_STEPS = 12
@@ -238,6 +243,15 @@ def clean(f: Field, value: Any, ctx: Ctx) -> Any:
         if not value.startswith("https://") or len(value) > 512 or " " in value:
             raise ValueError("https:// bilan boshlanadigan havola kiriting")
         return value
+    if kind in ("video", "image", "item_image"):
+        value = _text(value, f)
+        suffix = ".mp4" if kind == "video" else ".webp"
+        if MEDIA_FILE.fullmatch(value) and value.endswith(suffix):
+            return value
+        # Links to other sites from before uploads existed keep working until replaced.
+        if value.startswith("https://") and len(value) <= 512 and " " not in value:
+            return value
+        raise ValueError("faylni yuklang")
     if kind == "emoji":
         value = _text(value, f)
         if len(value) > 16:
@@ -399,9 +413,7 @@ def project_checks(values: dict, ctx: Ctx) -> list[Issue]:
         )
     if not values.get("video_url"):
         issues.append(
-            Issue(
-                "warning", "Video havolasi yo'q: ilovada «Video tez orada» ko'rinadi", "video_url"
-            )
+            Issue("warning", "Video yuklanmagan: ilovada «Video tez orada» ko'rinadi", "video_url")
         )
     for name, label in (("materials", "Materiallar"), ("steps", "Qadamlar")):
         if _counts_differ(values.get(name) or {}):
@@ -510,8 +522,18 @@ CONTENT_TYPES: dict[str, ContentType] = {
                     max_length=600,
                     help="🟡 va 🔴 loyihalarda majburiy.",
                 ),
-                Field("video_url", "Video havolasi", "url"),
-                Field("poster_url", "Muqova rasmi havolasi", "url"),
+                Field(
+                    "video_url",
+                    "Video",
+                    "video",
+                    help="MP4 yoki MOV, 3 daqiqagacha, 500 MB gacha. Server o'zi siqadi.",
+                ),
+                Field(
+                    "poster_url",
+                    "Muqova rasmi",
+                    "image",
+                    help="Video yuklansa, muqova undan avtomatik olinadi.",
+                ),
                 Field(
                     "tested_by",
                     "Kim sinab ko'rdi",
@@ -563,7 +585,7 @@ CONTENT_TYPES: dict[str, ContentType] = {
                 Field(
                     "explanation", "Tushuntirish", "i18n_textarea", required=True, max_length=400
                 ),
-                Field("image_url", "Rasm havolasi", "url"),
+                Field("image_url", "Rasm", "image", help="Savol ustida ko'rinadi (ixtiyoriy)."),
                 SORT,
             ),
         ),
@@ -578,7 +600,12 @@ CONTENT_TYPES: dict[str, ContentType] = {
             fields=(
                 Field("name", "Nomi", "i18n_text", required=True, max_length=80),
                 Field("icon", "Emoji", "emoji", help="Rasm bo'lmasa shu ko'rinadi."),
-                Field("image_url", "Rasm havolasi", "url"),
+                Field(
+                    "image_url",
+                    "Rasm",
+                    "item_image",
+                    help="Kvadrat, fon shaffof (PNG yoki WebP). Rasm bo'lmasa emoji ko'rinadi.",
+                ),
                 Field(
                     "bin",
                     "To'g'ri quti",
@@ -657,7 +684,7 @@ CONTENT_TYPES: dict[str, ContentType] = {
                         ("action", "Men nima qila olaman?"),
                     )
                 ),
-                Field("image_url", "Rasm havolasi", "url"),
+                Field("image_url", "Rasm", "image", help="Kartochka tepasida ko'rinadi."),
                 SORT,
             ),
         ),

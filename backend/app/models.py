@@ -264,6 +264,38 @@ class TeacherLesson(ContentMixin, Base):
     pdf: Mapped[I18n | None]  # {"uz": "<file url or telegram file_id>", ...}
 
 
+class VideoStatus(enum.StrEnum):
+    PROCESSING = "processing"
+    READY = "ready"
+    FAILED = "failed"
+
+
+class VideoUpload(Base):
+    """A video uploaded in the admin panel, converted in the background (app.content_media).
+
+    Pictures are ready at once and need no row; a video takes a minute or two, and the admin
+    page asks for its state here until the files are ready.
+    """
+
+    __tablename__ = "video_uploads"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    status: Mapped[VideoStatus] = mapped_column(str_enum(VideoStatus))
+    original_name: Mapped[str] = mapped_column(String(200))
+    # The uploaded file in the media folder's tmp/, kept until the conversion is over.
+    source_name: Mapped[str | None] = mapped_column(String(64))
+    url: Mapped[str | None] = mapped_column(String(128))
+    poster_url: Mapped[str | None] = mapped_column(String(128))
+    width: Mapped[int | None]
+    height: Mapped[int | None]
+    duration_ms: Mapped[int | None]
+    size_bytes: Mapped[int | None] = mapped_column(BigInteger)
+    error: Mapped[str | None] = mapped_column(String(32))
+    admin_id: Mapped[int | None] = mapped_column(ForeignKey("admin_users.id", ondelete="SET NULL"))
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    finished_at: Mapped[datetime | None]
+
+
 class Badge(Base):
     __tablename__ = "badges"
 

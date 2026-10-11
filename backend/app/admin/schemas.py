@@ -12,6 +12,7 @@ from app.models import (
     ListingStatus,
     ReportStatus,
     RequestStatus,
+    VideoStatus,
     WordKind,
 )
 
@@ -460,3 +461,30 @@ class HandoverCodeIn(BaseModel):
 class HandoverMatchOut(BaseModel):
     action: Literal["receive", "give"]
     item: HandoverItemOut
+
+
+# ---------------------------------------------------------------------- media
+
+
+class MediaStatusOut(BaseModel):
+    # False when ffmpeg is missing: the admin page says so before sending a big file.
+    video: bool
+
+
+class PictureOut(BaseModel):
+    url: str
+    width: int
+    height: int
+
+
+class VideoOut(BaseModel):
+    id: int
+    status: VideoStatus
+    name: str
+    url: str | None = None
+    poster_url: str | None = None
+    width: int | None = None
+    height: int | None = None
+    duration_ms: int | None = None
+    size_bytes: int | None = None
+    error: str | None = None

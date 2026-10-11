@@ -912,3 +912,113 @@
   border-radius: 16px;
   background: var(--primary-soft);
 }
+
+/* ------------------------------------------------------------------- media */
+
+.a-media {
+  display: grid;
+  gap: 8px;
+}
+
+.a-media__drop {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 22px 16px;
+  border: 2px dashed var(--line);
+  border-radius: 14px;
+  background: var(--canvas);
+  color: var(--text-2);
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.a-media__drop:hover,
+.a-media.is-dragging .a-media__drop {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--on-primary-soft);
+}
+
+.a-media.is-invalid .a-media__drop {
+  border-color: var(--danger);
+}
+
+.a-media__status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--canvas);
+}
+
+.a-media__progress {
+  display: grid;
+  flex: 1;
+  gap: 4px;
+  min-width: 0;
+}
+
+.a-media__progress .a-muted {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.a-media__bar {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: var(--primary-soft-2);
+}
+
+.a-media__bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary-strong);
+  transition: width 0.2s;
+}
+
+.a-media__preview {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+}
+
+.a-media__video,
+.a-media__img {
+  display: block;
+  max-width: min(100%, 360px);
+  max-height: 360px;
+  border-radius: 14px;
+  background: #000;
+}
+
+.a-media__img {
+  background: var(--primary-soft);
+}
+
+/* Game items have a transparent background: show it on a checkerboard. */
+.a-media__img--item {
+  width: 160px;
+  height: 160px;
+  object-fit: contain;
+  background: repeating-conic-gradient(var(--line) 0% 25%, transparent 0% 50%) 0 0 / 16px 16px;
+}
+
+.a-media__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.a-spin {
+  animation: spin 0.9s linear infinite;
+}

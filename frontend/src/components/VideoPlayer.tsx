@@ -1,4 +1,4 @@
-import { Play, VolumeX } from "lucide-react";
+import { Play } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -61,9 +61,6 @@ export function VideoPlayer({ url, poster, icon, onEnded, onPlay }: Props) {
         <span className="video__play" aria-hidden="true">
           <Play size={30} fill="currentColor" />
         </span>
-        <span className="video__caption">
-          <VolumeX size={14} /> {t("project.silentVideo")}
-        </span>
       </button>
     );
   }
@@ -82,7 +79,14 @@ export function VideoPlayer({ url, poster, icon, onEnded, onPlay }: Props) {
   }
   return (
     <div className="video">
-      <video src={source.kind === "file" ? source.url : undefined} controls autoPlay playsInline onEnded={onEnded} />
+      <video
+        src={source.kind === "file" ? source.url : undefined}
+        poster={poster ?? undefined}
+        controls
+        autoPlay
+        playsInline
+        onEnded={onEnded}
+      />
     </div>
   );
 }

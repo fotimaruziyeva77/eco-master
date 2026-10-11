@@ -33,3 +33,7 @@ deploy/backups/
 
 # Server-specific Compose changes (ports and the like)
 deploy/docker-compose.override.yml
+
+# Pictures and videos uploaded in the admin panel (locally and on the server)
+backend/media/
+deploy/media/

@@ -175,7 +175,6 @@
       "red": "Faqat kattalar"
     },
     "ready": "{{done}}/{{total}} tayyor",
-    "silentVideo": "Ovozsiz video dars (qadamlar matnda)",
     "doneCta": "Bajardim (+{{count}} ball olish)",
     "doneCount_one": "{{count}} marta bajarildi",
     "doneCount_other": "{{count}} marta bajarildi"

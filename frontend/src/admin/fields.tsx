@@ -2,6 +2,7 @@ import { ArrowDown, ArrowUp, ExternalLink, Plus, Trash2 } from "lucide-react";
 import type { ReactNode } from "react";
 
 import type { FieldSpec, Values } from "./api";
+import { MediaField } from "./media";
 
 export const LANGS = ["uz", "ru", "en"] as const;
 export type Lang = (typeof LANGS)[number];
@@ -39,9 +40,11 @@ type Props = {
   error?: string;
   locked?: boolean;
   onChange: (value: unknown) => void;
+  /** Lets an upload fill other fields: the cover picture taken from a video. */
+  onExtra?: (patch: Record<string, string>) => void;
 };
 
-export function FieldEditor({ spec, value, lang, error, locked, onChange }: Props) {
+export function FieldEditor({ spec, value, lang, error, locked, onChange, onExtra }: Props) {
   const id = `f-${spec.name}`;
   const localized = (value ?? {}) as Localized;
   const setLang = (v: unknown) => onChange({ ...localized, [lang]: v });
@@ -110,6 +113,20 @@ export function FieldEditor({ spec, value, lang, error, locked, onChange }: Prop
           {spec.help && <span className="a-help">{spec.help}</span>}
         </div>
       );
+    case "video":
+    case "image":
+    case "item_image":
+      input = (
+        <MediaField
+          id={id}
+          kind={spec.kind}
+          value={(value as string | null) ?? null}
+          invalid={Boolean(error)}
+          onChange={onChange}
+          onExtra={onExtra}
+        />
+      );
+      break;
     case "date":
       input = (
         <input

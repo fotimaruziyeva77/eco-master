@@ -47,6 +47,11 @@ if ! grep -q '^BOT_TOKEN=.' .env; then
     exit 1
 fi
 
+# Pictures and videos uploaded in the admin panel; the API (user 10001 in its container)
+# writes there, the web server only reads.
+mkdir -p media
+chown 10001:10001 media
+
 if [ -n "$(docker compose ps -q db 2>/dev/null)" ]; then
     say "Backup before the update"
     docker compose exec -T backup sh /usr/local/bin/backup.sh now
@@ -81,6 +86,21 @@ if [ ! -e "/etc/nginx/sites-enabled/$DOMAIN" ]; then
         exit 1
     fi
     systemctl reload nginx
+fi
+
+# Sites made by an older version of this script took uploads of up to 10 MB only.
+if grep -q 'client_max_body_size 10m;' "$SITE" 2>/dev/null; then
+    say "nginx: uploads of up to 600 MB (videos in the admin panel)"
+    cp "$SITE" "$SITE.before-upload-limit"
+    sed -i 's/client_max_body_size 10m;/client_max_body_size 600m;/' "$SITE"
+    if nginx -t; then
+        systemctl reload nginx
+        rm -f "$SITE.before-upload-limit"
+    else
+        mv "$SITE.before-upload-limit" "$SITE"
+        echo "nginx rejected the change; the site file was put back. Nothing else was changed."
+        exit 1
+    fi
 fi
 
 if [ ! -d "/etc/letsencrypt/live/$DOMAIN" ]; then

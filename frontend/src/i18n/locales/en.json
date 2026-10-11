@@ -175,7 +175,6 @@
       "red": "Adults only"
     },
     "ready": "{{done}}/{{total}} ready",
-    "silentVideo": "Silent video (steps are in the text)",
     "doneCta": "I did it (+{{count}} points)",
     "doneCount_one": "Made {{count}} time",
     "doneCount_other": "Made {{count}} times"

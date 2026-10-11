@@ -25,8 +25,9 @@ export default defineConfig({
     // Telegram needs HTTPS, so in development the app is opened through an
     // ngrok / cloudflared tunnel whose host name changes between runs.
     allowedHosts: true,
-    // Same-origin API calls: one tunnel to Vite also reaches the backend.
-    proxy: { "/api": "http://127.0.0.1:8090" },
+    // Same-origin API calls: one tunnel to Vite also reaches the backend, which in
+    // development also serves the pictures and videos uploaded in the admin panel.
+    proxy: { "/api": "http://127.0.0.1:8090", "/media": "http://127.0.0.1:8090" },
   },
   build: {
     rollupOptions: {

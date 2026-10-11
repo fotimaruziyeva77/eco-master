@@ -1,5 +1,6 @@
 import json
 import os
+import tempfile
 import time
 
 # Must be set before the app (and its settings/engine) is imported.
@@ -14,6 +15,8 @@ os.environ.update(
         "WEBAPP_URL": "http://localhost:5180",
         "JWT_SECRET": "test-secret-0123456789-0123456789",
         "DEV_AUTH": "false",
+        # Uploaded pictures and videos go to a scratch folder, never into the project.
+        "MEDIA_DIR": tempfile.mkdtemp(prefix="eco-master-media-"),
     }
 )
 

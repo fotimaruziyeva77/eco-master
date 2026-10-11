@@ -35,6 +35,10 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5180"
     dev_auth: bool = False
 
+    # Pictures and videos uploaded in the admin panel. In production a volume that the web
+    # server serves at /media; in development the API serves it itself.
+    media_dir: str = "media"
+
     @property
     def is_prod(self) -> bool:
         return self.env == "prod"

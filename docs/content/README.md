@@ -69,8 +69,10 @@ matnga aniq joy yoki boshqa amaliy yo'l qo'shing.
 | Video muqovasi | JPG yoki WebP, 1080×1920, 150 KB gacha |
 | Loyiha / o'yin buyumi rasmi | WebP yoki PNG, 512×512, o'yin uchun shaffof fon, 100 KB gacha |
 
-Hozircha o'yin buyumlarida emoji turadi; rasm tayyor bo'lsa, admin panelda «Rasm havolasi»
-maydoniga qo'yiladi.
+Video va rasmlar admin panelda kompyuterdan yuklanadi (havola emas): server videoni o'zi
+siqadi (720p, H.264) va muqovani videodan oladi, shuning uchun 20 MB chegarasiga moslash shart
+emas — 3 daqiqagacha va 500 MB gacha fayl qabul qilinadi. Hozircha o'yin buyumlarida emoji
+turadi; rasm tayyor bo'lsa, buyumning «Rasm» maydoniga yuklanadi.
 
 ## Yurist tekshiruvi (TZ 11.4)
 

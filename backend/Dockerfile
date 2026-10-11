@@ -6,6 +6,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
+# ffmpeg converts the videos uploaded in the admin panel (app/content_media.py).
+RUN apt-get update     && apt-get install -y --no-install-recommends ffmpeg     && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 COPY pyproject.toml ./
 COPY app ./app
@@ -13,8 +16,9 @@ RUN pip install .
 COPY alembic.ini ./
 COPY alembic ./alembic
 
-# Not root inside the container.
-RUN useradd --system --uid 10001 --no-create-home ekoustoz
+# Not root inside the container. Uploaded pictures and videos go to /data/media
+# (deploy/media on the server, owned by this user id).
+RUN useradd --system --uid 10001 --no-create-home ekoustoz     && mkdir -p /data/media && chown ekoustoz /data/media
 USER ekoustoz
 
 EXPOSE 8000

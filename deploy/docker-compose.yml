@@ -12,6 +12,11 @@ x-backend: &backend
     DATABASE_URL: postgresql+asyncpg://ekoustoz:${POSTGRES_PASSWORD}@db:5432/ekoustoz
     WEBAPP_URL: https://${DOMAIN}
     CORS_ORIGINS: https://${DOMAIN}
+    MEDIA_DIR: /data/media
+  # Pictures and videos uploaded in the admin panel. The folder must belong to user 10001
+  # (install-behind-nginx.sh does that): mkdir -p media && chown 10001:10001 media
+  volumes:
+    - ./media:/data/media
   depends_on:
     db:
       condition: service_healthy
@@ -63,11 +68,13 @@ services:
     volumes:
       - caddy-data:/data
       - caddy-config:/config
+      - ./media:/media-files:ro
     depends_on:
       api:
         condition: service_healthy
 
-  # Daily dump at 03:00 Tashkent, kept 14 days (TZ 11.1). Files: deploy/backups/.
+  # Daily dump at 03:00 Tashkent, kept 14 days (TZ 11.1), and a copy of new uploaded
+  # pictures and videos. Files: deploy/backups/.
   backup:
     image: postgres:17-alpine
     restart: unless-stopped
@@ -80,6 +87,7 @@ services:
     volumes:
       - ./backups:/backups
       - ./backup.sh:/usr/local/bin/backup.sh:ro
+      - ./media:/media:ro
     entrypoint: ["/bin/sh", "/usr/local/bin/backup.sh"]
     depends_on:
       db:

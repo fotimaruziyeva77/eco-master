@@ -34,6 +34,9 @@ npm install
 npm run dev                       # http://localhost:5180
 ```
 
+Uploading videos in the admin panel needs ffmpeg on the PATH (`winget install Gyan.FFmpeg`,
+`apt install ffmpeg`); pictures work without it. Uploaded files go to `backend/media/`.
+
 In a normal browser the Mini App logs in with a fake Telegram user
 (`ENV=dev` + `DEV_AUTH=true` in `.env`, `VITE_DEV_AUTH=true` in `frontend/.env.development`).
 API docs: http://localhost:8090/api/docs
@@ -85,6 +88,13 @@ authenticator app (Google Authenticator, Authy, 2FAS...); the app is connected o
   `python -m app.admin_cli reset-2fa --login ali`.
 - Five wrong passwords or codes lock an account for 15 minutes; every admin action is written
   to the audit log.
+- **Pictures and videos are uploaded from the computer**, not linked from other sites. A picture
+  (JPG, PNG, WebP up to 15 MB) is redrawn without camera data and saved as WebP at once; game
+  item pictures keep a transparent background. A video (MP4, MOV and the like, up to 3 minutes and
+  500 MB) is converted on the server by ffmpeg into an H.264 MP4 of at most 1280 px that every
+  phone plays, without metadata such as the place it was filmed; the cover picture is taken from
+  it. That takes a minute or two, one video at a time. Files live in `MEDIA_DIR`
+  (`deploy/media` on the server), not in the database; their names are hashes of the files.
 - The admin page is a separate build entry (`frontend/admin/index.html`), so the Mini App
   never loads its code. A web server must answer `/admin/*` with `dist/admin/index.html`.
 
@@ -130,10 +140,11 @@ from Let's Encrypt) and a daily database backup. Sized for TZ 13: up to 5,000 us
    cp deploy/.env.example deploy/.env
    ```
 
-3. Start:
+3. Start (the API writes uploaded pictures and videos to `deploy/media` as user 10001):
 
    ```bash
-   cd deploy && docker compose up -d --build
+   cd deploy && mkdir -p media && chown 10001:10001 media
+   docker compose up -d --build
    ```
 
    Updating later: make a backup (below), `git pull`, the same command again. The API applies
@@ -169,14 +180,18 @@ grep '^BOT_TOKEN=' .env | ssh root@<server> "cat >> /srv/eco-master/deploy/.env"
 
 Run the script again: it builds and starts everything, loads the content (sample content is
 published right away; `SEED_ARGS=--content` keeps it as drafts), adds the nginx site, gets the
-certificate and checks `https://<domain>/api/health`. To update later: `git pull` and the same
+certificate and checks `https://<domain>/api/health`. The nginx site takes uploads of up to
+600 MB (videos in the admin panel; Caddy keeps every other request to 20 MB); on a site made by an
+older version of the script the update raises the old 10 MB limit itself. To update later: `git pull` and the same
 command (it makes a backup first). Then create the first administrator and register the Mini App
 in @BotFather as the script prints. Stop a bot started on a developer's computer with the same
 token first: Telegram lets only one copy receive updates.
 
 **Backups (TZ 11.1).** Every day at 03:00 Tashkent time into `deploy/backups/` (readable by
 root only), kept for 14 days. Market photos are in the database too, so the dumps grow with the
-market: keep an eye on the disk. Copy that folder to another machine or storage as well. A
+market: keep an eye on the disk. Pictures and videos uploaded in the admin panel are files in
+`deploy/media`; new ones are copied to `deploy/backups/media` with every backup (they never
+change, so nothing is copied twice). To restore them, copy that folder back into `deploy/media`. Copy that folder to another machine or storage as well. A
 backup right away, e.g. before an update, and the monthly check that the newest backup
 restores (into a scratch database, the live one is not touched):
 

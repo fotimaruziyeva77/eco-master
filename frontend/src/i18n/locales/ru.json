@@ -191,7 +191,6 @@
       "red": "Только взрослые"
     },
     "ready": "Готово {{done}}/{{total}}",
-    "silentVideo": "Видео без звука (шаги — текстом)",
     "doneCta": "Готово (+{{count}} баллов)",
     "doneCount_one": "Сделано {{count}} раз",
     "doneCount_few": "Сделано {{count}} раза",

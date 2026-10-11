@@ -1164,6 +1164,83 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/media/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Media Status
+         * @description Asked before a video upload: an early refusal would break the upload in the browser.
+         */
+        get: operations["media_status_api_admin_media_status_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/media/pictures": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Upload Picture
+         * @description A picture (image/jpeg, png or webp); "item" keeps it small for the sorting game.
+         */
+        post: operations["upload_picture_api_admin_media_pictures_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/media/videos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Upload Video
+         * @description A video file of up to 500 MB and 3 minutes; converted in the background.
+         */
+        post: operations["upload_video_api_admin_media_videos_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/media/videos/{video_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Video State */
+        get: operations["video_state_api_admin_media_videos__video_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/schedule/{kind}": {
         parameters: {
             query?: never;
@@ -2985,6 +3062,11 @@ export interface components {
             /** Reminder Time */
             reminder_time?: string | null;
         };
+        /** MediaStatusOut */
+        MediaStatusOut: {
+            /** Video */
+            video: boolean;
+        };
         /** MyListingOut */
         MyListingOut: {
             /** Id */
@@ -3110,6 +3192,15 @@ export interface components {
             hours: {
                 [key: string]: unknown;
             };
+        };
+        /** PictureOut */
+        PictureOut: {
+            /** Url */
+            url: string;
+            /** Width */
+            width: number;
+            /** Height */
+            height: number;
         };
         /** PointsFlagOut */
         PointsFlagOut: {
@@ -3581,6 +3672,33 @@ export interface components {
             /** Context */
             ctx?: Record<string, never>;
         };
+        /** VideoOut */
+        VideoOut: {
+            /** Id */
+            id: number;
+            status: components["schemas"]["VideoStatus"];
+            /** Name */
+            name: string;
+            /** Url */
+            url?: string | null;
+            /** Poster Url */
+            poster_url?: string | null;
+            /** Width */
+            width?: number | null;
+            /** Height */
+            height?: number | null;
+            /** Duration Ms */
+            duration_ms?: number | null;
+            /** Size Bytes */
+            size_bytes?: number | null;
+            /** Error */
+            error?: string | null;
+        };
+        /**
+         * VideoStatus
+         * @enum {string}
+         */
+        VideoStatus: "processing" | "ready" | "failed";
         /** VoidIn */
         VoidIn: {
             /** Entry Ids */
@@ -5729,6 +5847,119 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    media_status_api_admin_media_status_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MediaStatusOut"];
+                };
+            };
+        };
+    };
+    upload_picture_api_admin_media_pictures_post: {
+        parameters: {
+            query?: {
+                kind?: "picture" | "item";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PictureOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    upload_video_api_admin_media_videos_post: {
+        parameters: {
+            query?: {
+                name?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VideoOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    video_state_api_admin_media_videos__video_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                video_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VideoOut"];
                 };
             };
             /** @description Validation Error */

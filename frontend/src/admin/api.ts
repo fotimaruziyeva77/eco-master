@@ -34,6 +34,9 @@ export type HandoverPoint = S["HandoverPointOut"];
 export type HandoverDesk = S["HandoverDeskOut"];
 export type HandoverItem = S["HandoverItemOut"];
 export type HandoverMatch = S["HandoverMatchOut"];
+export type PictureUpload = S["PictureOut"];
+export type VideoUpload = S["VideoOut"];
+export type MediaStatus = S["MediaStatusOut"];
 export type MarketFilter = "pending" | "reported" | "approved" | "rejected" | "hidden" | "handover" | "all";
 
 /** Values of a content form: {"uz": ..., "ru": ..., "en": ...} for multilingual fields. */
@@ -85,6 +88,32 @@ async function call<T>(path: string, init: RequestInit = {}): Promise<T> {
   return (await response.json()) as T;
 }
 
+/** A file as the request body, with upload progress (fetch can not report it). */
+function upload<T>(path: string, file: File, onProgress: (percent: number) => void, signal: AbortSignal): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `/api/admin${path}`);
+    xhr.setRequestHeader("Content-Type", file.type || "application/octet-stream");
+    xhr.responseType = "json";
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) onProgress(Math.min(100, Math.round((e.loaded / e.total) * 100)));
+    };
+    xhr.onload = () => {
+      const body = xhr.response as { detail?: unknown } | null;
+      if (xhr.status >= 200 && xhr.status < 300) {
+        resolve(body as T);
+        return;
+      }
+      if (xhr.status === 401) onSignedOut?.();
+      reject(new AdminApiError(xhr.status, body?.detail ?? `http_${xhr.status}`));
+    };
+    xhr.onerror = () => reject(new TypeError("network"));
+    xhr.onabort = () => reject(new DOMException("aborted", "AbortError"));
+    signal.addEventListener("abort", () => xhr.abort(), { once: true });
+    xhr.send(file);
+  });
+}
+
 const get = <T>(path: string) => call<T>(path);
 const send = <T>(method: string, path: string, body?: unknown) =>
   call<T>(path, { method, body: body === undefined ? undefined : JSON.stringify(body) });
@@ -117,6 +146,13 @@ export const adminApi = {
   contentStatus: (type: string, id: number, status: ContentStatus) =>
     send<ContentItem>("POST", `/content/${type}/${id}/status`, { status }),
   contentDelete: (type: string, id: number) => send<void>("DELETE", `/content/${type}/${id}`),
+
+  uploadPicture: (file: File, kind: "picture" | "item", onProgress: (percent: number) => void, signal: AbortSignal) =>
+    upload<PictureUpload>(`/media/pictures${query({ kind })}`, file, onProgress, signal),
+  uploadVideo: (file: File, onProgress: (percent: number) => void, signal: AbortSignal) =>
+    upload<VideoUpload>(`/media/videos${query({ name: file.name })}`, file, onProgress, signal),
+  videoState: (id: number) => get<VideoUpload>(`/media/videos/${id}`),
+  mediaStatus: () => get<MediaStatus>("/media/status"),
 
   schedule: (kind: "daily" | "tips", start: string) => get<Schedule>(`/schedule/${kind}${query({ start, days: 35 })}`),
   setSchedule: (kind: "daily" | "tips", day: string, itemId: number | null) =>
@@ -213,7 +249,26 @@ const MESSAGES: Record<string, string> = {
   wrong_code: "Kod mos kelmadi.",
   too_many_lookups: "Juda ko'p urinish. Bir daqiqadan keyin qayta urinib ko'ring.",
   listing_not_found: "E'lon topilmadi.",
+  picture_format: "Faqat JPG, PNG yoki WebP rasm yuklash mumkin.",
+  picture_too_large: "Rasm juda katta: 15 MB gacha bo'lsin.",
+  picture_too_small: "Rasm juda kichik: kamida 64×64 piksel bo'lsin.",
+  picture_unreadable: "Rasmni ochib bo'lmadi. Boshqa fayl tanlang.",
+  video_format: "Bu video fayl emas.",
+  video_too_large: "Video juda katta: 500 MB gacha bo'lsin.",
+  video_too_long: "Video 3 daqiqadan uzun. Qisqartirib yuklang.",
+  video_too_short: "Video juda qisqa.",
+  video_unreadable: "Videoni ochib bo'lmadi. Telefonda MP4 qilib saqlab, qayta yuklang.",
+  video_too_slow: "Videoni tayyorlash juda uzoq davom etdi. Qisqaroq video yuklang.",
+  video_not_found: "Video topilmadi. Qaytadan yuklang.",
+  interrupted: "Server qayta ishga tushdi. Videoni qaytadan yuklang.",
+  no_ffmpeg: "Serverda video tayyorlovchi dastur (ffmpeg) yo'q. Administratorga ayting.",
+  media_not_writable: "Serverda fayllar papkasiga yozib bo'lmadi. Administratorga ayting.",
 };
+
+/** Text for an error code the server sent, e.g. the reason a video conversion failed. */
+export function messageFor(code: string): string {
+  return MESSAGES[code] ?? `Xatolik (${code}).`;
+}
 
 export function errorText(error: unknown): string {
   if (error instanceof AdminApiError) {
@@ -221,6 +276,7 @@ export function errorText(error: unknown): string {
     const code = typeof detail === "string" ? detail : detail?.code;
     if (code && MESSAGES[code]) return MESSAGES[code];
     if (error.status === 401) return "Sessiya tugadi. Qaytadan kiring.";
+    if (error.status === 413) return "Fayl juda katta.";
     if (error.status >= 500) return "Serverda xatolik. Birozdan keyin qayta urinib ko'ring.";
     return `Xatolik (${code ?? error.status}).`;
   }
