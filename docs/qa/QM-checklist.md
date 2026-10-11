@@ -237,8 +237,8 @@ Yarim tun atrofidagi holatlar `test_midnight.py` da soatni almashtirib tekshiril
 ## Bozor (9-faza, TZ'ga qo'shimcha)
 
 TZ v0.2 da rasm yuklash va bozor 1-versiyaga kirmagan edi (11.3, 16-bo'limlar). Loyiha rahbari
-2026-10-10 da qo'shishga qaror qildi; quyidagi mezonlar TZ'ga taklif sifatida qo'shiladi. Rasm
-yuklash yurist tekshiruviga (11.4) kiritilishi kerak.
+2026-10-10 da qo'shishga qaror qildi: bozor TZ v0.3 ning 8.13-bo'limida yozilgan, quyidagi
+mezonlar uning 15-bo'limiga kiritilgan. Rasm yuklash yurist tekshiruviga (11.4) kiritiladi.
 
 ### QM-22. E'lon moderator tasdiqlamaguncha hech kimga ko'rinmaydi
 

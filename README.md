@@ -1,7 +1,8 @@
 # Ekoustoz
 
 Telegram Mini App that teaches children and adults to sort waste and give it a second life.
-Specification: [docs/Ekoustoz_TZ_v0.2.docx](docs/Ekoustoz_TZ_v0.2.docx).
+Specification: [docs/Ekoustoz_TZ_v0.3.docx](docs/Ekoustoz_TZ_v0.3.docx) (v0.2 is kept for
+history; what changed is listed in appendix B of v0.3).
 
 | Part | Stack | Folder |
 |---|---|---|
@@ -88,9 +89,10 @@ authenticator app (Google Authenticator, Authy, 2FAS...); the app is connected o
 ## Market (phase 9)
 
 Children show things they made from waste, or give away things they no longer need. Added on
-the project lead's decision on 2026-10-10: TZ v0.2 (sections 11.3 and 16) had left photo uploads
-and a market for a later version because of moderation and children's privacy, so the design
-below keeps those risks small. Photo uploads belong in the lawyer's review (TZ 11.4).
+the project lead's decision on 2026-10-10 and specified in TZ v0.3, section 8.13. TZ v0.2
+(sections 11.3 and 16) had left photo uploads and a market for a later version because of
+moderation and children's privacy, so the design below keeps those risks small. Photo uploads
+belong in the lawyer's review (TZ 11.4).
 
 - **Moderation first.** A new or changed listing is seen by nobody but its author until an
   administrator or content editor approves it (admin panel → "E'lonlar moderatsiyasi").
