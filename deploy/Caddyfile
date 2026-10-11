@@ -1,5 +1,15 @@
 # Eco-Master web server: HTTPS certificates from Let's Encrypt, the API behind /api,
 # the Mini App and the admin panel from /srv. DOMAIN comes from deploy/.env.
+# Behind the server's own nginx (docker-compose.behind-proxy.yml) DOMAIN is ":80": plain HTTP,
+# and nginx does HTTPS.
+
+{
+	servers {
+		# nginx in front (a private address) passes the visitor's address on; the API needs it
+		# for its per-address limits. Visitors from the internet never come from these ranges.
+		trusted_proxies static private_ranges
+	}
+}
 
 {$DOMAIN} {
 	encode zstd gzip

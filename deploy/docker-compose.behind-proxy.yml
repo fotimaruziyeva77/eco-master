@@ -1,0 +1,9 @@
+# For a server whose own nginx already uses ports 80 and 443 for other sites.
+# Caddy serves plain HTTP on 127.0.0.1:WEB_PORT only; nginx does HTTPS (certbot) and proxies
+# here (nginx-site.conf). install-behind-nginx.sh turns this on through COMPOSE_FILE in .env.
+services:
+  web:
+    environment:
+      DOMAIN: ":80"
+    ports: !override
+      - "127.0.0.1:${WEB_PORT:-8130}:80"

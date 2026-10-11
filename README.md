@@ -151,6 +151,29 @@ from Let's Encrypt) and a daily database backup. Sized for TZ 13: up to 5,000 us
 5. In @BotFather: `/newapp` with the URL `https://<DOMAIN>`, optionally `/setinline`.
    The bot sets its commands and menu button itself on start.
 
+**A server that already runs nginx** (several sites on one machine, certbot for HTTPS):
+the containers stay on `127.0.0.1:<port>`, a new nginx site points the domain there and certbot
+adds the certificate; other sites are not touched. As root on the server:
+
+```bash
+git clone https://github.com/fotimaruziyeva77/eco-master.git /opt/eco-master
+cd /opt/eco-master/deploy && sh install-behind-nginx.sh eco-master.sifatdev.uz 8130
+```
+
+The first run writes `deploy/.env` with secrets generated on the server and stops: add the bot
+token yourself, for example from the project folder on your computer (the token is not shown):
+
+```bash
+grep '^BOT_TOKEN=' .env | ssh root@100.42.190.208 "cat >> /opt/eco-master/deploy/.env"
+```
+
+Run the script again: it builds and starts everything, loads the content (sample content is
+published right away; `SEED_ARGS=--content` keeps it as drafts), adds the nginx site, gets the
+certificate and checks `https://<domain>/api/health`. To update later: `git pull` and the same
+command (it makes a backup first). Then create the first administrator and register the Mini App
+in @BotFather as the script prints. Stop a bot started on a developer's computer with the same
+token first: Telegram lets only one copy receive updates.
+
 **Backups (TZ 11.1).** Every day at 03:00 Tashkent time into `deploy/backups/` (readable by
 root only), kept for 14 days. Market photos are in the database too, so the dumps grow with the
 market: keep an eye on the disk. Copy that folder to another machine or storage as well. A
