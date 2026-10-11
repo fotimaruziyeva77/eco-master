@@ -1,8 +1,10 @@
-# Ekoustoz
+# Eco-Master
 
 Telegram Mini App that teaches children and adults to sort waste and give it a second life.
-Specification: [docs/Ekoustoz_TZ_v0.3.docx](docs/Ekoustoz_TZ_v0.3.docx) (v0.2 is kept for
-history; what changed is listed in appendix B of v0.3).
+Specification: [docs/Eco-Master_TZ_v0.4.docx](docs/Eco-Master_TZ_v0.4.docx); earlier versions
+(working name Ekoustoz) stay in `docs/` for history. Bot: [@eco_master_bot](https://t.me/eco_master_bot).
+Logo and icons: `docs/brand/`. Internal names (database, packages, storage keys) still say
+`ekoustoz`: nobody sees them, and renaming them would break existing data.
 
 | Part | Stack | Folder |
 |---|---|---|

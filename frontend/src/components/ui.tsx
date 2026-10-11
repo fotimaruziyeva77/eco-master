@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
 import type { User } from "../api/client";
+import mark from "../assets/brand/eco-master-mark.webp";
 import { useUser } from "../state/user";
 import { insideTelegram, useTelegramBackButton } from "../telegram";
 
@@ -43,9 +44,7 @@ export function TopBar({ subtitle }: { subtitle: string }) {
   return (
     <header className="topbar">
       <div className="topbar__brand">
-        <span className="logo" aria-hidden="true">
-          🌱
-        </span>
+        <img className="logo" src={mark} alt="" />
         <span className="topbar__title">
           <strong>{t("common.appName")}</strong>
           <span>{subtitle}</span>
@@ -76,9 +75,7 @@ export function SubpageHeader({ title, onBack, right }: { title?: ReactNode; onB
         </button>
       )}
       <div className="topbar__brand">
-        <span className="logo" aria-hidden="true">
-          🌱
-        </span>
+        <img className="logo" src={mark} alt="" />
         {title && (
           <span className="topbar__title">
             <strong>{title}</strong>

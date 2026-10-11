@@ -268,7 +268,7 @@ async def test_csv_export(client, session, content):
     admin = await admin_client(client, session)
     r = await admin.get("/api/admin/stats/export/users")
     assert r.headers["content-type"].startswith("text/csv")
-    assert "ekoustoz-users-" in r.headers["content-disposition"]
+    assert "eco-master-users-" in r.headers["content-disposition"]
     text = r.content.decode("utf-8")
     assert text.startswith("﻿")
     rows = list(csv.reader(io.StringIO(text.lstrip("﻿"))))

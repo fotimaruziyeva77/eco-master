@@ -109,7 +109,7 @@ export function StatusPill({ status }: { status: ContentStatus | null | undefine
 
 export function PageHead({ title, children }: { title: string; children?: ReactNode }) {
   useEffect(() => {
-    document.title = `${title} — Ekoustoz admin`;
+    document.title = `${title} — Eco-Master admin`;
   }, [title]);
   return (
     <div className="a-page-head">

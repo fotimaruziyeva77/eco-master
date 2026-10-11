@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { api } from "../../api/client";
+import mark from "../../assets/brand/eco-master-mark.webp";
 import { changeLanguage } from "../../i18n";
 import { LANGUAGE_NAMES, LANGUAGES, pickLanguage, type Language } from "../../i18n/languages";
 import { useUser } from "../../state/user";
@@ -38,9 +39,7 @@ export function LanguageStep({ onDone }: { onDone: () => void }) {
       <span className="chip welcome-chip">
         <Leaf size={14} /> {t("onboarding.welcome")}
       </span>
-      <div className="intro__art" style={{ margin: "0 auto" }} aria-hidden="true">
-        🌍
-      </div>
+      <img className="brand-mark" src={mark} alt="Eco-Master" style={{ margin: "0 auto" }} />
       <div className="stack">
         <h1>{t("onboarding.headline")}</h1>
         <p className="hint">{t("onboarding.subheadline")}</p>

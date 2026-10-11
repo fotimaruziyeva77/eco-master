@@ -35,7 +35,7 @@ CODE_TOKEN = "admin_code"
 
 TOTP_PERIOD = 30
 TOTP_DIGITS = 6
-ISSUER = "Ekoustoz"
+ISSUER = "Eco-Master"
 
 
 # ------------------------------------------------------------------ passwords

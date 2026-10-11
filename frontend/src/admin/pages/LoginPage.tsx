@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 
+import mark from "../../assets/brand/eco-master-mark.webp";
 import { QrCode } from "../../components/QrCode";
 import { adminApi, errorText, type AdminMe, type LoginResult } from "../api";
 
@@ -49,11 +50,9 @@ export function LoginPage({ onSignedIn }: { onSignedIn: (me: AdminMe) => void })
       {step === null ? (
         <form className="a-card" onSubmit={(e) => void submitPassword(e)}>
           <div className="a-brand" style={{ padding: 0 }}>
-            <span className="logo" aria-hidden="true">
-              🌱
-            </span>
+            <img className="logo" src={mark} alt="" />
             <span>
-              Ekoustoz
+              Eco-Master
               <small>Admin panel</small>
             </span>
           </div>

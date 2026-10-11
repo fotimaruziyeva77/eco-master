@@ -34,10 +34,17 @@ async def configure(bot: Bot) -> None:
             BotCommand(command="help", description=t("cmd_help", "uz")),
         ]
     )
+    # What people see in the empty chat before /start, and on the bot's profile.
+    for lang in (*SUPPORTED_LANGUAGES, None):
+        text_lang = lang or "uz"
+        await bot.set_my_description(t("bot_description", text_lang), language_code=lang)
+        await bot.set_my_short_description(
+            t("bot_short_description", text_lang), language_code=lang
+        )
     if settings.webapp_url.startswith("https://"):
         await bot.set_chat_menu_button(
             menu_button=MenuButtonWebApp(
-                text="Ekoustoz", web_app=WebAppInfo(url=settings.webapp_url)
+                text="Eco-Master", web_app=WebAppInfo(url=settings.webapp_url)
             )
         )
 

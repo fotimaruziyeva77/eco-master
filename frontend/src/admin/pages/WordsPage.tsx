@@ -14,7 +14,7 @@ const KINDS: { kind: WordKind; title: string; help: string }[] = [
   {
     kind: "reserved",
     title: "Band taxalluslar",
-    help: "Taxallus shu so'z bilan boshlansa yoki tugasa rad etiladi (admin, moderator, ekoustoz…).",
+    help: "Taxallus shu so'z bilan boshlansa yoki tugasa rad etiladi (admin, moderator, ecomaster…).",
   },
 ];
 

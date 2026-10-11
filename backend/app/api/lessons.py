@@ -50,7 +50,7 @@ def render(lesson: TeacherLesson, lang: str) -> RenderedPdf:
         lesson.grade,
         (lesson.body or {}).get(lang) or {},
     )
-    return RenderedPdf(pdf, f"ekoustoz-{lesson.slug}-{lang}.pdf", title, lang)
+    return RenderedPdf(pdf, f"eco-master-{lesson.slug}-{lang}.pdf", title, lang)
 
 
 @router.get("")

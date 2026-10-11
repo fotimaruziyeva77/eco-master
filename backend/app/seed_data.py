@@ -111,6 +111,7 @@ RESERVED_WORDS = [
     "administrator",
     "moderator",
     "ekoustoz",
+    "ecomaster",
     "support",
     "telegram",
     "official",
@@ -118,6 +119,7 @@ RESERVED_WORDS = [
     "администратор",
     "модератор",
     "экоустоз",
+    "экомастер",
     "поддержка",
 ]
 PROFANITY = [

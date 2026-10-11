@@ -19,7 +19,7 @@ cd backend && .venv/Scripts/python -m pytest && .venv/Scripts/ruff check .
 cd frontend && npm run typecheck && npm test && npm run build && npm run size
 ```
 
-Oxirgi to'liq ishga tushirish (2026-10-10): backend — 340 test, frontend — 51 test, hammasi
+Oxirgi to'liq ishga tushirish (2026-10-10): backend — 343 test, frontend — 51 test, hammasi
 o'tdi; boshlang'ich JS — 125 KB (gzip), chegara 250 KB. Production stek (Docker Compose)
 lokal smoke testdan o'tdi: migratsiyalar, xavfsizlik sarlavhalari, zaxira nusxa va tiklash.
 
@@ -44,7 +44,7 @@ Yarim tun atrofidagi holatlar `test_midnight.py` da soatni almashtirib tekshiril
 - **Avtomatik:** `frontend/src/i18n/i18n.test.ts` — «pickLanguage (QM-02)» (uz, ru, en,
   ru-RU, en_US, kk, de, til yo'q); `test_auth_api.py` —
   `test_login_creates_user_with_telegram_language`, `test_unknown_telegram_language_defaults_to_uzbek`.
-- **Qo'lda:** Telegram ilovasi rus tilida → Ekoustoz rus tilida ochiladi; Telegram nemis
+- **Qo'lda:** Telegram ilovasi rus tilida → Eco-Master rus tilida ochiladi; Telegram nemis
   tilida → o'zbek tilida.
 - **Natija:**
 
@@ -172,7 +172,7 @@ Yarim tun atrofidagi holatlar `test_midnight.py` da soatni almashtirib tekshiril
   `test_no_inline_query_without_inline_mode`, `test_share_texts`,
   `test_progress_share_never_brags_about_zeros`.
 - **Qo'lda:** ⚠️ Android, iOS va Desktop'da: «Ulashish» → chat tanlash oynasi → yuborilgan
-  xabarda tugma bor → tugma Ekoustoz'ni ochadi. Eski Telegram versiyalari uchun BotFather'da
+  xabarda tugma bor → tugma Eco-Master'ni ochadi. Eski Telegram versiyalari uchun BotFather'da
   `/setinline` yoqilgan bo'lishi kerak.
 - **Natija:**
 

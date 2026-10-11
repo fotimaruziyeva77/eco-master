@@ -74,7 +74,7 @@ def csv_response(name: str, body: str) -> Response:
     return Response(
         content=body.encode("utf-8"),
         media_type="text/csv; charset=utf-8",
-        headers={"Content-Disposition": f'attachment; filename="ekoustoz-{name}-{stamp}.csv"'},
+        headers={"Content-Disposition": f'attachment; filename="eco-master-{name}-{stamp}.csv"'},
     )
 
 

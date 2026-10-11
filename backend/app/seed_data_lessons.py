@@ -48,7 +48,7 @@ DEMO_LESSONS = [
                     "Uyda bugundan nimani o'zgartira olasiz?",
                 ],
                 "homework": "Uyda bitta chiqindidan foydali buyum yasang va keyingi darsga olib keling.",
-                "app_task": "Ekoustoz'dagi «Chiqindini to'g'ri qutiga joyla» o'yinini o'ynab, natijalarni sinfda solishtiring.",
+                "app_task": "Eco-Master'dagi «Chiqindini to'g'ri qutiga joyla» o'yinini o'ynab, natijalarni sinfda solishtiring.",
             },
             "ru": {
                 "goal": "Ученики учатся различать виды отходов, понимают разницу между повторным использованием и переработкой и предлагают, как дать вещи вторую жизнь.",
@@ -85,7 +85,7 @@ DEMO_LESSONS = [
                     "Что вы можете изменить дома уже сегодня?",
                 ],
                 "homework": "Сделайте дома полезную вещь из отходов и принесите её на следующий урок.",
-                "app_task": "Сыграйте в Ekoustoz в игру «Разложи отходы по контейнерам» и сравните результаты в классе.",
+                "app_task": "Сыграйте в Eco-Master в игру «Разложи отходы по контейнерам» и сравните результаты в классе.",
             },
             "en": {
                 "goal": "Students learn to tell types of waste apart, understand the difference between reusing and recycling, and suggest how to give an item a second life.",
@@ -122,7 +122,7 @@ DEMO_LESSONS = [
                     "What can you change at home starting today?",
                 ],
                 "homework": "Make something useful out of waste at home and bring it to the next lesson.",
-                "app_task": 'Play "Put the waste in the right bin" in Ekoustoz and compare results in class.',
+                "app_task": 'Play "Put the waste in the right bin" in Eco-Master and compare results in class.',
             },
         },
     },
@@ -147,7 +147,7 @@ DEMO_LESSONS = [
                     {
                         "minutes": 20,
                         "title": "Asosiy qism",
-                        "text": "Plastik tabiatda juda sekin parchalanishini va mikroplastik nima ekanini tushuntiring. Ekoustoz'dagi «Plastik ifloslanish» kartochkasini birga o'qing.",
+                        "text": "Plastik tabiatda juda sekin parchalanishini va mikroplastik nima ekanini tushuntiring. Eco-Master'dagi «Plastik ifloslanish» kartochkasini birga o'qing.",
                     },
                     {
                         "minutes": 15,
@@ -166,7 +166,7 @@ DEMO_LESSONS = [
                     "Qaysi bir martalik buyumlardan voz kecha olamiz?",
                 ],
                 "homework": "Bir hafta davomida oilangiz nechta plastik paket ishlatishini hisoblab boring.",
-                "app_task": "Ekoustoz'dagi plastik bo'limidan bitta loyihani bajaring va «Bajardim» tugmasini bosing.",
+                "app_task": "Eco-Master'dagi plastik bo'limidan bitta loyihani bajaring va «Bajardim» tugmasini bosing.",
             },
             "ru": {
                 "goal": "Ученики понимают, почему пластик разлагается так долго и чем он вредит природе и животным, и находят способы использовать его меньше.",
@@ -184,7 +184,7 @@ DEMO_LESSONS = [
                     {
                         "minutes": 20,
                         "title": "Основная часть",
-                        "text": "Объясните, что пластик разлагается очень медленно, и что такое микропластик. Прочитайте вместе карточку «Пластиковое загрязнение» в Ekoustoz.",
+                        "text": "Объясните, что пластик разлагается очень медленно, и что такое микропластик. Прочитайте вместе карточку «Пластиковое загрязнение» в Eco-Master.",
                     },
                     {
                         "minutes": 15,
@@ -203,7 +203,7 @@ DEMO_LESSONS = [
                     "От каких одноразовых вещей мы можем отказаться?",
                 ],
                 "homework": "В течение недели считайте, сколько пластиковых пакетов использует ваша семья.",
-                "app_task": "Выполните в Ekoustoz один проект из раздела «Пластик» и нажмите «Готово».",
+                "app_task": "Выполните в Eco-Master один проект из раздела «Пластик» и нажмите «Готово».",
             },
             "en": {
                 "goal": "Students understand why plastic takes so long to break down and how it harms nature and animals, and find ways to use less of it.",
@@ -221,7 +221,7 @@ DEMO_LESSONS = [
                     {
                         "minutes": 20,
                         "title": "Main part",
-                        "text": 'Explain that plastic breaks down very slowly and what microplastics are. Read the "Plastic pollution" card in Ekoustoz together.',
+                        "text": 'Explain that plastic breaks down very slowly and what microplastics are. Read the "Plastic pollution" card in Eco-Master together.',
                     },
                     {
                         "minutes": 15,
@@ -240,7 +240,7 @@ DEMO_LESSONS = [
                     "Which single-use items can we give up?",
                 ],
                 "homework": "For one week, count how many plastic bags your family uses.",
-                "app_task": 'Complete one project from the Plastic section in Ekoustoz and tap "I did it".',
+                "app_task": 'Complete one project from the Plastic section in Eco-Master and tap "I did it".',
             },
         },
     },
@@ -288,7 +288,7 @@ DEMO_LESSONS = [
                     "Kompostga qaysi chiqindilarni solish mumkin emas?",
                 ],
                 "homework": "Bir hafta davomida uyda meva va sabzavot po'choqlarini alohida yig'ing.",
-                "app_task": "Ekoustoz'dagi «Quruq barglardan kompost» loyihasini o'qing va oilangiz bilan bajaring.",
+                "app_task": "Eco-Master'dagi «Quruq barglardan kompost» loyihasini o'qing va oilangiz bilan bajaring.",
             },
             "ru": {
                 "goal": "Ученики понимают, как органические отходы превращаются в удобрение и чем вредно сжигание листьев, и учатся закладывать компост.",
@@ -325,7 +325,7 @@ DEMO_LESSONS = [
                     "Какие отходы нельзя класть в компост?",
                 ],
                 "homework": "В течение недели собирайте дома очистки фруктов и овощей отдельно.",
-                "app_task": "Прочитайте в Ekoustoz проект «Компост из сухих листьев» и сделайте его вместе с семьёй.",
+                "app_task": "Прочитайте в Eco-Master проект «Компост из сухих листьев» и сделайте его вместе с семьёй.",
             },
             "en": {
                 "goal": "Students understand how organic waste turns into fertiliser and why burning leaves is harmful, and learn to start a compost.",
@@ -362,7 +362,7 @@ DEMO_LESSONS = [
                     "Which waste must not go into compost?",
                 ],
                 "homework": "For one week, collect fruit and vegetable peels separately at home.",
-                "app_task": 'Read the "Compost from dry leaves" project in Ekoustoz and do it with your family.',
+                "app_task": 'Read the "Compost from dry leaves" project in Eco-Master and do it with your family.',
             },
         },
     },

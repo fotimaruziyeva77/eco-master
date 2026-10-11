@@ -34,7 +34,7 @@ def test_totp_window_and_replay():
     assert verify_totp(secret, hotp(secret, step - 2), None, at=now) is None
     assert verify_totp(secret, hotp(secret, step), step, at=now) is None  # already used
     assert verify_totp(secret, "12345", None, at=now) is None
-    assert "issuer=Ekoustoz" in provisioning_uri(secret, "ali")
+    assert "issuer=Eco-Master" in provisioning_uri(secret, "ali")
 
 
 def test_password_hashing():
@@ -57,7 +57,7 @@ async def test_first_sign_in_sets_up_the_authenticator(client, session):
     await make_admin(session)
     r = await client.post("/api/admin/auth/login", json={"login": "BOSS", "password": PASSWORD})
     body = r.json()
-    assert body["setup"]["uri"].startswith("otpauth://totp/Ekoustoz:boss?secret=")
+    assert body["setup"]["uri"].startswith("otpauth://totp/Eco-Master:boss?secret=")
     secret = body["setup"]["secret"]
 
     wrong = await client.post(

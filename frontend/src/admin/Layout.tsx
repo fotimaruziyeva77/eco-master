@@ -26,6 +26,7 @@ import {
 import { useEffect, useState, type ReactNode } from "react";
 import { NavLink, useLocation } from "react-router";
 
+import mark from "../assets/brand/eco-master-mark.webp";
 import { useLoad } from "../hooks/useLoad";
 import { adminApi } from "./api";
 import { ROLE_LABEL, useAdmin } from "./ui";
@@ -71,15 +72,13 @@ export function Layout({ children }: { children: ReactNode }) {
         <button type="button" className="a-icon-btn" onClick={() => setOpen(true)} aria-label="Menyu">
           <Menu size={18} />
         </button>
-        Ekoustoz admin
+        Eco-Master admin
       </header>
       <nav className={open ? "a-side open" : "a-side"} aria-label="Bo'limlar">
         <div className="a-brand">
-          <span className="logo" aria-hidden="true">
-            🌱
-          </span>
+          <img className="logo" src={mark} alt="" />
           <span>
-            Ekoustoz
+            Eco-Master
             <small>Admin panel</small>
           </span>
         </div>

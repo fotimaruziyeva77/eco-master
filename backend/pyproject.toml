@@ -1,7 +1,7 @@
 [project]
 name = "ekoustoz-backend"
 version = "0.1.0"
-description = "Ekoustoz Telegram Mini App — API, bot and admin"
+description = "Eco-Master Telegram Mini App — API, bot and admin"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.115",
@@ -57,4 +57,4 @@ select = ["E", "F", "I", "UP", "B", "ASYNC"]
 "app/seed_data_v1.py" = ["E501"]
 
 [tool.setuptools.package-data]
-app = ["assets/fonts/*"]
+app = ["assets/fonts/*", "assets/brand/*"]

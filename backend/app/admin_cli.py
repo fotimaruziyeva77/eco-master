@@ -86,7 +86,7 @@ async def list_admins() -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Ekoustoz admin accounts")
+    parser = argparse.ArgumentParser(description="Eco-Master admin accounts")
     commands = parser.add_subparsers(dest="command", required=True)
     create_cmd = commands.add_parser("create", help="new admin or content editor")
     create_cmd.add_argument("--login", required=True)

@@ -15,17 +15,17 @@ def pick_language(code: str | None) -> str:
 BOT_TEXTS: dict[str, dict[str, str]] = {
     "start": {
         "uz": (
-            "Salom! 🌱 <b>Ekoustoz</b>ga xush kelibsiz.\n\n"
+            "Salom! 🌱 <b>Eco-Master</b>ga xush kelibsiz.\n\n"
             "Bu yerda chiqindini to'g'ri saralashni, undan foydali buyumlar yasashni "
             "o'rganasiz, o'yin va topshiriqlar orqali ball to'playsiz."
         ),
         "ru": (
-            "Привет! 🌱 Добро пожаловать в <b>Ekoustoz</b>.\n\n"
+            "Привет! 🌱 Добро пожаловать в <b>Eco-Master</b>.\n\n"
             "Здесь вы научитесь правильно сортировать отходы и делать из них полезные "
             "вещи, а за игры и задания будете получать баллы."
         ),
         "en": (
-            "Hi! 🌱 Welcome to <b>Ekoustoz</b>.\n\n"
+            "Hi! 🌱 Welcome to <b>Eco-Master</b>.\n\n"
             "Learn to sort waste the right way and turn it into useful things, "
             "and earn points for games and daily tasks."
         ),
@@ -47,6 +47,32 @@ BOT_TEXTS: dict[str, dict[str, str]] = {
     },
     "cmd_start": {"uz": "Ilovani ochish", "ru": "Открыть приложение", "en": "Open the app"},
     "cmd_help": {"uz": "Yordam", "ru": "Помощь", "en": "Help"},
+    # Telegram limits: description 512 characters, short description 120.
+    "bot_description": {
+        "uz": "Eco-Master — chiqindiga ikkinchi hayot berishni o'rgatadigan ilova.\n\n"
+        "🌱 Chiqindini to'g'ri saralashni o'rganing\n"
+        "🎨 Undan foydali buyumlar yasang\n"
+        "🧠 Viktorina va o'yinlarda ball to'plang\n"
+        "🛍 Eko-bozorda yasaganlaringizni ko'rsating\n\n"
+        "Boshlash uchun «Start» tugmasini bosing.",
+        "ru": "Eco-Master — приложение, которое учит давать отходам вторую жизнь.\n\n"
+        "🌱 Учись правильно сортировать отходы\n"
+        "🎨 Делай из них полезные вещи\n"
+        "🧠 Набирай баллы в викторинах и играх\n"
+        "🛍 Показывай свои поделки на Эко-рынке\n\n"
+        "Нажми «Старт», чтобы начать.",
+        "en": "Eco-Master teaches how to give waste a second life.\n\n"
+        "🌱 Learn to sort waste the right way\n"
+        "🎨 Make useful things from it\n"
+        "🧠 Earn points in quizzes and games\n"
+        "🛍 Show what you made in the Eco market\n\n"
+        "Tap «Start» to begin.",
+    },
+    "bot_short_description": {
+        "uz": "Chiqindini saralash, undan buyum yasash, viktorina, o'yinlar va eko-bozor. 🌱",
+        "ru": "Сортировка отходов, поделки, викторины, игры и эко-рынок. 🌱",
+        "en": "Sort waste, make things from it, play quizzes and games, visit the eco market. 🌱",
+    },
 }
 
 BOT_TEXTS.update(
@@ -76,29 +102,29 @@ BOT_TEXTS.update(
             "en": "Thank you! Your message has been passed to the team. 💚",
         },
         "share_title": {
-            "uz": "Mening Ekoustoz natijam",
-            "ru": "Мой результат в Ekoustoz",
-            "en": "My Ekoustoz result",
+            "uz": "Mening Eco-Master natijam",
+            "ru": "Мой результат в Eco-Master",
+            "en": "My Eco-Master result",
         },
         "share_progress": {
-            "uz": "Mening Ekoustoz'dagi natijam: {projects} ta buyumga ikkinchi hayot "
+            "uz": "Mening Eco-Master'dagi natijam: {projects} ta buyumga ikkinchi hayot "
             "berdim 🌱 va {points} ball to'pladim! Sen ham qo'shil 👇",
-            "ru": "Мой результат в Ekoustoz: сделано проектов — {projects} 🌱, баллов — "
+            "ru": "Мой результат в Eco-Master: сделано проектов — {projects} 🌱, баллов — "
             "{points}! Присоединяйся 👇",
-            "en": "My Ekoustoz progress: {projects} things given a second life 🌱 and "
+            "en": "My Eco-Master progress: {projects} things given a second life 🌱 and "
             "{points} points! Join me 👇",
         },
         "share_points": {
-            "uz": "Mening Ekoustoz'dagi natijam: {points} ball! 🌱 Sen ham qo'shil 👇",
-            "ru": "Мой результат в Ekoustoz: баллов — {points}! 🌱 Присоединяйся 👇",
-            "en": "My Ekoustoz score: {points}! 🌱 Join me 👇",
+            "uz": "Mening Eco-Master'dagi natijam: {points} ball! 🌱 Sen ham qo'shil 👇",
+            "ru": "Мой результат в Eco-Master: баллов — {points}! 🌱 Присоединяйся 👇",
+            "en": "My Eco-Master score: {points}! 🌱 Join me 👇",
         },
         "share_invite": {
-            "uz": "🌱 Ekoustoz — chiqindini to'g'ri saralash, eko-loyihalar va viktorinalar. "
+            "uz": "🌱 Eco-Master — chiqindini to'g'ri saralash, eko-loyihalar va viktorinalar. "
             "Qo'shil 👇",
-            "ru": "🌱 Ekoustoz — учимся сортировать отходы, делаем эко-проекты и играем в "
+            "ru": "🌱 Eco-Master — учимся сортировать отходы, делаем эко-проекты и играем в "
             "викторины. Присоединяйся 👇",
-            "en": "🌱 Ekoustoz — learn to sort waste, make eco projects and play quizzes. "
+            "en": "🌱 Eco-Master — learn to sort waste, make eco projects and play quizzes. "
             "Join in 👇",
         },
         "share_project": {
@@ -107,14 +133,14 @@ BOT_TEXTS.update(
             "en": "I made «{title}»! ♻️ Give it a try 👇",
         },
         "share_badge": {
-            "uz": "Ekoustoz'da «{badge}» nishonini oldim! 🏅 Sen ham qo'shil 👇",
-            "ru": "Получен значок «{badge}» в Ekoustoz! 🏅 Присоединяйся 👇",
-            "en": "I earned the «{badge}» badge in Ekoustoz! 🏅 Join me 👇",
+            "uz": "Eco-Master'da «{badge}» nishonini oldim! 🏅 Sen ham qo'shil 👇",
+            "ru": "Получен значок «{badge}» в Eco-Master! 🏅 Присоединяйся 👇",
+            "en": "I earned the «{badge}» badge in Eco-Master! 🏅 Join me 👇",
         },
         "share_quiz": {
-            "uz": "Ekoustoz viktorinasida {correct}/{total} to'g'ri javob berdim! 🧠 Sen-chi? 👇",
-            "ru": "Мой результат в викторине Ekoustoz: {correct}/{total} 🧠 А у тебя? 👇",
-            "en": "I got {correct}/{total} in the Ekoustoz quiz! 🧠 Can you beat it? 👇",
+            "uz": "Eco-Master viktorinasida {correct}/{total} to'g'ri javob berdim! 🧠 Sen-chi? 👇",
+            "ru": "Мой результат в викторине Eco-Master: {correct}/{total} 🧠 А у тебя? 👇",
+            "en": "I got {correct}/{total} in the Eco-Master quiz! 🧠 Can you beat it? 👇",
         },
         "share_sort": {
             "uz": "Saralash o'yinida {correct}/{total} buyumni to'g'ri saraladim! ♻️ Sen-chi? 👇",
@@ -122,14 +148,14 @@ BOT_TEXTS.update(
             "en": "I sorted {correct}/{total} items correctly! ♻️ Can you beat it? 👇",
         },
         "pdf_caption": {
-            "uz": "📄 {title}\nEkoustoz — o'qituvchilar uchun dars",
-            "ru": "📄 {title}\nEkoustoz — урок для учителей",
-            "en": "📄 {title}\nEkoustoz — a lesson for teachers",
+            "uz": "📄 {title}\nEco-Master — o'qituvchilar uchun dars",
+            "ru": "📄 {title}\nEco-Master — урок для учителей",
+            "en": "📄 {title}\nEco-Master — a lesson for teachers",
         },
         "pdf_header": {
-            "uz": "Ekoustoz — o'qituvchilar uchun dars",
-            "ru": "Ekoustoz — урок для учителей",
-            "en": "Ekoustoz — a lesson for teachers",
+            "uz": "Eco-Master — o'qituvchilar uchun dars",
+            "ru": "Eco-Master — урок для учителей",
+            "en": "Eco-Master — a lesson for teachers",
         },
         "pdf_grade": {"uz": "Sinf: {grade}", "ru": "Класс: {grade}", "en": "Grade: {grade}"},
         "pdf_duration": {
@@ -148,14 +174,14 @@ BOT_TEXTS.update(
         },
         "pdf_homework": {"uz": "Uyga vazifa", "ru": "Домашнее задание", "en": "Homework"},
         "pdf_app_task": {
-            "uz": "Ekoustoz ilovasi bilan",
-            "ru": "С приложением Ekoustoz",
-            "en": "With the Ekoustoz app",
+            "uz": "Eco-Master ilovasi bilan",
+            "ru": "С приложением Eco-Master",
+            "en": "With the Eco-Master app",
         },
         "pdf_footer": {
-            "uz": "Ekoustoz — chiqindiga ikkinchi hayot",
-            "ru": "Ekoustoz — вторая жизнь для отходов",
-            "en": "Ekoustoz — a second life for waste",
+            "uz": "Eco-Master — chiqindiga ikkinchi hayot",
+            "ru": "Eco-Master — вторая жизнь для отходов",
+            "en": "Eco-Master — a second life for waste",
         },
     }
 )

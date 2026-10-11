@@ -26,7 +26,7 @@ def create_app() -> FastAPI:
     settings.check_production()
 
     app = FastAPI(
-        title="Ekoustoz API",
+        title="Eco-Master API",
         version="0.1.0",
         docs_url=None if settings.is_prod else "/api/docs",
         redoc_url=None,

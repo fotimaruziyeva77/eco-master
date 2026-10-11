@@ -2,7 +2,7 @@
   "common": {
     "loading": "Yuklanmoqda…",
     "retry": "Qayta urinish",
-    "appName": "Ekoustoz",
+    "appName": "Eco-Master",
     "back": "Orqaga",
     "minutes_one": "{{count}} daqiqa",
     "minutes_other": "{{count}} daqiqa",
@@ -20,7 +20,7 @@
   },
   "openInTelegram": {
     "title": "Ilovani Telegram'da oching",
-    "text": "Ekoustoz Telegram ichida ishlaydi. Pastdagi tugmani bosing yoki botimizni Telegram'dan qidiring.",
+    "text": "Eco-Master Telegram ichida ishlaydi. Pastdagi tugmani bosing yoki botimizni Telegram'dan qidiring.",
     "button": "Telegram'da ochish"
   },
   "nav": {
@@ -35,8 +35,8 @@
     "seed": "Urug'",
     "beginner": "Ekologiya boshlovchisi",
     "young_ecologist": "Yosh ekolog",
-    "helper": "Ekoustoz yordamchisi",
-    "ekoustoz": "Ekoustoz"
+    "helper": "Eco-Master yordamchisi",
+    "ekoustoz": "Eco-Master"
   },
   "onboarding": {
     "step": "{{current}}-qadam / {{total}}",
@@ -93,7 +93,7 @@
     },
     "welcome": "Xush kelibsiz!",
     "headline": "Tabiatni asrashni o'rganamiz",
-    "subheadline": "Ekoustoz bilan har kuni kichik qadamlar orqali katta o'zgarishlar yarating.",
+    "subheadline": "Eco-Master bilan har kuni kichik qadamlar orqali katta o'zgarishlar yarating.",
     "nicknameReset": "Moderator taxallusingizni o'zgartirishni so'radi. Iltimos, yangi taxallus tanlang."
   },
   "home": {
@@ -240,7 +240,7 @@
     "deleteTitle": "Ma'lumotni o'chirish",
     "deleteText": "Istalgan vaqtda Profil → «Ma'lumotlarimni o'chirish» orqali ma'lumotlaringizni o'chirishingiz mumkin.",
     "contactTitle": "Bog'lanish",
-    "contactText": "Savollar bo'lsa, Ekoustoz botiga yozing.",
+    "contactText": "Savollar bo'lsa, Eco-Master botiga yozing.",
     "marketTitle": "Bozor",
     "marketText": "Bozorga e'lon bersangiz, buyumning 1–3 ta rasmi, nomi va tavsifi saqlanadi. Rasmlardan joylashuv va kamera ma'lumotlari o'chiriladi. E'lonni avval moderator tekshiradi; tasdiqlangan e'lonni ilova foydalanuvchilari taxallusingiz bilan ko'radi. Buyum faqat topshirish joyida, kattalar orqali beriladi — kontaktlaringiz hech kimga ko'rsatilmaydi. E'lon yoki hisobingiz o'chirilsa, rasmlar ham o'chadi."
   },
@@ -337,8 +337,8 @@
     "copy": "Nusxalash",
     "copied": "Nusxalandi",
     "enlarge": "QR-kodni kattalashtirish",
-    "qrLabel": "Ekoustoz ilovasini ochadigan QR-kod",
-    "inviteShareText": "Ekoustoz ilovasiga qo'shiling — chiqindini to'g'ri saralashni birga o'rganamiz! 🌱",
+    "qrLabel": "Eco-Master ilovasini ochadigan QR-kod",
+    "inviteShareText": "Eco-Master ilovasiga qo'shiling — chiqindini to'g'ri saralashni birga o'rganamiz! 🌱",
     "headline": "Tayyor ekologiya darslari"
   },
   "lesson": {
@@ -363,7 +363,7 @@
     "title": "Foydalanish shartlari",
     "draft": "Qoralama. Yakuniy matn yurist tekshiruvidan keyin e'lon qilinadi.",
     "aboutTitle": "Ilova haqida",
-    "aboutText": "Ekoustoz — chiqindini saralash va undan foydali buyumlar yasashni o'rgatuvchi bepul ta'lim ilovasi. Ilovada reklama va to'lovlar yo'q.",
+    "aboutText": "Eco-Master — chiqindini saralash va undan foydali buyumlar yasashni o'rgatuvchi bepul ta'lim ilovasi. Ilovada reklama va to'lovlar yo'q.",
     "whoTitle": "Kim foydalanishi mumkin",
     "whoText": "Ilova maktab o'quvchilari, o'qituvchilar va ota-onalar uchun. Agar siz o'quvchi bo'lsangiz, ilovadan ota-onangiz yoki o'qituvchingiz xabardor holda foydalaning.",
     "safetyTitle": "Xavfsizlik",
@@ -373,11 +373,11 @@
     "pointsTitle": "Ball va reyting",
     "pointsText": "Ballar o'yin uchun, ularning pul qiymati yo'q. Halol o'ynang: sun'iy ko'paytirilgan ballar bekor qilinadi.",
     "contentTitle": "Materiallar",
-    "contentText": "Ilovadagi video, matn va rasmlar Ekoustoz jamoasiga tegishli. Ulardan darslarda ta'lim maqsadida foydalanishingiz mumkin.",
+    "contentText": "Ilovadagi video, matn va rasmlar Eco-Master jamoasiga tegishli. Ulardan darslarda ta'lim maqsadida foydalanishingiz mumkin.",
     "changesTitle": "O'zgarishlar",
     "changesText": "Shartlar o'zgarsa, bu haqda ilova yoki bot orqali xabar beramiz.",
     "contactTitle": "Bog'lanish",
-    "contactText": "Savollar bo'lsa, Ekoustoz botiga yozing.",
+    "contactText": "Savollar bo'lsa, Eco-Master botiga yozing.",
     "marketTitle": "Bozor",
     "marketText": "Bozorga faqat o'zingiz yasagan yoki sizga tegishli, endi kerak bo'lmagan narsalarni qo'ying — uydagi narsalarni ota-onangiz ruxsati bilan. Rasmda odamlar, ism va manzil bo'lmasin, kontakt yozmang. Ovqat, dori, kosmetika, o'tkir va xavfli narsalar, batareya va elektronika, hayvonlar, pul va qimmatbaho buyumlar qo'yilmaydi. Buyumlar bepul, faqat topshirish joyida beriladi; sotish va pul so'rash mumkin emas. Qoidalar buzilsa, e'lon olib tashlanadi."
   },
@@ -415,7 +415,7 @@
     "showOnly": "Faqat ko'rgazma",
     "like": "Zo'r!",
     "likesCount": "«Zo'r!»: {{count}}",
-    "anonymous": "Ekoustoz a'zosi",
+    "anonymous": "Eco-Master a'zosi",
     "by": "Muallif: {{name}}",
     "condition": {
       "new": "Yangi",

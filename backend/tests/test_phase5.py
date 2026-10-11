@@ -199,7 +199,7 @@ async def test_send_pdf_to_chat(client, headers, fake_bot):
     assert r.json() == {"sent": True}
     chat_id, filename, caption = fake_bot.documents[0]
     assert chat_id == 1500
-    assert filename == "ekoustoz-plastic-and-us-ru.pdf"
+    assert filename == "eco-master-plastic-and-us-ru.pdf"
     assert "Пластик и мы" in caption
 
 
@@ -217,7 +217,7 @@ async def test_send_pdf_when_user_never_started_bot(client, headers, fake_bot, s
 
 async def test_share_texts(client, headers):
     progress = (await client.post("/api/share", json={"kind": "progress"}, headers=headers)).json()
-    assert "Ekoustoz" in progress["text"]
+    assert "Eco-Master" in progress["text"]
     assert progress["prepared_message_id"] is None  # no bot in tests
 
     project = await client.post(
@@ -285,7 +285,7 @@ async def test_inline_share_for_older_clients(content, session):
     query = FakeInlineQuery(1600, "quiz 99/10")
     await on_inline_query(query)
     [article], _ = query.answers[0]
-    assert "Ekoustoz" in article.input_message_content.message_text
+    assert "Eco-Master" in article.input_message_content.message_text
 
 
 async def test_inline_share_for_strangers(content):

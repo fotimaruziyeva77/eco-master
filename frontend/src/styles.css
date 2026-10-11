@@ -189,16 +189,28 @@ button {
   flex: 1;
 }
 
+/* The Eco-Master mark: green on white, so it gets a white tile in the dark theme too. */
 .logo {
-  display: grid;
-  place-items: center;
+  display: block;
   flex: none;
   width: 36px;
   height: 36px;
+  padding: 2px;
   border-radius: 12px;
-  background: linear-gradient(145deg, #34d399, #059669);
-  font-size: 20px;
+  background: #ffffff;
+  object-fit: contain;
   box-shadow: var(--shadow-1);
+}
+
+.brand-mark {
+  display: block;
+  width: 96px;
+  height: 96px;
+  padding: 6px;
+  border-radius: 28px;
+  background: #ffffff;
+  object-fit: contain;
+  box-shadow: var(--shadow-2);
 }
 
 .topbar__title {

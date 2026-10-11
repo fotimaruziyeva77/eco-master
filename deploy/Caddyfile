@@ -1,4 +1,4 @@
-# Ekoustoz web server: HTTPS certificates from Let's Encrypt, the API behind /api,
+# Eco-Master web server: HTTPS certificates from Let's Encrypt, the API behind /api,
 # the Mini App and the admin panel from /srv. DOMAIN comes from deploy/.env.
 
 {$DOMAIN} {

@@ -10,6 +10,7 @@ from fpdf.enums import XPos, YPos
 from app.i18n import t
 
 FONT_DIR = Path(__file__).parent / "assets" / "fonts"
+LOGO = Path(__file__).parent / "assets" / "brand" / "eco-master-mark.png"
 # Manrope has no modifier-letter apostrophes; Uzbek o‘/g‘ variants are drawn as a plain one.
 APOSTROPHES = str.maketrans({"ʻ": "'", "ʼ": "'", "‘": "'", "’": "'"})
 GREEN = (4, 120, 87)
@@ -27,10 +28,13 @@ class LessonPdf(FPDF):
         self.set_auto_page_break(True, margin=18)
 
     def header(self) -> None:
+        top = self.t_margin
+        self.image(LOGO, x=self.l_margin, y=top - 1, h=8)
+        self.set_xy(self.l_margin + 10, top + 0.5)
         self.set_font("Manrope", "B", 9)
         self.set_text_color(*GREEN)
-        self.cell(0, 6, t("pdf_header", self.lang), new_x=XPos.LMARGIN, new_y=YPos.NEXT)
-        self.ln(2)
+        self.cell(0, 6, t("pdf_header", self.lang))
+        self.set_xy(self.l_margin, top + 10)
 
     def footer(self) -> None:
         self.set_y(-12)

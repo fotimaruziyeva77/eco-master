@@ -65,7 +65,7 @@ export function LessonScreen() {
       const url = URL.createObjectURL(await api.lessonPdf(slug, lang));
       const a = document.createElement("a");
       a.href = url;
-      a.download = `ekoustoz-${slug}-${lang}.pdf`;
+      a.download = `eco-master-${slug}-${lang}.pdf`;
       a.click();
       window.setTimeout(() => URL.revokeObjectURL(url), 10_000);
       setStatus(null);
