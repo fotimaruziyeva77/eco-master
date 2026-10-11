@@ -25,24 +25,20 @@ for tool in docker nginx certbot openssl curl; do
 done
 docker compose version
 
-if [ ! -f .env ]; then
-    say "Settings: $(pwd)/.env"
-    # Readable by root only: it holds the secrets.
-    (
-        umask 077
-        cat > .env <<EOF
-# Created by install-behind-nginx.sh. The secrets below were generated on this server.
-COMPOSE_FILE=docker-compose.yml:docker-compose.behind-proxy.yml
-DOMAIN=$DOMAIN
-WEB_PORT=$PORT
-POSTGRES_PASSWORD=$(openssl rand -hex 24)
-JWT_SECRET=$(openssl rand -hex 32)
-BOT_USERNAME=$BOT_USERNAME
-WEBAPP_SHORT_NAME=app
-FEEDBACK_CHAT_ID=
-EOF
-    )
-fi
+say "Settings: $(pwd)/.env"
+# Missing settings are added (secrets generated here, never printed); existing values,
+# such as a bot token added by hand, are never changed. Readable by root only.
+touch .env
+chmod 600 .env
+add() { grep -q "^$1=" .env || printf '%s=%s\n' "$1" "$2" >> .env; }
+add COMPOSE_FILE docker-compose.yml:docker-compose.behind-proxy.yml
+add DOMAIN "$DOMAIN"
+add WEB_PORT "$PORT"
+add POSTGRES_PASSWORD "$(openssl rand -hex 24)"
+add JWT_SECRET "$(openssl rand -hex 32)"
+add BOT_USERNAME "$BOT_USERNAME"
+add WEBAPP_SHORT_NAME app
+add FEEDBACK_CHAT_ID ""
 if ! grep -q '^BOT_TOKEN=.' .env; then
     echo
     echo "The bot token is missing. Add the line BOT_TOKEN=<token from @BotFather> to"

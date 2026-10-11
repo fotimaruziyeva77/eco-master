@@ -156,15 +156,15 @@ the containers stay on `127.0.0.1:<port>`, a new nginx site points the domain th
 adds the certificate; other sites are not touched. As root on the server:
 
 ```bash
-git clone https://github.com/fotimaruziyeva77/eco-master.git /opt/eco-master
-cd /opt/eco-master/deploy && sh install-behind-nginx.sh eco-master.sifatdev.uz 8130
+git clone https://github.com/fotimaruziyeva77/eco-master.git /srv/eco-master
+cd /srv/eco-master/deploy && sh install-behind-nginx.sh eco-master.sifatdev.uz 8130
 ```
 
-The first run writes `deploy/.env` with secrets generated on the server and stops: add the bot
-token yourself, for example from the project folder on your computer (the token is not shown):
+The script fills in `deploy/.env` (secrets generated on the server; values already there, such
+as a token added first, are kept) and stops until the bot token is there: add it yourself, for example from the project folder on your computer (the token is not shown):
 
 ```bash
-grep '^BOT_TOKEN=' .env | ssh root@100.42.190.208 "cat >> /opt/eco-master/deploy/.env"
+grep '^BOT_TOKEN=' .env | ssh root@<server> "cat >> /srv/eco-master/deploy/.env"
 ```
 
 Run the script again: it builds and starts everything, loads the content (sample content is
