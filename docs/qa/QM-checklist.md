@@ -34,9 +34,11 @@ Yarim tun atrofidagi holatlar `test_midnight.py` da soatni almashtirib tekshiril
 - **Avtomatik:** `test_onboarding_api.py` — `test_full_onboarding_flow`,
   `test_progress_is_resumed_and_never_goes_back`, `test_complete_requires_path_and_nickname`;
   `test_auth_api.py::test_second_login_returns_same_user_and_keeps_chosen_language`.
-- **Qo'lda:** ⚠️ yangi hisob bilan (yoki ma'lumotlarni o'chirgandan keyin) sekundomer bilan:
-  ochish → til → tanishtiruv («O'tkazib yuborish») → yo'l → taxallus → bosh sahifa.
-  60 soniyadan kam bo'lishi kerak. Ilovani yopib qayta ochish → to'g'ri bosh sahifaga tushadi.
+- **Qo'lda:** ⚠️ yangi hisob bilan (yoki ma'lumotlarni o'chirgandan keyin) sekundomer bilan.
+  2026-10-11 dan onboarding ikki ekran: 1) til (Telegram tilidan tanlangan bo'ladi) va «Siz
+  kimsiz?» — rolni bosish keyingi ekranga o'tkazadi; 2) tayyor tasodifiy taxallus, eslatma va
+  «Boshlash». Tanishtiruv slaydlari olib tashlandi. 30 soniyadan kam bo'lishi kerak. Ilovani
+  yopib qayta ochish → to'g'ri bosh sahifaga tushadi.
 - **Natija:**
 
 ### QM-02. Telegram tili uz/ru/en bo'lsa — shu til, boshqasida — o'zbek tili (6)
@@ -101,10 +103,11 @@ Yarim tun atrofidagi holatlar `test_midnight.py` da soatni almashtirib tekshiril
 ### QM-08. O'yindan kuniga 40 balldan ortiq yo'q; surish ilovani yopmaydi (8.4)
 
 - **Avtomatik:** `test_games_api.py::test_game_daily_cap`,
-  `test_midnight.py::test_game_limit_starts_again_at_midnight`. O'yinda sudrash yo'q — chiqindi
-  bosish bilan tanlanadi; `frontend/src/telegram.ts` pastga surishni o'chiradi
-  (`disableVerticalSwipes`, Telegram 7.7+).
-- **Qo'lda:** ⚠️ Android va iOS'da o'yin paytida barmoq bilan pastga surish → ilova yopilmaydi.
+  `test_midnight.py::test_game_limit_starts_again_at_midnight`. Buyumni qutiga sudrab tashlash
+  ham, qutini bosish ham mumkin; `frontend/src/telegram.ts` pastga surishni o'chiradi
+  (`disableVerticalSwipes`, Telegram 7.7+). Olti quti 360×640 ekranga ham sig'adi.
+- **Qo'lda:** ⚠️ Android va iOS'da o'yin paytida barmoq bilan pastga surish va buyumni qutiga
+  sudrash → ilova yopilmaydi, sahifa siljimaydi, javob qabul qilinadi.
 - **Natija:**
 
 ### QM-09. Kunlik topshiriq Toshkent vaqti 00:00 da almashadi; 23:59 dagi bajarish shu kunga (8.5)

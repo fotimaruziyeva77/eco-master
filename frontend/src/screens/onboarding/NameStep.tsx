@@ -1,20 +1,35 @@
-import { CircleCheck, Lock, ShieldCheck } from "lucide-react";
+import { CircleCheck, Dices } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 import { api, ApiError } from "../../api/client";
+import { Emoji } from "../../components/Emoji";
+import { Toggle } from "../../components/ui";
 import { pickLanguage } from "../../i18n/languages";
 import { useUser } from "../../state/user";
-import { haptic } from "../../telegram";
+import { haptic, requestWriteAccess } from "../../telegram";
+import type { LegalDocumentKind } from "../PrivacyScreen";
 import { nicknameFormatError, randomNickname } from "./nickname";
 
 type Check = { state: "idle" | "checking" | "ok" } | { state: "error"; code: string };
 
-export function NicknameStep({ onDone, notice }: { onDone: () => void; notice?: string }) {
+/**
+ * Second and last screen: a nickname (a ready one to keep or change), daily reminders and the
+ * consent line, then the app. After a moderator reset only the nickname is asked again.
+ */
+export function NameStep({
+  notice,
+  onOpenDocument,
+}: {
+  /** Set when a moderator asked for a new nickname: no reminders or consent again. */
+  notice?: string;
+  onOpenDocument: (kind: LegalDocumentKind) => void;
+}) {
   const { t, i18n } = useTranslation();
   const { user, setUser } = useUser();
-  const [value, setValue] = useState(user.nickname ?? "");
+  const [value, setValue] = useState(() => user.nickname ?? randomNickname(pickLanguage(i18n.language)));
   const [check, setCheck] = useState<Check>({ state: "idle" });
+  const [reminders, setReminders] = useState(true);
   const [saving, setSaving] = useState(false);
 
   // Validate the format at once and ask the server (taken / forbidden) after a pause in typing.
@@ -53,15 +68,22 @@ export function NicknameStep({ onDone, notice }: { onDone: () => void; notice?: 
     setSaving(true);
     try {
       setUser(await api.onboardingNickname(value.trim()));
+      if (!notice) {
+        // Reminders need the user's permission for the bot to write (TZ 8.1). Declining is fine.
+        if (reminders && !user.write_access && (await requestWriteAccess())) {
+          await api.setWriteAccess(true);
+        }
+        await api.updateMe({ reminders_enabled: reminders });
+      }
+      const done = await api.onboardingComplete();
       haptic.success();
-      onDone();
+      setUser(done);
     } catch (error) {
       haptic.error();
       setCheck({
         state: "error",
         code: error instanceof ApiError && error.code.startsWith("nickname_") ? error.code : "unknown",
       });
-    } finally {
       setSaving(false);
     }
   }
@@ -71,24 +93,13 @@ export function NicknameStep({ onDone, notice }: { onDone: () => void; notice?: 
   return (
     <form className="stack stack--lg" onSubmit={(e) => void submit(e)} noValidate>
       <div className="stack">
-        <div className="row row--between row--wrap">
-          <h1>{t("onboarding.nickname.title")}</h1>
-          <span className="chip chip--sm">
-            <Lock size={12} /> {t("onboarding.nickname.anonymous")}
-          </span>
-        </div>
-        <p className="hint">{t("onboarding.nickname.subtitle")}</p>
-        {notice && (
-          <p className="note" role="status">
-            {notice}
-          </p>
-        )}
+        <h1>{t("onboarding.nickname.title")}</h1>
+        <p className="hint">{notice ?? t("onboarding.nickname.subtitle")}</p>
       </div>
 
-      <div className="card stack">
-        <label className="field">
-          <span className="field__label">{t("onboarding.nickname.label")}</span>
-          <span className={errorCode ? "input-wrap is-invalid" : "input-wrap"}>
+      <div className="stack" style={{ gap: 8 }}>
+        <div className="row">
+          <span className={errorCode ? "input-wrap is-invalid" : "input-wrap"} style={{ flex: 1 }}>
             <span className="input-wrap__prefix" aria-hidden="true">
               @
             </span>
@@ -96,39 +107,59 @@ export function NicknameStep({ onDone, notice }: { onDone: () => void; notice?: 
               className="input"
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder={t("onboarding.nickname.placeholder")}
               maxLength={32}
               autoComplete="off"
               autoCapitalize="off"
               spellCheck={false}
+              aria-label={t("onboarding.nickname.label")}
               aria-invalid={Boolean(errorCode)}
               aria-describedby="nickname-status"
             />
             {check.state === "ok" && <CircleCheck size={22} className="ok-text" aria-hidden="true" />}
           </span>
-        </label>
-        <p id="nickname-status" className="field__status" aria-live="polite">
+          <button
+            type="button"
+            className="icon-button"
+            aria-label={t("onboarding.nickname.suggest")}
+            onClick={() => {
+              haptic.tap();
+              setValue(randomNickname(pickLanguage(i18n.language)));
+            }}
+          >
+            <Dices size={22} />
+          </button>
+        </div>
+        <p id="nickname-status" className="field__status small" aria-live="polite">
           {errorCode && <span className="error-text">{t(`onboarding.nicknameErrors.${errorCode || "unknown"}`)}</span>}
           {check.state === "checking" && <span className="hint">{t("onboarding.nickname.checking")}</span>}
-          {check.state === "ok" && <span className="ok-text">{t("onboarding.nickname.available")}</span>}
         </p>
-        <p className="hint small row" style={{ alignItems: "flex-start" }}>
-          <ShieldCheck size={16} style={{ flex: "none", marginTop: 1 }} /> {t("onboarding.nickname.hint")}{" "}
-          {t("onboarding.nickname.privacyHint")}
-        </p>
-        <button
-          type="button"
-          className="btn btn--soft btn--sm"
-          style={{ alignSelf: "flex-start" }}
-          onClick={() => setValue(randomNickname(pickLanguage(i18n.language)))}
-        >
-          {t("onboarding.nickname.suggest")}
-        </button>
       </div>
 
+      {!notice && (
+        <div className="card card--soft row" style={{ gap: 12 }}>
+          <Emoji char="🔔" className="welcome__bell" />
+          <span className="list-row__text">
+            <strong>{t("onboarding.intro.remindersTitle")}</strong>
+          </span>
+          <Toggle checked={reminders} onChange={setReminders} label={t("onboarding.intro.remindersTitle")} />
+        </div>
+      )}
+
       <button type="submit" className="btn btn--block" disabled={saving || Boolean(errorCode) || !value.trim()}>
-        {t("onboarding.nickname.submit")}
+        {t("onboarding.intro.start")} <Emoji char="🌱" />
       </button>
+
+      {!notice && (
+        <p className="hint small consent">
+          <Trans
+            i18nKey="onboarding.intro.consent"
+            components={{
+              policy: <button type="button" className="link-inline" onClick={() => onOpenDocument("privacy")} />,
+              terms: <button type="button" className="link-inline" onClick={() => onOpenDocument("terms")} />,
+            }}
+          />
+        </p>
+      )}
     </form>
   );
 }

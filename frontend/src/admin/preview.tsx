@@ -107,7 +107,7 @@ export function Preview({ kind, values, lang, fields }: Props) {
     return (
       <div className="stack">
         <span className="chip" style={{ alignSelf: "flex-start" }}>
-          {option("category") || "🌍 " + t("quiz.mixed")}
+          {option("category") || <Emoji char="🌍" />}
         </span>
         <section className="card question-card">
           {typeof values.image_url === "string" && <img src={values.image_url} alt="" />}
@@ -136,16 +136,15 @@ export function Preview({ kind, values, lang, fields }: Props) {
   if (kind === "game_item") {
     return (
       <div className="stack">
-        <p className="hint small">{t("sort.whereDoesItGo")}</p>
-        <section className="card" style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 64 }} aria-hidden="true">
+        <section className="game-stage" style={{ padding: "16px 0" }}>
+          <div className="game-item" aria-hidden="true">
             {typeof values.image_url === "string" ? (
-              <img src={values.image_url} alt="" style={{ width: 96, height: 96, objectFit: "contain" }} />
+              <img src={values.image_url} alt="" />
             ) : (
               <Emoji char={(values.icon as string) || "📦"} />
             )}
           </div>
-          <h2>{text("name") || placeholder}</h2>
+          <h2 className="game-item__name">{text("name") || placeholder}</h2>
         </section>
         <span className="chip" style={{ alignSelf: "flex-start" }}>
           ✓ {option("bin") || "—"}

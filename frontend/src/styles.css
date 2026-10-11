@@ -746,23 +746,6 @@ button {
   font-weight: 800;
 }
 
-.choice__check {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 28px;
-  height: 28px;
-  border: 2px solid var(--primary-soft-2);
-  border-radius: 50%;
-  color: transparent;
-}
-
-.choice.is-selected .choice__check {
-  border-color: var(--primary-strong);
-  background: var(--primary-strong);
-  color: var(--on-primary);
-}
-
 /* --------------------------------------------------------------- onboarding */
 
 .onboarding__progress {
@@ -790,29 +773,26 @@ button {
   background: var(--primary);
 }
 
-.dots--center {
-  justify-content: center;
+/* The language switch on the first screen: small, the language is usually right already. */
+.segmented--small {
+  justify-self: end;
+  width: min(100%, 300px);
 }
 
-.stack > .welcome-chip {
-  justify-self: center;
+.segmented--small .segmented__item {
+  min-height: 36px;
+  font-size: 14px;
 }
 
-.intro {
-  display: flex;
-  flex-direction: column;
-  min-height: calc(var(--tg-viewport-stable-height, 100vh) - 110px);
-}
-
-.intro__slide {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+.welcome__hero {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
   text-align: center;
-  animation: fade-in 0.25s ease-out;
+}
+
+.welcome__bell {
+  font-size: 26px;
 }
 
 .intro__art {
@@ -1461,11 +1441,6 @@ button {
 
 /* -------------------------------------------------------------------- games */
 
-.round-card {
-  display: grid;
-  gap: 10px;
-}
-
 .question-card {
   padding: 20px;
 }
@@ -1576,98 +1551,6 @@ button {
 
 .feedback--bad .feedback__head strong {
   color: var(--danger);
-}
-
-.sort-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  text-align: center;
-}
-
-.sort-item__visual {
-  display: grid;
-  place-items: center;
-  width: 128px;
-  height: 128px;
-  border-radius: 32px;
-  background: var(--primary-soft);
-  font-size: 72px;
-  overflow: hidden;
-}
-
-.sort-item__visual img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.bins {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.bin {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 72px;
-  padding: 10px;
-  border: 2px solid var(--card-border);
-  border-radius: var(--r-tile);
-  background: var(--card);
-  color: var(--text);
-  text-align: left;
-  box-shadow: var(--shadow-1);
-  cursor: pointer;
-  touch-action: manipulation;
-}
-
-.bin:disabled {
-  cursor: default;
-}
-
-.bin__icon {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  font-size: 24px;
-}
-
-.bin__text {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  line-height: 1.2;
-}
-
-.bin__text strong {
-  font-size: 15px;
-}
-
-.bin__text small {
-  color: var(--hint);
-  font-size: 11.5px;
-  font-weight: 600;
-}
-
-.bin.is-correct {
-  border-color: var(--primary);
-  background: var(--primary-soft);
-}
-
-.bin.is-wrong {
-  border-color: var(--danger);
-  background: var(--danger-soft);
-}
-
-.bin.is-dimmed {
-  opacity: 0.5;
 }
 
 .result-score {
@@ -2454,6 +2337,361 @@ button {
   border-radius: 22px;
   background: var(--card);
   font-size: 40px;
+}
+
+/* ---------------------------------------------------------------- sort game */
+
+/* The whole game fits the screen: nothing to scroll while the clock runs. */
+.game-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: var(--tg-viewport-stable-height, 100dvh);
+  max-width: 560px;
+  margin: 0 auto;
+  padding: calc(10px + var(--tg-content-safe-area-inset-top, 0px)) var(--gutter)
+    calc(12px + var(--tg-content-safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));
+  overflow: hidden;
+  /* A drag must never select text. */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.game-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.game-top__progress {
+  flex: 1;
+}
+
+.game-stage {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  justify-content: safe center;
+  gap: 10px;
+  min-height: 0;
+  overflow-y: auto;
+  text-align: center;
+}
+
+/* After a wrong answer the explanation needs the room: the item gets small. */
+.game-stage.has-feedback .game-item {
+  width: 76px;
+  height: 76px;
+  border-radius: 24px;
+  font-size: 46px;
+}
+
+.game-stage.has-feedback .game-item__name {
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.game-item {
+  position: relative;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: min(42vw, 168px);
+  height: min(42vw, 168px);
+  border-radius: 40px;
+  background: var(--card);
+  box-shadow: var(--shadow-2);
+  font-size: min(26vw, 104px);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+  animation: pop-in 0.25s ease-out;
+  transition:
+    transform 0.45s ease-in,
+    opacity 0.45s ease-in;
+}
+
+.game-item img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.game-item.is-dragging {
+  box-shadow: var(--shadow-3);
+  cursor: grabbing;
+  transition: none;
+}
+
+.game-item.is-wrong {
+  animation: shake 0.4s ease-in-out;
+}
+
+.game-item__name {
+  font-size: 22px;
+  line-height: 28px;
+}
+
+.game-feedback {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  animation: fade-in 0.2s ease-out;
+}
+
+.game-cap {
+  text-align: center;
+}
+
+.game-bins {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+/* A bin like the ones in the street: a lid and a body in the waste type's colour. */
+.game-bin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: clamp(78px, 13vh, 104px);
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.15s ease;
+}
+
+.game-bin:disabled {
+  cursor: default;
+}
+
+.game-bin__lid {
+  width: 88%;
+  height: 11px;
+  border-radius: 7px 7px 3px 3px;
+  background: var(--bin);
+  box-shadow: inset 0 0 0 40px rgba(0, 0, 0, 0.22);
+  transition: transform 0.15s ease;
+}
+
+.game-bin__body {
+  display: grid;
+  place-items: center;
+  flex: 1;
+  width: 78%;
+  margin-top: 2px;
+  padding: 4px;
+  border-radius: 4px 4px 16px 16px;
+  background: var(--bin);
+  color: var(--bin-text);
+  font-size: 12.5px;
+  font-weight: 800;
+  line-height: 15px;
+  text-align: center;
+  overflow-wrap: anywhere;
+  box-shadow: inset 0 -8px 0 rgba(0, 0, 0, 0.14);
+}
+
+.game-bin.is-over {
+  transform: scale(1.08);
+}
+
+.game-bin.is-over .game-bin__lid {
+  transform: translateY(-5px) rotate(-8deg);
+}
+
+.game-bin.is-correct {
+  transform: scale(1.06);
+}
+
+.game-bin.is-correct .game-bin__body {
+  box-shadow:
+    0 0 0 4px var(--primary),
+    inset 0 -8px 0 rgba(0, 0, 0, 0.14);
+}
+
+.game-bin.is-wrong {
+  animation: shake 0.4s ease-in-out;
+}
+
+.game-bin.is-wrong .game-bin__body {
+  box-shadow:
+    0 0 0 4px var(--danger),
+    inset 0 -8px 0 rgba(0, 0, 0, 0.14);
+}
+
+.game-bin.is-dimmed {
+  opacity: 0.45;
+}
+
+/* Individual transform properties: they do not fight the inline transform of a drag. */
+@keyframes shake {
+  0%,
+  100% {
+    translate: 0;
+  }
+  20%,
+  60% {
+    translate: -8px 0;
+  }
+  40%,
+  80% {
+    translate: 8px 0;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    scale: 0.6;
+    opacity: 0;
+  }
+  to {
+    scale: 1;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-item,
+  .game-bin,
+  .game-bin__lid {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------- quiz & result */
+
+.quiz-start {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 24px 16px 18px;
+  border-radius: var(--r-card);
+  background: var(--amber-soft);
+  text-align: center;
+}
+
+.quiz-start__icon {
+  font-size: 84px;
+  line-height: 1;
+}
+
+.topic-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.topic-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.topic-chip .emoji {
+  font-size: 20px;
+}
+
+.result-stars {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-size: 56px;
+}
+
+.result-stars span {
+  opacity: 0.25;
+  filter: grayscale(1);
+}
+
+.result-stars span:nth-child(2) {
+  font-size: 72px;
+}
+
+.result-stars span.is-on {
+  opacity: 1;
+  filter: none;
+  animation: pop-in 0.35s ease-out both;
+}
+
+.result-stars span.is-on:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.result-stars span.is-on:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+.celebrate__level {
+  display: grid;
+  place-items: center;
+  width: 132px;
+  height: 132px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, var(--amber-soft) 58%, transparent 59%),
+    conic-gradient(#fbbf24, #10b981, #0ea5e9, #ec4899, #fbbf24);
+  font-size: 76px;
+  animation: pop-in 0.4s ease-out;
+}
+
+/* Paper pieces falling over a celebration (components/Confetti.tsx). */
+.confetti {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.confetti span {
+  position: absolute;
+  top: -16px;
+  left: var(--x);
+  width: 9px;
+  height: 14px;
+  border-radius: 2px;
+  background: var(--color);
+  animation: confetti-fall 2s ease-in var(--delay) forwards;
+}
+
+.overlay .sheet {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes confetti-fall {
+  to {
+    transform: translateY(110vh) rotate(var(--turn));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .confetti {
+    display: none;
+  }
 }
 
 /* -------------------------------------------------------------- card story */

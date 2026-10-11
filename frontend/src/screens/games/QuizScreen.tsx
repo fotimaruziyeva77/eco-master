@@ -9,10 +9,12 @@ import { ProgressBar, SubpageHeader } from "../../components/ui";
 import { useBack } from "../../hooks/useBack";
 import { useLoad } from "../../hooks/useLoad";
 import { useTr } from "../../i18n/tr";
+import { sound } from "../../sound";
 import { useCelebrate } from "../../state/celebration";
 import { useUser } from "../../state/user";
 import { haptic } from "../../telegram";
 import { RoundResult } from "./RoundResult";
+import { SoundToggle } from "./SoundToggle";
 
 const LETTERS = ["A", "B", "C", "D", "E", "F"];
 
@@ -60,8 +62,13 @@ export function QuizScreen() {
     setError(false);
     try {
       const answer = await api.quizAnswer(play.round.round_token, question.id, option);
-      if (answer.correct) haptic.success();
-      else haptic.error();
+      if (answer.correct) {
+        haptic.success();
+        sound.correct();
+      } else {
+        haptic.error();
+        sound.wrong();
+      }
       setPlay({
         ...play,
         answer,
@@ -89,32 +96,33 @@ export function QuizScreen() {
     const games = overview.data;
     return (
       <main className="screen">
-        <SubpageHeader onBack={back} title={t("games.quizTitle")} />
-        <h1>{t("quiz.chooseTopic")}</h1>
+        <SubpageHeader onBack={back} title={t("games.quizTitle")} right={<SoundToggle />} />
         {overview.loading && !games && <InlineLoading />}
         {overview.error !== undefined && !games && <InlineError error={overview.error} onRetry={overview.reload} />}
         {games && (
-          <div className="stack section">
-            <button type="button" className="choice" disabled={busy} onClick={() => void start(null)}>
-              <span className="choice__icon" aria-hidden="true">
-                <Emoji char="🌍" />
+          <div className="stack stack--lg">
+            <section className="quiz-start">
+              <span className="quiz-start__icon" aria-hidden="true">
+                <Emoji char="🧠" />
               </span>
-              <span className="choice__body">
-                <span className="choice__title">{t("quiz.mixed")}</span>
-                <span className="hint small">{t("games.quizText", { count: games.quiz_total })}</span>
-              </span>
-            </button>
-            {games.quiz_categories.map((c) => (
-              <button key={c.code} type="button" className="choice" disabled={busy} onClick={() => void start(c.code)}>
-                <span className="choice__icon" aria-hidden="true">
-                  <Emoji char={c.icon} />
-                </span>
-                <span className="choice__body">
-                  <span className="choice__title">{tr(c.name)}</span>
-                  <span className="hint small">{t("games.quizText", { count: c.question_count })}</span>
-                </span>
+              <h1>{t("games.quizTitle")}</h1>
+              <p className="text-2">{t("games.quizText", { count: games.quiz_total })}</p>
+              <button type="button" className="btn btn--block" disabled={busy} onClick={() => void start(null)}>
+                {t("games.play")}
               </button>
-            ))}
+            </section>
+            {games.quiz_categories.length > 0 && (
+              <section className="stack">
+                <h2>{t("quiz.chooseTopic")}</h2>
+                <div className="topic-chips">
+                  {games.quiz_categories.map((c) => (
+                    <button key={c.code} type="button" className="topic-chip" disabled={busy} onClick={() => void start(c.code)}>
+                      <Emoji char={c.icon} /> {tr(c.name)}
+                    </button>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
         )}
         {error && (
@@ -158,25 +166,19 @@ export function QuizScreen() {
 
   return (
     <main className="screen screen--with-action">
-      <SubpageHeader onBack={back} title={t("games.quizTitle")} />
-      <div className="round-card">
-        <div className="row row--between">
-          <span className="row">
-            <strong style={{ fontSize: 20 }}>{t("quiz.question", { n: play.index + 1 })}</strong>
-            <span className="hint">/ {total}</span>
-          </span>
-          <span className="row">
-            {play.combo >= 2 && (
-              <span className="chip chip--amber">
-                <Emoji char="🔥" /> {t("quiz.combo", { count: play.combo })}
-              </span>
-            )}
-            <span className="chip chip--neutral">
-              {t("quiz.score")}: <strong className="ok-text">{play.points}</strong>
-            </span>
-          </span>
+      <SubpageHeader onBack={back} title={t("games.quizTitle")} right={<SoundToggle />} />
+      <div className="game-top">
+        <div className="game-top__progress" aria-label={t("quiz.question", { n: play.index + 1 })}>
+          <ProgressBar value={play.index + (answer ? 1 : 0)} max={total} />
         </div>
-        <ProgressBar value={play.index + (answer ? 1 : 0)} max={total} />
+        {play.combo >= 2 && (
+          <span className="chip chip--amber chip--sm">
+            <Emoji char="🔥" /> ×{play.combo}
+          </span>
+        )}
+        <span className="chip chip--amber">
+          <Emoji char="⭐" /> {play.points}
+        </span>
       </div>
 
       <section className="card question-card section">

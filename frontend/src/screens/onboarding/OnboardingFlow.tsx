@@ -1,26 +1,27 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { api, type User } from "../../api/client";
+import type { User } from "../../api/client";
 import { useUser } from "../../state/user";
 import { insideTelegram, useTelegramBackButton } from "../../telegram";
 import { LegalContent, type LegalDocumentKind } from "../PrivacyScreen";
-import { IntroStep } from "./IntroStep";
-import { LanguageStep } from "./LanguageStep";
-import { NicknameStep } from "./NicknameStep";
-import { PathStep } from "./PathStep";
+import { NameStep } from "./NameStep";
+import { WelcomeStep } from "./WelcomeStep";
 
-const STEPS = ["language", "path", "nickname", "intro"] as const;
+const STEPS = ["welcome", "name"] as const;
 type Step = (typeof STEPS)[number];
 
 function savedStep(user: User): Step {
-  return user.onboarding_step === "done" ? "intro" : user.onboarding_step;
+  return user.onboarding_step === "language" || user.onboarding_step === "path" ? "welcome" : "name";
 }
 
-/** TZ 8.1: language → path → nickname → intro. Resumes at the step saved on the server. */
+/**
+ * First run in two screens (TZ 8.1, shortened): language and role, then nickname. The server
+ * keeps each answer, so a user who closes the app halfway continues where they stopped.
+ */
 export function OnboardingFlow() {
   const { t } = useTranslation();
-  const { user, setUser } = useUser();
+  const { user } = useUser();
   // A moderator reset the nickname of someone who had finished onboarding.
   const nicknameReset = user.onboarded_at != null && user.onboarding_step === "nickname";
   const [step, setStep] = useState<Step>(() => savedStep(user));
@@ -29,20 +30,9 @@ export function OnboardingFlow() {
   const index = STEPS.indexOf(step);
   const back = useMemo(() => {
     if (document) return () => setDocument(null);
-    return index > 0 ? () => setStep(STEPS[index - 1]) : undefined;
-  }, [document, index]);
+    return index > 0 && !nicknameReset ? () => setStep(STEPS[index - 1]) : undefined;
+  }, [document, index, nicknameReset]);
   useTelegramBackButton(back);
-
-  if (nicknameReset) {
-    return (
-      <main className="screen onboarding">
-        <NicknameStep
-          notice={t("onboarding.nicknameReset")}
-          onDone={() => void api.onboardingComplete().then(setUser)}
-        />
-      </main>
-    );
-  }
 
   if (document) {
     return (
@@ -57,22 +47,30 @@ export function OnboardingFlow() {
     );
   }
 
+  if (nicknameReset) {
+    return (
+      <main className="screen onboarding">
+        <NameStep notice={t("onboarding.nicknameReset")} onOpenDocument={setDocument} />
+      </main>
+    );
+  }
+
   return (
     <main className="screen onboarding">
       <div className="onboarding__progress">
-        <div className="dots" aria-hidden="true">
+        <div className="dots" role="img" aria-label={t("onboarding.step", { current: index + 1, total: STEPS.length })}>
           {STEPS.map((s, i) => (
             <span key={s} className={i <= index ? "dot is-active" : "dot"} />
           ))}
         </div>
-        <span className="hint">
-          {t("onboarding.step", { current: index + 1, total: STEPS.length })}
-        </span>
+        {index > 0 && !insideTelegram() && (
+          <button type="button" className="link-button" onClick={() => setStep(STEPS[index - 1])}>
+            ← {t("common.back")}
+          </button>
+        )}
       </div>
-      {step === "language" && <LanguageStep onDone={() => setStep("path")} />}
-      {step === "path" && <PathStep onDone={() => setStep("nickname")} />}
-      {step === "nickname" && <NicknameStep onDone={() => setStep("intro")} />}
-      {step === "intro" && <IntroStep onOpenDocument={setDocument} />}
+      {step === "welcome" && <WelcomeStep onDone={() => setStep("name")} />}
+      {step === "name" && <NameStep onOpenDocument={setDocument} />}
     </main>
   );
 }

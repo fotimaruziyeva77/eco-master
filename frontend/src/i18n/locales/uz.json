@@ -36,39 +36,29 @@
     "beginner": "Ekologiya boshlovchisi",
     "young_ecologist": "Yosh ekolog",
     "helper": "Eco-Master yordamchisi",
-    "ekoustoz": "Eco-Master"
+    "ekoustoz": "Eco-Master",
+    "newTitle": "Yangi daraja!"
   },
   "onboarding": {
     "step": "{{current}}-qadam / {{total}}",
     "language": {
-      "title": "Tilni tanlang",
-      "subtitle": "Keyin sozlamalarda o'zgartirish mumkin."
+      "title": "Tilni tanlang"
     },
     "path": {
       "title": "Siz kimsiz?",
-      "subtitle": "Bosh sahifani sizga moslashtiramiz. Keyin sozlamalarda o'zgartirish mumkin.",
       "student": "O'quvchi",
-      "studentHint": "Bugungi topshiriqlar, qiziqarli o'yinlar, nishonlar va reyting.",
       "teacher": "O'qituvchi",
-      "teacherHint": "Tayyor 45 daqiqalik dars rejalari va PDF materiallar.",
-      "general": "Ota-ona yoki boshqa foydalanuvchi",
-      "generalHint": "Uyda chiqindini kamaytirish, foydali DIY darslar va maslahatlar.",
-      "studentTag": "10–15 yosh",
-      "teacherTag": "Metodika",
-      "generalTag": "Xonadon"
+      "studentHint": "O'yinlar, topshiriqlar va nishonlar",
+      "teacherHint": "Tayyor darslar va PDF",
+      "generalHint": "Uy uchun maslahat va hunarlar",
+      "general": "Ota-ona yoki boshqa"
     },
     "nickname": {
-      "title": "Taxallusingizni tanlang",
-      "subtitle": "Reyting va darslarda ismingiz shu tarzda ko'rinadi.",
       "label": "Taxallus",
-      "placeholder": "Yashil_Barg",
-      "hint": "3–20 belgi: harflar, raqamlar va _.",
-      "privacyHint": "Haqiqiy ism yoki telefon talab qilinmaydi.",
-      "suggest": "🎲 Tasodifiy taxallus",
       "checking": "Tekshirilmoqda…",
-      "available": "✓ Bu taxallus bo'sh",
-      "submit": "Davom etish",
-      "anonymous": "Anonim va xavfsiz"
+      "title": "Taxallus tanlang",
+      "subtitle": "Reytingda shu ko'rinadi. Haqiqiy ism kerak emas.",
+      "suggest": "Boshqa taxallus"
     },
     "nicknameErrors": {
       "nickname_length": "Taxallus 3 tadan 20 tagacha belgidan iborat bo'lishi kerak.",
@@ -78,22 +68,11 @@
       "unknown": "Saqlab bo'lmadi. Qayta urinib ko'ring."
     },
     "intro": {
-      "slide1Title": "Chiqindiga ikkinchi hayot bering",
-      "slide1Text": "Chiqindini to'g'ri saralashni va undan foydali buyumlar yasashni o'rganing.",
-      "slide2Title": "O'ynang va ball to'plang",
-      "slide2Text": "Viktorina, saralash o'yini va kunlik topshiriqlar sizni kutmoqda.",
-      "slide3Title": "Darajangizni oshiring",
-      "slide3Text": "Nishonlar oling va reytingda do'stlaringiz bilan bellashing.",
-      "next": "Keyingi",
-      "skip": "O'tkazib yuborish",
       "start": "Boshlash",
       "consent": "Davom etish orqali <policy>maxfiylik siyosati</policy> va <terms>foydalanish shartlari</terms>ga rozilik bildirasiz.",
-      "remindersTitle": "Streak o'chmasligi uchun eslatmalar",
-      "remindersText": "Kuniga bitta eslatmani botdan oling."
+      "remindersTitle": "Kunlik eslatma"
     },
-    "welcome": "Xush kelibsiz!",
     "headline": "Tabiatni asrashni o'rganamiz",
-    "subheadline": "Eco-Master bilan har kuni kichik qadamlar orqali katta o'zgarishlar yarating.",
     "nicknameReset": "Moderator taxallusingizni o'zgartirishni so'radi. Iltimos, yangi taxallus tanlang."
   },
   "home": {
@@ -207,17 +186,16 @@
     "quizTitle": "Viktorina",
     "play": "O'ynash",
     "empty": "Bu o'yin uchun savollar hali qo'shilmagan.",
-    "dailyLimit": "Kunlik limit: {{points}} / {{cap}} ball",
     "sortTitle": "Saralash",
     "sortText": "Buyumni to'g'ri qutiga soling",
     "quizText_one": "{{count}} ta savol",
     "quizText_other": "{{count}} ta savol",
     "today": "Bugungi ballar",
-    "quickMode": "Tezkor rejim"
+    "quickMode": "Tezkor rejim",
+    "soundOn": "Ovozni yoqish",
+    "soundOff": "Ovozni o'chirish"
   },
   "quiz": {
-    "chooseTopic": "Mavzuni tanlang",
-    "mixed": "Aralash",
     "next": "Keyingi savolga o'tish",
     "finish": "Natijani ko'rish",
     "correct": "Barakalla, to'g'ri!",
@@ -229,25 +207,23 @@
     "playAgain": "Yana o'ynash",
     "backToGames": "O'yinlarga qaytish",
     "question": "Savol {{n}}",
-    "score": "Hisob",
-    "combo_one": "{{count}} ketma-ket!",
-    "combo_other": "{{count}} ketma-ket!",
     "added_one": "{{count}} ball qo'shildi",
-    "added_other": "{{count}} ball qo'shildi"
+    "added_other": "{{count}} ball qo'shildi",
+    "perfect": "Hammasi to'g'ri!",
+    "great": "Zo'r natija!",
+    "chooseTopic": "Mavzu bo'yicha"
   },
   "sort": {
-    "whereDoesItGo": "Qaysi qutiga tashlash kerak?",
-    "correct": "To'g'ri!",
     "wrongBin": "Bu «{{bin}}» qutisiga tegishli.",
     "timeUp": "Vaqt tugadi!",
     "next": "Keyingi",
     "secondsLeft_one": "{{count}} soniya qoldi",
     "secondsLeft_other": "{{count}} soniya qoldi",
-    "capReached": "Bugungi o'yin ballari limiti tugadi. O'ynashda davom etishingiz mumkin, lekin ball berilmaydi.",
     "resultScore": "{{correct}} / {{total}} buyum to'g'ri saralandi",
     "round": "Raund: {{current}} / {{total}}",
-    "instruction": "Buyumni mos saralash qutisiga bosing!",
-    "bins": "Chiqindi konteynerlari"
+    "instruction": "Buyumni qutiga suring yoki qutini bosing",
+    "takes": "Bu qutiga",
+    "capReached": "Bugungi ballar to'ldi. O'ynash mumkin, ball ertaga."
   },
   "badges": {
     "newTitle": "🎉 Yangi nishon!",

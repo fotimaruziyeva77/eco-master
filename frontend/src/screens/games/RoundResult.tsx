@@ -1,7 +1,10 @@
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import { ShareButton } from "../../components/ShareButton";
+import { Confetti } from "../../components/Confetti";
 import { Emoji } from "../../components/Emoji";
+import { ShareButton } from "../../components/ShareButton";
+import { sound } from "../../sound";
 import { useTelegramBackButton } from "../../telegram";
 
 type Props = {
@@ -15,16 +18,27 @@ type Props = {
   onBack: () => void;
 };
 
+/** End of a round: stars for the share of right answers, confetti for a perfect one. */
 export function RoundResult({ game, correct, total, score, points, note, onAgain, onBack }: Props) {
   const perfect = correct === total;
+  const stars = correct === 0 ? 0 : perfect ? 3 : correct * 2 >= total ? 2 : 1;
   const { t } = useTranslation();
   useTelegramBackButton(onBack);
+  useEffect(() => {
+    if (stars >= 2) sound.fanfare();
+  }, [stars]);
+
   return (
     <main className="screen screen--center">
-      <div className="intro__art" aria-hidden="true">
-        <Emoji char={perfect ? "🏆" : points > 0 ? "🌿" : "🌱"} />
+      {perfect && <Confetti />}
+      <div className="result-stars" role="img" aria-label={score}>
+        {[1, 2, 3].map((n) => (
+          <span key={n} className={n <= stars ? "is-on" : undefined}>
+            <Emoji char="⭐" />
+          </span>
+        ))}
       </div>
-      <h1>{t("quiz.resultTitle")}</h1>
+      <h1>{t(perfect ? "quiz.perfect" : stars >= 2 ? "quiz.great" : "quiz.resultTitle")}</h1>
       <p className="result-score">{score}</p>
       {points > 0 && (
         <span className="chip chip--amber">

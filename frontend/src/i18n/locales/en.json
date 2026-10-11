@@ -36,39 +36,29 @@
     "beginner": "Eco beginner",
     "young_ecologist": "Young ecologist",
     "helper": "Eco-Master helper",
-    "ekoustoz": "Eco-Master"
+    "ekoustoz": "Eco-Master",
+    "newTitle": "New level!"
   },
   "onboarding": {
     "step": "Step {{current}} of {{total}}",
     "language": {
-      "title": "Choose your language",
-      "subtitle": "You can change it later in settings."
+      "title": "Choose your language"
     },
     "path": {
       "title": "Who are you?",
-      "subtitle": "We'll tailor the home screen for you. You can change this later in settings.",
       "student": "Student",
-      "studentHint": "Daily tasks, fun games, badges and the rating.",
       "teacher": "Teacher",
-      "teacherHint": "Ready-made 45-minute lesson plans and PDF materials.",
-      "general": "Parent or other user",
-      "generalHint": "Cutting waste at home, handy DIY lessons and tips.",
-      "studentTag": "Ages 10–15",
-      "teacherTag": "Lessons",
-      "generalTag": "At home"
+      "studentHint": "Games, tasks and badges",
+      "teacherHint": "Ready lessons and PDFs",
+      "generalHint": "Tips and crafts for home",
+      "general": "Parent or other"
     },
     "nickname": {
-      "title": "Choose your nickname",
-      "subtitle": "This is how you'll appear in the rating and lessons.",
       "label": "Nickname",
-      "placeholder": "Green_Leaf",
-      "hint": "3–20 characters: letters, digits and _.",
-      "privacyHint": "No real name or phone number needed.",
-      "suggest": "🎲 Random nickname",
       "checking": "Checking…",
-      "available": "✓ This nickname is free",
-      "submit": "Continue",
-      "anonymous": "Anonymous & safe"
+      "title": "Pick a nickname",
+      "subtitle": "It shows on the leaderboard. No real name needed.",
+      "suggest": "Another nickname"
     },
     "nicknameErrors": {
       "nickname_length": "A nickname must be 3 to 20 characters long.",
@@ -78,22 +68,11 @@
       "unknown": "Couldn't save. Please try again."
     },
     "intro": {
-      "slide1Title": "Give waste a second life",
-      "slide1Text": "Learn to sort waste properly and turn it into useful things.",
-      "slide2Title": "Play and earn points",
-      "slide2Text": "A quiz, a sorting game and daily tasks are waiting for you.",
-      "slide3Title": "Level up",
-      "slide3Text": "Collect badges and compete with friends in the rating.",
-      "next": "Next",
-      "skip": "Skip",
       "start": "Start",
       "consent": "By continuing you agree to the <policy>privacy policy</policy> and the <terms>terms of use</terms>.",
-      "remindersTitle": "Reminders to keep your streak",
-      "remindersText": "One reminder a day from the bot."
+      "remindersTitle": "Daily reminder"
     },
-    "welcome": "Welcome!",
     "headline": "Let's learn to protect nature",
-    "subheadline": "With Eco-Master, small steps every day add up to big changes.",
     "nicknameReset": "A moderator asked you to change your nickname. Please choose a new one."
   },
   "home": {
@@ -207,17 +186,16 @@
     "quizTitle": "Quiz",
     "play": "Play",
     "empty": "No questions have been added for this game yet.",
-    "dailyLimit": "Daily limit: {{points}} / {{cap}} points",
     "sortTitle": "Sorting",
     "sortText": "Put each item in the right bin",
     "quizText_one": "{{count}} question",
     "quizText_other": "{{count}} questions",
     "today": "Points today",
-    "quickMode": "Quick mode"
+    "quickMode": "Quick mode",
+    "soundOn": "Turn the sound on",
+    "soundOff": "Turn the sound off"
   },
   "quiz": {
-    "chooseTopic": "Choose a topic",
-    "mixed": "Mixed",
     "next": "Next question",
     "finish": "See the result",
     "correct": "Well done, correct!",
@@ -229,25 +207,23 @@
     "playAgain": "Play again",
     "backToGames": "Back to games",
     "question": "Question {{n}}",
-    "score": "Score",
-    "combo_one": "{{count}} in a row!",
-    "combo_other": "{{count}} in a row!",
     "added_one": "{{count}} point added",
-    "added_other": "{{count}} points added"
+    "added_other": "{{count}} points added",
+    "perfect": "All correct!",
+    "great": "Great result!",
+    "chooseTopic": "By topic"
   },
   "sort": {
-    "whereDoesItGo": "Which bin does it go in?",
-    "correct": "Correct!",
     "wrongBin": "This goes in the \"{{bin}}\" bin.",
     "timeUp": "Time's up!",
     "next": "Next",
     "secondsLeft_one": "{{count}} second left",
     "secondsLeft_other": "{{count}} seconds left",
-    "capReached": "You've reached today's game points limit. You can keep playing, but no more points today.",
     "resultScore": "{{correct}} of {{total}} items sorted correctly",
     "round": "Round: {{current}} / {{total}}",
-    "instruction": "Tap the right bin for the item!",
-    "bins": "Waste bins"
+    "instruction": "Drag the item into a bin or tap the bin",
+    "takes": "This bin takes",
+    "capReached": "Today's points are full. Keep playing; points again tomorrow."
   },
   "badges": {
     "newTitle": "🎉 New badge!",
