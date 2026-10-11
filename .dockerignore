@@ -8,3 +8,6 @@ backend
 docs
 deploy/backups
 deploy/.env
+# Uploaded pictures and videos on the server, and emoji pictures the build makes itself.
+deploy/media
+frontend/public/emoji

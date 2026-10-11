@@ -5,3 +5,5 @@
 .ruff_cache
 tests
 scripts
+# Pictures and videos uploaded in a local admin panel
+media
