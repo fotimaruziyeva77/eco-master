@@ -103,44 +103,23 @@
     "topLevel": "You've reached the top level!",
     "streak_one": "🔥 {{count}} day in a row",
     "streak_other": "🔥 {{count}} days in a row",
-    "tipTitle": "Tip of the day",
-    "quiz": "Eco quiz",
-    "game": "Sorting game",
-    "wasteTypes": "Waste types and DIY lessons",
-    "subtitle": "What will we do for nature today?",
-    "stage": "Stage {{n}}",
-    "filled": "{{percent}}% complete",
     "nextLevel": "Next: {{name}}",
-    "streakStart": "Start a streak!",
-    "streakStartHint": "Do today's task — 7 days in a row earns +50 points.",
     "taskTitle": "Today's task",
-    "taskDeadline": "Until 23:59 today",
     "taskDone": "Done",
-    "quickGames": "Quick games",
-    "all": "All",
-    "sortChip": "+2 points each",
-    "sortHint": "Put it in the right bin",
-    "quizChip": "10 questions",
-    "quizHint": "Test what you know",
-    "wasteTypesHint": "Help nature with your own hands",
-    "start": "Start",
-    "pointsWord_one": "point",
-    "pointsWord_other": "points",
-    "streakTitle_one": "{{count}}-day streak!",
-    "streakTitle_other": "{{count}}-day streak!",
-    "streakBonus_one": "{{count}} more day to the +{{points}} bonus",
-    "streakBonus_other": "{{count}} more days to the +{{points}} bonus",
     "teacherTitle": "Lessons for teachers",
-    "teacherText": "Ready lessons, PDFs and a QR code for your class"
+    "game": "Sorting",
+    "quiz": "Quiz",
+    "makeIt": "Make it",
+    "wasteTypes": "What shall we make?",
+    "tipTitle": "Did you know?",
+    "streakDots_one": "{{count}} day in a row. 7 days: +{{points}} points",
+    "streakDots_other": "{{count}} days in a row. 7 days: +{{points}} points"
   },
   "learn": {
     "title": "Learn",
-    "wasteTypes": "Types of waste",
     "cards": "Environmental problems",
     "projects_one": "{{count}} project",
-    "projects_other": "{{count}} projects",
-    "subtitle": "Learn to give waste a second life.",
-    "cardHint": "Problem, cause and solution"
+    "projects_other": "{{count}} projects"
   },
   "category": {
     "empty": "Projects for this section are coming soon."
@@ -156,28 +135,18 @@
       "yellow": "With adult supervision",
       "red": "Adults only"
     },
-    "safetyTitle": "Safety rule",
-    "materials": "You will need",
-    "steps": "Step-by-step guide",
-    "videoSoon": "Video coming soon",
     "play": "Watch the video",
     "done": "I did it",
-    "doneWait": "I did it ({{count}} s)",
     "alreadyDone": "Done ✓",
     "earned_one": "+{{count}} point! Well done!",
     "earned_other": "+{{count}} points! Well done!",
     "doneError": "Couldn't save. Please try again.",
     "title": "Project",
-    "categoryProject": "{{name}} project",
-    "safetyShort": {
-      "green": "Easy for kids",
-      "yellow": "With an adult",
-      "red": "Adults only"
-    },
-    "ready": "{{done}}/{{total}} ready",
-    "doneCta": "I did it (+{{count}} points)",
     "doneCount_one": "Made {{count}} time",
-    "doneCount_other": "Made {{count}} times"
+    "doneCount_other": "Made {{count}} times",
+    "materials": "You will need",
+    "steps": "Steps",
+    "doneWait": "Available in {{count}} s"
   },
   "card": {
     "problem": "Problem",
@@ -185,22 +154,13 @@
     "effect": "Effect",
     "solution": "Solution",
     "action": "What can I do?",
-    "position": "Card {{current}}/{{total}}",
-    "chain": "Cause-and-effect chain",
-    "quizTitle": "Test your knowledge?",
-    "quizText": "Answer the questions in the quiz.",
-    "readTime_one": "{{count}} min read",
-    "readTime_other": "{{count}} min read"
+    "next": "Next",
+    "quizTitle": "Play the quiz"
   },
   "profile": {
     "language": "Language",
     "privacy": "Privacy policy",
     "rank": "#{{rank}} place",
-    "streak": "Current streak",
-    "tasks": "Tasks done",
-    "projects": "DIY projects made",
-    "sorted": "Items sorted",
-    "accuracy": "{{percent}}% accurate",
     "settings": "Settings",
     "nickname": "Nickname",
     "nicknameRule": "You can change it once every 30 days. 3–20 characters: letters, digits and _.",
@@ -216,14 +176,13 @@
     "deleteText": "Your profile, points and badges will be deleted for good. This can't be undone.",
     "deleteConfirm": "Yes, delete",
     "deleted": "Your data has been deleted",
-    "days_one": "{{count}} day",
-    "days_other": "{{count}} days",
-    "best_one": "Best: {{count}} day",
-    "best_other": "Best: {{count}} days",
     "teachers": "For teachers",
     "feedback": "Send feedback",
-    "feedbackHint": "Write to the bot — our team reads it",
-    "terms": "Terms of use"
+    "terms": "Terms of use",
+    "streak": "In a row",
+    "tasks": "Tasks",
+    "projects": "Projects",
+    "sorted": "Sorted"
   },
   "privacy": {
     "title": "Privacy policy",
@@ -246,15 +205,15 @@
   "games": {
     "title": "Games",
     "quizTitle": "Quiz",
-    "quizText_one": "{{count}} question: test what you know",
-    "quizText_other": "{{count}} questions: test what you know",
-    "sortTitle": "Put the waste in the right bin",
-    "sortText": "Drop each item into the right bin and learn to sort.",
-    "quickMode": "⚡ Quick mode (10 seconds per item)",
     "play": "Play",
     "empty": "No questions have been added for this game yet.",
-    "quizPoints": "+5 points per correct answer",
-    "dailyLimit": "Daily limit: {{points}} / {{cap}} points"
+    "dailyLimit": "Daily limit: {{points}} / {{cap}} points",
+    "sortTitle": "Sorting",
+    "sortText": "Put each item in the right bin",
+    "quizText_one": "{{count}} question",
+    "quizText_other": "{{count}} questions",
+    "today": "Points today",
+    "quickMode": "Quick mode"
   },
   "quiz": {
     "chooseTopic": "Choose a topic",
@@ -291,11 +250,10 @@
     "bins": "Waste bins"
   },
   "badges": {
-    "title": "Achievements and badges",
     "newTitle": "🎉 New badge!",
     "ok": "Great!",
-    "locked": "Locked",
-    "earned": "Earned"
+    "earned": "Earned",
+    "title": "Badges"
   },
   "roles": {
     "student": "Student",
@@ -303,11 +261,6 @@
     "general": "Parent"
   },
   "rating": {
-    "title": "Top of the rating",
-    "week": "This week",
-    "all": "All time",
-    "weekHint": "The week starts over every Monday at 00:00.",
-    "allHint": "Points earned over all time.",
     "empty": "No one has earned points yet. Be the first!",
     "notRanked": "Earn points to get into the rating!",
     "you": "You",
@@ -315,18 +268,20 @@
     "reportTitle": "Report the nickname \"@{{name}}\"?",
     "reportText": "If the nickname is rude or offensive, a moderator will check it.",
     "reportSend": "Send report",
-    "reported": "Thank you! The report was sent to a moderator."
+    "reported": "Thank you! The report was sent to a moderator.",
+    "title": "Leaderboard",
+    "week": "This week",
+    "all": "All time"
   },
   "share": {
     "button": "Share",
-    "progress": "Share my progress",
     "project": "Share with friends",
     "result": "Share my result",
-    "error": "Couldn't share. Please try again."
+    "error": "Couldn't share. Please try again.",
+    "progress": "Share my progress"
   },
   "teachers": {
     "title": "For teachers",
-    "subtitle": "Each one fits a 45-minute class: plan, questions and homework. Text and PDF in three languages.",
     "lessons": "Lessons",
     "grade": "Grades {{grade}}",
     "empty": "Lessons are coming soon.",
@@ -338,7 +293,8 @@
     "enlarge": "Enlarge the QR code",
     "qrLabel": "QR code that opens Eco-Master",
     "inviteShareText": "Join Eco-Master — let's learn to sort waste the right way! 🌱",
-    "headline": "Ready-made ecology lessons"
+    "headline": "Ready-made ecology lessons",
+    "subtitle": "Ready 45-minute lessons. PDFs in three languages."
   },
   "lesson": {
     "title": "Lesson",

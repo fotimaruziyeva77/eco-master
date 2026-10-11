@@ -328,6 +328,37 @@ button {
   width: 100%;
 }
 
+/* "I did it" while it waits: the button fills up instead of counting seconds. */
+.btn--waiting {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn--waiting::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: -1;
+  width: var(--progress, 0%);
+  background: rgba(255, 255, 255, 0.22);
+  transition: width 1s linear;
+}
+
+.btn--waiting:disabled {
+  opacity: 0.75;
+}
+
+.btn__points {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 15px;
+}
+
 .btn--soft {
   background: var(--primary-soft-2);
   color: var(--on-primary-soft);
@@ -397,12 +428,6 @@ button {
   box-shadow: none;
 }
 
-.card--amber {
-  border-color: transparent;
-  background: var(--amber-soft);
-  box-shadow: none;
-}
-
 .card--hero {
   position: relative;
   border: 0;
@@ -417,11 +442,6 @@ button {
 .card--hero h2,
 .card--hero h3 {
   color: #ffffff;
-}
-
-.card__title {
-  font-size: 18px;
-  font-weight: 700;
 }
 
 .icon-tile {
@@ -813,52 +833,54 @@ button {
 /* --------------------------------------------------------------------- home */
 
 .greeting {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 8px;
   margin-bottom: 14px;
-}
-
-.greeting h1 {
+  font-size: 24px;
+  line-height: 30px;
   overflow-wrap: anywhere;
 }
 
-.level-card__top {
+.level-row {
   display: flex;
   align-items: center;
   gap: 12px;
+  padding: 12px 14px;
 }
 
-.level-card__name {
+.level-row__main {
+  display: grid;
   flex: 1;
+  gap: 8px;
   min-width: 0;
 }
 
-.level-card__name strong {
-  display: block;
-  font-size: 19px;
-  line-height: 24px;
-  font-weight: 800;
-}
-
-.level-card__points {
-  text-align: right;
-}
-
-.level-card__points strong {
-  color: var(--on-primary-soft);
-  font-size: 24px;
-  font-weight: 800;
-}
-
-.level-card__foot {
+.level-row__top {
   display: flex;
+  align-items: baseline;
   justify-content: space-between;
   gap: 8px;
-  margin-top: 8px;
-  font-size: 13px;
-  font-weight: 600;
+}
+
+.level-row__top strong {
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 800;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.level-row__points {
+  flex: none;
+  color: var(--on-primary-soft);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+/* The next level, a little faded: something to reach. */
+.level-row__next {
+  flex: none;
+  font-size: 28px;
+  opacity: 0.55;
+  filter: grayscale(0.5);
 }
 
 .level-emoji {
@@ -872,28 +894,31 @@ button {
   font-size: 28px;
 }
 
-.streak-banner {
-  display: flex;
+.streak-dots {
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 5px;
 }
 
-.streak-banner strong {
-  display: block;
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--on-amber-soft);
-}
-
-.flame {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 44px;
-  height: 44px;
+.streak-dot {
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
-  background: var(--amber);
-  font-size: 22px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.streak-dot.is-on {
+  background: #fbbf24;
+  box-shadow: 0 0 6px rgba(251, 191, 36, 0.8);
+}
+
+.streak-dots__bonus {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 4px;
+  font-size: 14px;
+  font-weight: 800;
 }
 
 .task-card__head {
@@ -939,15 +964,6 @@ button {
   margin-top: 16px;
 }
 
-.task-card__deadline {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 700;
-  opacity: 0.9;
-}
-
 .task-card__done {
   display: inline-flex;
   align-items: center;
@@ -958,33 +974,74 @@ button {
   font-weight: 800;
 }
 
-.tip-card {
-  display: flex;
-  gap: 12px;
-}
-
-.quick-grid {
+.play-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
-.game-tile {
+.play-tile {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
-  padding: 16px;
-  border: 1px solid var(--card-border);
+  padding: 18px 12px 16px;
   border-radius: var(--r-card);
-  background: var(--card);
   color: var(--text);
+  font-size: 48px;
   text-decoration: none;
   box-shadow: var(--shadow-1);
+  transition: transform 0.08s ease;
 }
 
-.game-tile strong {
+.play-tile:active {
+  transform: scale(0.97);
+}
+
+.play-tile strong {
   font-size: 17px;
   line-height: 22px;
+}
+
+.play-tile--sky {
+  background: var(--sky-soft);
+  color: var(--on-sky-soft);
+}
+
+.play-tile--amber {
+  background: var(--amber-soft);
+  color: var(--on-amber-soft);
+}
+
+.tip-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  font-size: 28px;
+  text-align: left;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.tip-card strong {
+  display: block;
+  font-size: 15px;
+}
+
+.tip-card__text {
+  display: block;
+  margin-top: 2px;
+  color: var(--text-2);
+  font-size: 15px;
+  line-height: 21px;
+}
+
+.tip-card__text.is-clamped {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .chip-scroll {
@@ -1033,7 +1090,10 @@ button {
 }
 
 .featured {
+  display: block;
   padding: 12px;
+  color: var(--text);
+  text-decoration: none;
 }
 
 .featured__media {
@@ -1057,28 +1117,18 @@ button {
   position: absolute;
   top: 10px;
   left: 10px;
-}
-
-.featured__time {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  padding: 4px 10px;
+  padding: 4px 12px;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.55);
   color: #ffffff;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .featured__body {
+  display: grid;
+  gap: 8px;
   padding: 12px 4px 4px;
-}
-
-.featured__meta {
-  color: var(--on-sky-soft);
-  font-size: 13px;
-  font-weight: 700;
 }
 
 /* -------------------------------------------------------------------- lists */
@@ -1228,8 +1278,14 @@ button {
   cursor: pointer;
 }
 
+/* A cover picture while the project has no video yet. */
+.video--still {
+  display: block;
+  object-fit: cover;
+}
+
 .video--empty {
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 2 / 1;
   align-content: center;
   gap: 6px;
   background: linear-gradient(160deg, var(--primary-soft-2), var(--primary-soft));
@@ -1369,28 +1425,6 @@ button {
 }
 
 /* ------------------------------------------------------------ knowledge card */
-
-.card-tabs {
-  margin-bottom: 12px;
-}
-
-.card-tabs a {
-  flex: none;
-  min-height: 36px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: var(--primary-soft);
-  color: var(--on-primary-soft);
-  font-size: 14px;
-  font-weight: 700;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.card-tabs a.is-active {
-  background: var(--primary-strong);
-  color: var(--on-primary);
-}
 
 .chain {
   display: grid;
@@ -1644,9 +1678,22 @@ button {
 /* ------------------------------------------------------------ profile/rating */
 
 .profile-head {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 14px;
+  padding-right: 56px;
+}
+
+.profile-head__name {
+  overflow-wrap: anywhere;
+}
+
+.profile-head__gear {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: var(--text-2);
 }
 
 .avatar {
@@ -1675,29 +1722,47 @@ button {
   border: 4px solid var(--amber);
 }
 
-.stat-grid {
+/* Four numbers in one row: picture, number, one word. */
+.stat-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
 }
 
-.stat {
+.stat-mini {
   display: grid;
-  gap: 4px;
+  justify-items: center;
+  gap: 2px;
+  padding: 12px 4px 10px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-tile);
+  background: var(--card);
+  text-align: center;
 }
 
-.stat__top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-  margin-bottom: 4px;
-}
-
-.stat strong {
+.stat-mini__icon {
+  display: grid;
+  place-items: center;
+  height: 26px;
+  color: var(--on-primary-soft);
   font-size: 24px;
-  line-height: 28px;
+}
+
+.stat-mini strong {
+  font-size: 20px;
+  line-height: 26px;
   font-weight: 800;
+}
+
+.stat-mini span:last-child {
+  overflow: hidden;
+  max-width: 100%;
+  color: var(--hint);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .badge-grid {
@@ -1714,6 +1779,11 @@ button {
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  width: 100%;
+  height: 100%;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
   padding: 12px 6px;
   border: 1px solid var(--card-border);
   border-radius: var(--r-tile);
@@ -1736,10 +1806,6 @@ button {
   color: var(--hint);
   font-size: 11.5px;
   font-weight: 700;
-}
-
-.badge-tile small.is-earned {
-  color: var(--on-primary-soft);
 }
 
 .podium {
@@ -2318,6 +2384,154 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* ------------------------------------------------------- tiles and games */
+
+.tile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.tile {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 4px;
+  min-height: 132px;
+  padding: 16px;
+  border-radius: var(--r-card);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.tile:active {
+  transform: scale(0.98);
+}
+
+.tile__icon {
+  margin-bottom: 4px;
+  font-size: 44px;
+}
+
+.tile strong {
+  font-size: 17px;
+  line-height: 22px;
+}
+
+.tile__count {
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.icon-tile__img {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+}
+
+.game-card {
+  border: 0;
+}
+
+.game-card--sky {
+  background: var(--sky-soft);
+}
+
+.game-card--amber {
+  background: var(--amber-soft);
+}
+
+.game-card__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border-radius: 22px;
+  background: var(--card);
+  font-size: 40px;
+}
+
+/* -------------------------------------------------------------- card story */
+
+.story-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.story-bar span {
+  flex: 1;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--primary-soft-2);
+}
+
+.story-bar span.is-on {
+  background: var(--primary-strong);
+}
+
+.story {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding: 24px 18px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-card);
+  background: var(--card);
+  text-align: center;
+  animation: fade-in 0.25s ease-out;
+  touch-action: pan-y;
+}
+
+.story__icon {
+  display: grid;
+  place-items: center;
+  width: 120px;
+  height: 120px;
+  border-radius: 40px;
+  background: var(--primary-soft);
+  font-size: 68px;
+}
+
+.story--problem .story__icon {
+  background: var(--danger-soft);
+}
+
+.story--cause .story__icon {
+  background: var(--sky-soft);
+}
+
+.story--effect .story__icon {
+  background: var(--amber-soft);
+}
+
+.story--solution .story__icon,
+.story--action .story__icon {
+  background: var(--primary-soft-2);
+}
+
+.story__text {
+  color: var(--text);
+  font-size: 19px;
+  line-height: 28px;
+  font-weight: 600;
+}
+
+.story .checklist {
+  width: 100%;
+  margin: 0;
+  text-align: left;
+}
+
+.story__prev {
+  flex: none;
+  width: 56px;
+  padding: 0;
 }
 
 /* ----------------------------------------------------------------- medals */

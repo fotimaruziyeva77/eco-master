@@ -74,6 +74,19 @@ siqadi (720p, H.264) va muqovani videodan oladi, shuning uchun 20 MB chegarasiga
 emas — 3 daqiqagacha va 500 MB gacha fayl qabul qilinadi. Hozircha o'yin buyumlarida emoji
 turadi; rasm tayyor bo'lsa, buyumning «Rasm» maydoniga yuklanadi.
 
+## Matn uslubi
+
+Ilovani 10–15 yoshli bolalar telefonda o'qiydi, shuning uchun:
+
+- bitta fikr — bitta qisqa jumla;
+- murojaat butun ilovada bir xil: o'zbekchada «siz», ruschada «вы»;
+- «streak», «DIY», «limit» kabi so'zlar o'rniga oddiy so'zlar: «ketma-ket kunlar»,
+  «o'z qo'lingiz bilan».
+
+Matn uzun bo'lsa, admin panel ogohlantiradi (nashrga to'sqinlik qilmaydi). Taxminiy chegaralar:
+kartochkaning har bir qismi 250 belgigacha, maslahat 160, kunlik topshiriq 120, savol 160,
+tushuntirish 200, loyiha qadami 140 belgigacha.
+
 ## Yurist tekshiruvi (TZ 11.4)
 
 Maxfiylik siyosati va foydalanish shartlari ilovada «Qoralama» belgisi bilan turibdi

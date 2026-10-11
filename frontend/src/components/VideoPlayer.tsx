@@ -29,14 +29,13 @@ export function VideoPlayer({ url, poster, icon, onEnded, onPlay }: Props) {
   const { t } = useTranslation();
   const [playing, setPlaying] = useState(false);
 
+  // No video yet: the cover picture, or the waste type's picture. No "coming soon" text.
   if (!url) {
+    if (poster) return <img className="video video--still" src={poster} alt="" />;
     return (
-      <div className="video video--empty">
-        <span className="video__icon" aria-hidden="true">
+      <div className="video video--empty" aria-hidden="true">
+        <span className="video__icon">
           <Emoji char={icon} />
-        </span>
-        <span className="strong">
-          <Emoji char="🎬" /> {t("project.videoSoon")}
         </span>
       </div>
     );

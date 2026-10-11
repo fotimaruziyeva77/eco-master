@@ -39,7 +39,7 @@ export function nextLevelCode(code: string): string | null {
 }
 
 /** Brand, streak and points on top of every tab screen (design: bosh_sahifa). */
-export function TopBar({ subtitle }: { subtitle: string }) {
+export function TopBar({ subtitle }: { subtitle?: string }) {
   const { t } = useTranslation();
   const { user } = useUser();
   return (
@@ -48,7 +48,7 @@ export function TopBar({ subtitle }: { subtitle: string }) {
         <img className="logo" src={mark} alt="" />
         <span className="topbar__title">
           <strong>{t("common.appName")}</strong>
-          <span>{subtitle}</span>
+          {subtitle && <span>{subtitle}</span>}
         </span>
       </div>
       <span className="chip chip--amber" aria-label={t("home.streak", { count: user.streak_current })}>

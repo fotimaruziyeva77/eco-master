@@ -48,7 +48,7 @@ export function MarketScreen() {
 
   return (
     <main className="screen screen--with-nav screen--with-fab stack stack--lg">
-      <TopBar subtitle={t("market.subtitle")} />
+      <TopBar />
 
       <div className="row row--between">
         <h1>{t("market.title")}</h1>

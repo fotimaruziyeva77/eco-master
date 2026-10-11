@@ -103,44 +103,23 @@
     "topLevel": "Siz eng yuqori darajadasiz!",
     "streak_one": "🔥 {{count}} kun ketma-ket",
     "streak_other": "🔥 {{count}} kun ketma-ket",
-    "tipTitle": "Kunlik maslahat",
-    "quiz": "Ekologik viktorina",
-    "game": "Saralash o'yini",
-    "wasteTypes": "Chiqindi turlari va DIY darslar",
-    "subtitle": "Bugun tabiat uchun nima qilamiz?",
-    "stage": "{{n}}-bosqich",
-    "filled": "{{percent}}% to'ldirildi",
     "nextLevel": "Keyingi: {{name}}",
-    "streakStart": "Streakni boshlang!",
-    "streakStartHint": "Bugungi topshiriqni bajaring — 7 kun ketma-ket uchun +50 ball.",
     "taskTitle": "Bugungi topshiriq",
-    "taskDeadline": "Bugun 23:59 gacha",
     "taskDone": "Bajarildi",
-    "quickGames": "Tezkor o'yinlar",
-    "all": "Barchasi",
-    "sortChip": "+2 ball har biriga",
-    "sortHint": "To'g'ri qutiga sol",
-    "quizChip": "10 ta savol",
-    "quizHint": "Bilimingni sinab ko'r",
-    "wasteTypesHint": "O'z qo'llaring bilan tabiatga yordam ber",
-    "start": "Boshlash",
-    "pointsWord_one": "ball",
-    "pointsWord_other": "ball",
-    "streakTitle_one": "{{count}} kunlik streak!",
-    "streakTitle_other": "{{count}} kunlik streak!",
-    "streakBonus_one": "+{{points}} ball bonusiga yana {{count}} kun qoldi",
-    "streakBonus_other": "+{{points}} ball bonusiga yana {{count}} kun qoldi",
     "teacherTitle": "O'qituvchilar uchun darslar",
-    "teacherText": "Tayyor darslar, PDF va sinf uchun QR-kod"
+    "game": "Saralash",
+    "quiz": "Viktorina",
+    "makeIt": "Yasab ko'ring",
+    "wasteTypes": "Nimadan yasaymiz?",
+    "tipTitle": "Bilasizmi?",
+    "streakDots_one": "{{count}} kun ketma-ket. 7 kun to'lsa: +{{points}} ball",
+    "streakDots_other": "{{count}} kun ketma-ket. 7 kun to'lsa: +{{points}} ball"
   },
   "learn": {
     "title": "O'rganish",
-    "wasteTypes": "Chiqindi turlari",
     "cards": "Ekologik muammolar",
     "projects_one": "{{count}} loyiha",
-    "projects_other": "{{count}} loyiha",
-    "subtitle": "Chiqindiga ikkinchi hayot berishni o'rganing.",
-    "cardHint": "Muammo, sabab va yechim"
+    "projects_other": "{{count}} loyiha"
   },
   "category": {
     "empty": "Bu bo'limga loyihalar tez orada qo'shiladi."
@@ -156,28 +135,18 @@
       "yellow": "Kattalar nazorati bilan",
       "red": "Faqat kattalar"
     },
-    "safetyTitle": "Xavfsizlik qoidasi",
-    "materials": "Kerakli materiallar",
-    "steps": "Qadam-baqadam ko'rsatma",
-    "videoSoon": "Video tez orada qo'shiladi",
     "play": "Videoni ko'rish",
     "done": "Bajardim",
-    "doneWait": "Bajardim ({{count}} s)",
     "alreadyDone": "Bajarilgan ✓",
     "earned_one": "+{{count}} ball! Barakalla!",
     "earned_other": "+{{count}} ball! Barakalla!",
     "doneError": "Saqlab bo'lmadi. Qayta urinib ko'ring.",
     "title": "Loyiha",
-    "categoryProject": "{{name}} loyihasi",
-    "safetyShort": {
-      "green": "Bolalar uchun oson",
-      "yellow": "Kattalar bilan",
-      "red": "Faqat kattalar"
-    },
-    "ready": "{{done}}/{{total}} tayyor",
-    "doneCta": "Bajardim (+{{count}} ball olish)",
     "doneCount_one": "{{count}} marta bajarildi",
-    "doneCount_other": "{{count}} marta bajarildi"
+    "doneCount_other": "{{count}} marta bajarildi",
+    "materials": "Kerak bo'ladi",
+    "steps": "Qadamlar",
+    "doneWait": "{{count}} soniyadan keyin bosish mumkin"
   },
   "card": {
     "problem": "Muammo",
@@ -185,22 +154,13 @@
     "effect": "Oqibat",
     "solution": "Yechim",
     "action": "Men nima qila olaman?",
-    "position": "{{current}}/{{total}} kartochka",
-    "chain": "Sabab-oqibat zanjiri",
-    "quizTitle": "Bilimingizni sinaysizmi?",
-    "quizText": "Viktorinada savollarga javob bering.",
-    "readTime_one": "{{count}} daqiqa o'qish",
-    "readTime_other": "{{count}} daqiqa o'qish"
+    "next": "Keyingi",
+    "quizTitle": "Viktorinani o'ynash"
   },
   "profile": {
     "language": "Til / Language",
     "privacy": "Maxfiylik siyosati",
     "rank": "#{{rank}}-o'rin",
-    "streak": "Joriy streak",
-    "tasks": "Bajarilgan topshiriq",
-    "projects": "Yasalgan DIY loyiha",
-    "sorted": "Saralangan buyum",
-    "accuracy": "Aniqlik {{percent}}%",
     "settings": "Sozlamalar",
     "nickname": "Taxallus",
     "nicknameRule": "30 kunda bir marta o'zgartirish mumkin. 3–20 belgi: harflar, raqamlar va _.",
@@ -216,14 +176,13 @@
     "deleteText": "Profilingiz, ballaringiz va nishonlaringiz butunlay o'chiriladi. Bu amalni qaytarib bo'lmaydi.",
     "deleteConfirm": "Ha, o'chirish",
     "deleted": "Ma'lumotlaringiz o'chirildi",
-    "days_one": "{{count}} kun",
-    "days_other": "{{count}} kun",
-    "best_one": "Maks: {{count}} kun",
-    "best_other": "Maks: {{count}} kun",
     "teachers": "O'qituvchilar uchun",
     "feedback": "Fikr bildirish",
-    "feedbackHint": "Botga yozing — jamoamiz o'qiydi",
-    "terms": "Foydalanish shartlari"
+    "terms": "Foydalanish shartlari",
+    "streak": "Ketma-ket",
+    "tasks": "Topshiriq",
+    "projects": "Loyiha",
+    "sorted": "Saralangan"
   },
   "privacy": {
     "title": "Maxfiylik siyosati",
@@ -246,15 +205,15 @@
   "games": {
     "title": "O'yinlar",
     "quizTitle": "Viktorina",
-    "quizText_one": "{{count}} ta savol: bilimingizni sinab ko'ring",
-    "quizText_other": "{{count}} ta savol: bilimingizni sinab ko'ring",
-    "sortTitle": "Chiqindini to'g'ri qutiga joyla",
-    "sortText": "Buyumni kerakli qutiga tashlang va saralashni o'rganing.",
-    "quickMode": "⚡ Tezkor rejim (har buyumga 10 soniya)",
     "play": "O'ynash",
     "empty": "Bu o'yin uchun savollar hali qo'shilmagan.",
-    "quizPoints": "+5 ball har to'g'ri javobga",
-    "dailyLimit": "Kunlik limit: {{points}} / {{cap}} ball"
+    "dailyLimit": "Kunlik limit: {{points}} / {{cap}} ball",
+    "sortTitle": "Saralash",
+    "sortText": "Buyumni to'g'ri qutiga soling",
+    "quizText_one": "{{count}} ta savol",
+    "quizText_other": "{{count}} ta savol",
+    "today": "Bugungi ballar",
+    "quickMode": "Tezkor rejim"
   },
   "quiz": {
     "chooseTopic": "Mavzuni tanlang",
@@ -291,11 +250,10 @@
     "bins": "Chiqindi konteynerlari"
   },
   "badges": {
-    "title": "Yutuqlar va nishonlar",
     "newTitle": "🎉 Yangi nishon!",
     "ok": "Zo'r!",
-    "locked": "Qulflangan",
-    "earned": "Olingan"
+    "earned": "Olingan",
+    "title": "Nishonlar"
   },
   "roles": {
     "student": "O'quvchi",
@@ -303,11 +261,6 @@
     "general": "Ota-ona"
   },
   "rating": {
-    "title": "Reyting peshqadamlari",
-    "week": "Haftalik reyting",
-    "all": "Umumiy reyting",
-    "weekHint": "Hafta har dushanba 00:00 da noldan boshlanadi.",
-    "allHint": "Barcha vaqt davomida to'plangan ballar.",
     "empty": "Hali hech kim ball to'plamadi. Birinchi bo'ling!",
     "notRanked": "Ball to'plang va reytingga kiring!",
     "you": "Siz",
@@ -315,18 +268,20 @@
     "reportTitle": "«@{{name}}» taxallusi haqida shikoyat qilasizmi?",
     "reportText": "Agar taxallus odobsiz yoki haqoratli bo'lsa, moderator uni tekshiradi.",
     "reportSend": "Shikoyat yuborish",
-    "reported": "Rahmat! Shikoyat moderatorga yuborildi."
+    "reported": "Rahmat! Shikoyat moderatorga yuborildi.",
+    "title": "Reyting",
+    "week": "Hafta",
+    "all": "Hammasi"
   },
   "share": {
     "button": "Ulashish",
-    "progress": "Natijamni do'stlarga ulashish",
     "project": "Do'stlarga ulashish",
     "result": "Natijani ulashish",
-    "error": "Ulashib bo'lmadi. Qayta urinib ko'ring."
+    "error": "Ulashib bo'lmadi. Qayta urinib ko'ring.",
+    "progress": "Natijamni ulashish"
   },
   "teachers": {
     "title": "O'qituvchilar uchun",
-    "subtitle": "Har biri 45 daqiqaga mo'ljallangan: reja, savollar va uyga vazifa. Matn va PDF — uch tilda.",
     "lessons": "Darslar",
     "grade": "{{grade}}-sinflar",
     "empty": "Darslar tez orada qo'shiladi.",
@@ -338,7 +293,8 @@
     "enlarge": "QR-kodni kattalashtirish",
     "qrLabel": "Eco-Master ilovasini ochadigan QR-kod",
     "inviteShareText": "Eco-Master ilovasiga qo'shiling — chiqindini to'g'ri saralashni birga o'rganamiz! 🌱",
-    "headline": "Tayyor ekologiya darslari"
+    "headline": "Tayyor ekologiya darslari",
+    "subtitle": "45 daqiqalik tayyor darslar. PDF — uch tilda."
   },
   "lesson": {
     "title": "Dars",

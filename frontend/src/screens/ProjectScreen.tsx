@@ -1,12 +1,12 @@
-import { Check, ListChecks, PartyPopper, ShieldAlert, ShieldCheck, Waypoints } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { Check, ShieldAlert, ShieldCheck } from "lucide-react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 
 import { api, ApiError } from "../api/client";
 import { InlineError, InlineLoading } from "../components/common";
 import { Emoji } from "../components/Emoji";
-import { PROJECT_POINTS, SAFETY_ICON } from "../components/ProjectCard";
+import { PROJECT_POINTS } from "../components/ProjectCard";
 import { ShareButton } from "../components/ShareButton";
 import { SubpageHeader } from "../components/ui";
 import { VideoPlayer } from "../components/VideoPlayer";
@@ -88,35 +88,38 @@ export function ProjectScreen() {
     });
   }
 
+  // The button fills up while it waits: no countdown to read.
+  const waited = { "--progress": `${Math.round(((UNLOCK_SECONDS - secondsLeft) / UNLOCK_SECONDS) * 100)}%` } as CSSProperties;
+
   return (
     <main className="screen screen--with-action">
-      <SubpageHeader onBack={back} title={t("project.title")} />
+      <SubpageHeader onBack={back} title={project ? tr(project.category_name) : t("project.title")} />
       {data.loading && !project && <InlineLoading />}
       {data.error !== undefined && !project && <InlineError error={data.error} onRetry={data.reload} />}
 
       {project && (
         <article className="stack stack--lg">
           <div className="stack">
-            <span className="chip" style={{ alignSelf: "flex-start" }}>
-              <Emoji char={project.category_icon} /> {t("project.categoryProject", { name: tr(project.category_name) })}
-            </span>
             <h1>{tr(project.title)}</h1>
             <div className="chips">
-              <span className="chip chip--neutral">
-                <Emoji char={SAFETY_ICON[project.safety_level]} /> {t(`project.difficulty.${project.difficulty}`)} —{" "}
-                {t(`project.safety.${project.safety_level}`)}
-              </span>
-              <span className="chip chip--neutral">
+              <span className="chip chip--neutral chip--sm">{t(`project.difficulty.${project.difficulty}`)}</span>
+              <span className="chip chip--neutral chip--sm">
                 <Emoji char="⏱️" /> {t("common.minutes", { count: project.duration_min })}
               </span>
-              <span className="chip chip--amber">
-                <Emoji char="⭐" /> +{t("home.points", { count: PROJECT_POINTS })}
+              <span className="chip chip--amber chip--sm">
+                <Emoji char="⭐" /> +{PROJECT_POINTS}
               </span>
-              {isDone && <span className="chip">{t("project.alreadyDone")}</span>}
+              {project.done_count > 0 && (
+                <span className="chip chip--sm" title={t("project.doneCount", { count: project.done_count })}>
+                  <Emoji char="🙌" /> {project.done_count}
+                </span>
+              )}
+              {isDone && (
+                <span className="chip chip--sm">
+                  <Check size={14} /> {t("project.alreadyDone")}
+                </span>
+              )}
             </div>
-            {project.done_count > 0 && (
-              <span className="hint small">{t("project.doneCount", { count: project.done_count })}</span>
-            )}
           </div>
 
           <VideoPlayer
@@ -136,7 +139,7 @@ export function ProjectScreen() {
                 {project.safety_level === "green" ? <ShieldCheck size={22} /> : <ShieldAlert size={22} />}
               </span>
               <div>
-                <h3>{t("project.safetyTitle")}</h3>
+                <h3>{t(`project.safety.${project.safety_level}`)}</h3>
                 <p className="text-2">{tr(project.safety_text)}</p>
               </div>
             </section>
@@ -144,11 +147,9 @@ export function ProjectScreen() {
 
           <section className="card">
             <div className="row row--between">
-              <h3 className="row">
-                <ListChecks size={20} aria-hidden="true" /> {t("project.materials")}
-              </h3>
+              <h3>{t("project.materials")}</h3>
               <span className="chip chip--sm">
-                {t("project.ready", { done: checked.size, total: materials.length })}
+                {checked.size}/{materials.length}
               </span>
             </div>
             <ul className="checklist">
@@ -166,9 +167,7 @@ export function ProjectScreen() {
           </section>
 
           <section className="stack">
-            <h3 className="row">
-              <Waypoints size={20} aria-hidden="true" /> {t("project.steps")}
-            </h3>
+            <h3>{t("project.steps")}</h3>
             {steps.map((step, i) => (
               <div key={step} className="card step-card">
                 <span className="step-card__num">{i + 1}</span>
@@ -191,14 +190,16 @@ export function ProjectScreen() {
           ) : (
             <button
               type="button"
-              className="btn btn--block"
+              className={unlocked ? "btn btn--block" : "btn btn--block btn--waiting"}
+              style={unlocked ? undefined : waited}
               disabled={!unlocked || saving}
+              aria-label={unlocked ? undefined : t("project.doneWait", { count: secondsLeft })}
               onClick={() => void markDone()}
             >
-              <PartyPopper size={20} aria-hidden="true" />
-              {unlocked
-                ? t("project.doneCta", { count: PROJECT_POINTS })
-                : t("project.doneWait", { count: secondsLeft })}
+              <Emoji char="🎉" /> {t("project.done")}
+              <span className="btn__points">
+                <Emoji char="⭐" /> +{PROJECT_POINTS}
+              </span>
             </button>
           )}
         </div>

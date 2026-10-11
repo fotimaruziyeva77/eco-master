@@ -3,6 +3,7 @@ from datetime import timedelta
 import pytest
 from sqlalchemy import select
 
+from app.admin.content import CONTENT_TYPES, Ctx, issues_for
 from app.daily import task_of_the_day
 from app.models import AdminAuditLog, DailyTask, Question, TeacherLesson
 from app.seed import seed_badges, seed_categories, seed_demo
@@ -260,3 +261,13 @@ async def test_schedule_pins_a_task_to_a_date(admin, session):
     ).json()
     refused = await admin.put(f"/api/admin/schedule/daily/{day}", json={"item_id": draft["id"]})
     assert refused.status_code == 409
+
+
+def test_long_texts_for_children_get_a_warning():
+    ctype = CONTENT_TYPES["tips"]
+    short = {"text": {"uz": "Qisqa maslahat.", "ru": "Короткий совет.", "en": "A short tip."}}
+    long = {"text": {"uz": "a" * 161, "ru": "Короткий совет.", "en": "A short tip."}}
+
+    assert not [i for i in issues_for(ctype, short, Ctx([])) if "uzun" in i.message]
+    warning = next(i for i in issues_for(ctype, long, Ctx([])) if "uzun" in i.message)
+    assert (warning.level, warning.field, warning.lang) == ("warning", "text", "uz")

@@ -1,7 +1,6 @@
-import { Check, ClipboardList, Lightbulb, ListChecks, MapPin, Play, ShieldAlert, ShieldCheck, Waypoints } from "lucide-react";
+import { Check, ClipboardList, Lightbulb, MapPin, Play, ShieldAlert, ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
 
-import { SAFETY_ICON } from "../components/ProjectCard";
 import { Emoji } from "../components/Emoji";
 import { tint } from "../components/ui";
 import i18n from "../i18n";
@@ -34,23 +33,19 @@ export function Preview({ kind, values, lang, fields }: Props) {
     return (
       <article className="stack stack--lg">
         <div className="stack">
-          <span className="chip" style={{ alignSelf: "flex-start" }}>
-            {option("category") || placeholder}
-          </span>
+          <span className="hint small strong">{option("category") || placeholder}</span>
           <h1>{text("title") || placeholder}</h1>
           <div className="chips">
-            <span className="chip chip--neutral">
-              <Emoji char={SAFETY_ICON[safety]} /> {t(`project.difficulty.${difficulty}`)} — {t(`project.safety.${safety}`)}
-            </span>
-            <span className="chip chip--neutral">
+            <span className="chip chip--neutral chip--sm">{t(`project.difficulty.${difficulty}`)}</span>
+            <span className="chip chip--neutral chip--sm">
               <Emoji char="⏱️" /> {t("common.minutes", { count: Number(values.duration_min) || 0 })}
             </span>
-            <span className="chip chip--amber">
-              <Emoji char="⭐" /> +{t("home.points", { count: 15 })}
+            <span className="chip chip--amber chip--sm">
+              <Emoji char="⭐" /> +15
             </span>
           </div>
         </div>
-        {values.video_url || values.poster_url ? (
+        {values.video_url ? (
           <div
             className="video video--poster"
             style={values.poster_url ? { backgroundImage: `url(${String(values.poster_url)})` } : undefined}
@@ -59,12 +54,13 @@ export function Preview({ kind, values, lang, fields }: Props) {
               <Play size={30} fill="currentColor" />
             </span>
           </div>
+        ) : values.poster_url ? (
+          <img className="video video--still" src={String(values.poster_url)} alt="" />
         ) : (
-          <div className="video video--empty">
-            <span className="video__icon" aria-hidden="true">
+          <div className="video video--empty" aria-hidden="true">
+            <span className="video__icon">
               <Emoji char="🎬" />
             </span>
-            <span className="strong">{t("project.videoSoon")}</span>
           </div>
         )}
         {text("safety_text") && (
@@ -73,15 +69,13 @@ export function Preview({ kind, values, lang, fields }: Props) {
               {safety === "green" ? <ShieldCheck size={22} /> : <ShieldAlert size={22} />}
             </span>
             <div>
-              <h3>{t("project.safetyTitle")}</h3>
+              <h3>{t(`project.safety.${safety}`)}</h3>
               <p className="text-2">{text("safety_text")}</p>
             </div>
           </section>
         )}
         <section className="card">
-          <h3 className="row">
-            <ListChecks size={20} aria-hidden="true" /> {t("project.materials")}
-          </h3>
+          <h3>{t("project.materials")}</h3>
           <ul className="checklist">
             {list("materials").map((item, i) => (
               <li key={i}>
@@ -96,9 +90,7 @@ export function Preview({ kind, values, lang, fields }: Props) {
           </ul>
         </section>
         <section className="stack">
-          <h3 className="row">
-            <Waypoints size={20} aria-hidden="true" /> {t("project.steps")}
-          </h3>
+          <h3>{t("project.steps")}</h3>
           {list("steps").map((step, i) => (
             <div key={i} className="card step-card">
               <span className="step-card__num">{i + 1}</span>

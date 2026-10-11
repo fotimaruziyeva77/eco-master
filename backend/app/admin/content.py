@@ -389,8 +389,46 @@ def _counts_differ(value: dict[str, list]) -> bool:
     return len(counts) > 1
 
 
-def project_checks(values: dict, ctx: Ctx) -> list[Issue]:
+# Longest text a child should read in one piece on a phone, per field (characters). Only a
+# warning, and well above the first content; the Mini App shows one part at a time.
+KID_TEXT: dict[str, dict[str, int]] = {
+    "projects": {"steps": 140, "materials": 80, "safety_text": 250},
+    "questions": {"text": 160, "explanation": 200},
+    "game-items": {"name": 40, "explanation": 160},
+    "daily-tasks": {"text": 120},
+    "tips": {"text": 160},
+    "cards": {"problem": 250, "cause": 250, "effect": 250, "solution": 250, "action": 250},
+}
+
+
+def too_long(values: dict, limits: dict[str, int]) -> list[Issue]:
+    """One warning per field whose longest text (in any language) is over its limit."""
     issues = []
+    for name, limit in limits.items():
+        per_lang = values.get(name) or {}
+        for lang in LANGS:
+            value = per_lang.get(lang)
+            texts = value if isinstance(value, list) else [value]
+            longest = max((len(t) for t in texts if isinstance(t, str)), default=0)
+            if longest > limit:
+                issues.append(
+                    Issue(
+                        "warning",
+                        f"Bolalar uchun uzun: {longest} belgi, {limit} gacha bo'lsa yaxshi",
+                        name,
+                        lang,
+                    )
+                )
+                break
+    return issues
+
+
+def kid_text_checks(key: str) -> Callable[[dict, Ctx], list[Issue]]:
+    return lambda values, ctx: too_long(values, KID_TEXT[key])
+
+
+def project_checks(values: dict, ctx: Ctx) -> list[Issue]:
+    issues = too_long(values, KID_TEXT["projects"])
     if values.get("safety_level") in (SafetyLevel.YELLOW, SafetyLevel.RED):
         safety = values.get("safety_text") or {}
         missing = [lang for lang in LANGS if not _filled(safety.get(lang))]
@@ -424,7 +462,7 @@ def project_checks(values: dict, ctx: Ctx) -> list[Issue]:
 def question_checks(values: dict, ctx: Ctx) -> list[Issue]:
     options = values.get("options") or {}
     counts = {lang: len(options.get(lang) or []) for lang in LANGS}
-    issues = []
+    issues = too_long(values, KID_TEXT["questions"])
     if any(c and not 2 <= c <= 4 for c in counts.values()):
         issues.append(Issue("error", "Har bir tilda 2–4 ta javob varianti bo'lsin", "options"))
     if len({c for c in counts.values() if c}) > 1:
@@ -597,6 +635,7 @@ CONTENT_TYPES: dict[str, ContentType] = {
             title_field="name",
             search_columns=("name",),
             subtitle=lambda v, ctx: f"{ctx.name_of(v.get('bin'))} qutisi",
+            checks=kid_text_checks("game-items"),
             fields=(
                 Field("name", "Nomi", "i18n_text", required=True, max_length=80),
                 Field("icon", "Emoji", "emoji", help="Rasm bo'lmasa shu ko'rinadi."),
@@ -629,6 +668,7 @@ CONTENT_TYPES: dict[str, ContentType] = {
             search_columns=("text",),
             subtitle=lambda v, ctx: f"{v.get('points') or 0} ball",
             defaults={"points": 20},
+            checks=kid_text_checks("daily-tasks"),
             fields=(
                 Field("text", "Topshiriq", "i18n_textarea", required=True, max_length=300),
                 Field("points", "Ball", "int", nullable=False, min=5, max=100),
@@ -642,6 +682,7 @@ CONTENT_TYPES: dict[str, ContentType] = {
             preview="tip",
             title_field="text",
             search_columns=("text",),
+            checks=kid_text_checks("tips"),
             fields=(
                 Field("text", "Maslahat", "i18n_textarea", required=True, max_length=400),
                 SORT,
@@ -655,6 +696,7 @@ CONTENT_TYPES: dict[str, ContentType] = {
             title_field="title",
             search_columns=("title", "slug"),
             subtitle=lambda v, ctx: v.get("slug") or "",
+            checks=kid_text_checks("cards"),
             fields=(
                 Field(
                     "slug",

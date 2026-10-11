@@ -10,6 +10,17 @@ export const SAFETY_ICON = { green: "🟢", yellow: "🟡", red: "🔴" } as con
 /** Same value as PROJECT_DONE_POINTS on the server (TZ 8.6). */
 export const PROJECT_POINTS = 15;
 
+/** "With adults" / "Adults only" — nothing for projects children can do alone. */
+export function SafetyChip({ level }: { level: keyof typeof SAFETY_ICON }) {
+  const { t } = useTranslation();
+  if (level === "green") return null;
+  return (
+    <span className={level === "red" ? "chip chip--sm chip--danger" : "chip chip--sm chip--amber"}>
+      <Emoji char={SAFETY_ICON[level]} /> {t(`project.safety.${level}`)}
+    </span>
+  );
+}
+
 export function ProjectCard({ project, icon }: { project: ProjectSummary; icon: string }) {
   const { t } = useTranslation();
   const tr = useTr();
@@ -21,12 +32,11 @@ export function ProjectCard({ project, icon }: { project: ProjectSummary; icon: 
       <div className="project-card__body">
         <strong>{tr(project.title)}</strong>
         <div className="chips">
-          <span className="chip chip--sm chip--neutral">
-            <Emoji char={SAFETY_ICON[project.safety_level]} /> {t(`project.difficulty.${project.difficulty}`)}
-          </span>
+          <span className="chip chip--sm chip--neutral">{t(`project.difficulty.${project.difficulty}`)}</span>
           <span className="chip chip--sm chip--neutral">
             <Emoji char="⏱️" /> {t("common.minutes", { count: project.duration_min })}
           </span>
+          <SafetyChip level={project.safety_level} />
         </div>
         {project.done ? (
           <span className="ok-text small row">
@@ -34,7 +44,7 @@ export function ProjectCard({ project, icon }: { project: ProjectSummary; icon: 
           </span>
         ) : (
           <span className="chip chip--sm chip--amber" style={{ alignSelf: "flex-start" }}>
-            +{t("home.points", { count: PROJECT_POINTS })}
+            <Emoji char="⭐" /> +{PROJECT_POINTS}
           </span>
         )}
       </div>

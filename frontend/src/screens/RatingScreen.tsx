@@ -36,7 +36,7 @@ export function RatingScreen() {
 
   return (
     <main className="screen screen--with-nav">
-      <TopBar subtitle={t("nav.rating")} />
+      <TopBar />
       <div className="section-head">
         <h1 className="row">
           <Trophy size={24} aria-hidden="true" /> {t("rating.title")}
@@ -56,9 +56,6 @@ export function RatingScreen() {
           </button>
         ))}
       </div>
-      <p className="hint small" style={{ margin: "8px 4px 0" }}>
-        {period === "week" ? t("rating.weekHint") : t("rating.allHint")}
-      </p>
       {notice && (
         <p className="toast" role="status" style={{ marginTop: 12 }}>
           {notice}

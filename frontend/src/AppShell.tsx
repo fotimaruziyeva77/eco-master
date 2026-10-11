@@ -19,6 +19,7 @@ const LearnScreen = named(() => import("./screens/LearnScreen"), "LearnScreen");
 const PrivacyScreen = named(() => import("./screens/PrivacyScreen"), "PrivacyScreen");
 const TermsScreen = named(() => import("./screens/PrivacyScreen"), "TermsScreen");
 const ProfileScreen = named(() => import("./screens/ProfileScreen"), "ProfileScreen");
+const SettingsScreen = named(() => import("./screens/SettingsScreen"), "SettingsScreen");
 const ProjectScreen = named(() => import("./screens/ProjectScreen"), "ProjectScreen");
 const RatingScreen = named(() => import("./screens/RatingScreen"), "RatingScreen");
 const LessonScreen = named(() => import("./screens/teachers/LessonScreen"), "LessonScreen");
@@ -61,6 +62,7 @@ function Layout() {
         <Route path="/games/sort" element={<SortGameScreen />} />
         <Route path="/rating" element={<RatingScreen />} />
         <Route path="/profile" element={<ProfileScreen />} />
+        <Route path="/settings" element={<SettingsScreen />} />
         <Route path="/privacy" element={<PrivacyScreen />} />
         <Route path="/terms" element={<TermsScreen />} />
         <Route path="/teachers" element={<TeachersScreen />} />

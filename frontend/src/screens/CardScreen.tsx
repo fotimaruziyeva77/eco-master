@@ -1,5 +1,5 @@
-import { Check, ChevronRight, Clock, Link2, Play } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { useRef, useState, type TouchEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router";
 
@@ -13,15 +13,16 @@ import { useTr } from "../i18n/tr";
 import { haptic } from "../telegram";
 
 // Fixed order (TZ 8.10); the server's JSON does not preserve key order.
-const CHAIN = [
+const PARTS = [
   { key: "problem", icon: "⚠️" },
   { key: "cause", icon: "🔍" },
   { key: "effect", icon: "🌡️" },
   { key: "solution", icon: "🌱" },
+  { key: "action", icon: "🙋" },
 ] as const;
 
-/** Reading speed for the "N min read" label. */
-const WORDS_PER_MINUTE = 150;
+/** A swipe of at least this many pixels turns the page. */
+const SWIPE = 50;
 
 function splitSentences(text: string): string[] {
   // No regex look-behind: older iOS WebViews (before 16.4) fail to parse it.
@@ -30,19 +31,32 @@ function splitSentences(text: string): string[] {
     .filter(Boolean);
 }
 
+/**
+ * Knowledge card as a story (TZ 8.10): one part of the chain per page — problem, cause,
+ * effect, solution, what I can do — with a big picture, read by tapping or swiping.
+ */
 export function CardScreen() {
   const { slug = "" } = useParams();
   const { t } = useTranslation();
   const tr = useTr();
   const back = useBack("/learn");
-  const data = useLoad(() => Promise.all([api.card(slug), api.cards()]), [slug]);
+  const data = useLoad(() => api.card(slug), [slug]);
+  const [page, setPage] = useState(0);
   const [done, setDone] = useState<Set<number>>(new Set());
+  const touch = useRef<number | null>(null);
 
-  const [card, all] = data.data ?? [undefined, []];
+  const card = data.data;
   const sections = tr<Record<string, string>>(card?.sections);
-  const actions = sections?.action ? splitSentences(sections.action) : [];
-  const words = sections ? Object.values(sections).join(" ").split(/\s+/).length : 0;
-  const index = all.findIndex((c) => c.slug === slug);
+  const parts = PARTS.filter(({ key }) => sections?.[key]);
+  const last = parts.length - 1;
+  const part = parts[Math.min(page, last)];
+  const actions = part?.key === "action" && sections ? splitSentences(sections.action) : [];
+
+  function go(next: number) {
+    if (next < 0 || next > last) return;
+    haptic.tap();
+    setPage(next);
+  }
 
   function toggle(i: number) {
     haptic.tap();
@@ -54,54 +68,43 @@ export function CardScreen() {
     });
   }
 
+  function onTouchEnd(e: TouchEvent) {
+    const start = touch.current;
+    touch.current = null;
+    if (start === null) return;
+    const dx = e.changedTouches[0].clientX - start;
+    if (dx <= -SWIPE) go(page + 1);
+    else if (dx >= SWIPE) go(page - 1);
+  }
+
   return (
-    <main className="screen">
-      <SubpageHeader onBack={back} title={t("learn.cards")} />
-      {all.length > 1 && (
-        <nav className="chip-scroll card-tabs" aria-label={t("learn.cards")}>
-          {all.map((c) => (
-            <Link key={c.slug} to={`/cards/${c.slug}`} replace className={c.slug === slug ? "is-active" : undefined}>
-              {tr(c.title)}
-            </Link>
-          ))}
-        </nav>
-      )}
-      {data.loading && !data.data && <InlineLoading />}
-      {data.error !== undefined && !data.data && <InlineError error={data.error} onRetry={data.reload} />}
+    <main className="screen screen--with-action">
+      <SubpageHeader onBack={back} title={card ? tr(card.title) : t("learn.cards")} />
+      {data.loading && !card && <InlineLoading />}
+      {data.error !== undefined && !card && <InlineError error={data.error} onRetry={data.reload} />}
 
-      {card && sections && (
-        <article className="stack stack--lg">
-          <div className="row row--wrap">
-            <span className="chip chip--sm">
-              {t("card.position", { current: index + 1, total: all.length })}
-            </span>
-            <span className="chip chip--sm chip--neutral">
-              <Clock size={12} /> {t("card.readTime", { count: Math.max(1, Math.round(words / WORDS_PER_MINUTE)) })}
-            </span>
+      {card && part && (
+        <>
+          <div className="story-bar" aria-hidden="true">
+            {parts.map(({ key }, i) => (
+              <span key={key} className={i <= page ? "is-on" : undefined} />
+            ))}
           </div>
-          <h1>{tr(card.title)}</h1>
-
-          <section className="stack">
-            <h2 className="row">
-              <Link2 size={20} aria-hidden="true" /> {t("card.chain")}
-            </h2>
-            <ol className="chain">
-              {CHAIN.filter(({ key }) => sections[key]).map(({ key, icon }, i) => (
-                <li key={key} className={`card chain__item chain__item--${key}`}>
-                  <span className="chip chip--sm chip--neutral" style={{ marginBottom: 8 }}>
-                    <Emoji char={icon} /> {i + 1}. {t(`card.${key}`)}
-                  </span>
-                  <p className="text-2">{sections[key]}</p>
-                </li>
-              ))}
-            </ol>
-          </section>
-
-          {actions.length > 0 && (
-            <section className="card chain__item chain__item--action">
-              <h3>
-                <Emoji char="🙋" /> 5. {t("card.action")}
-              </h3>
+          <article
+            key={part.key}
+            className={`story story--${part.key}`}
+            onTouchStart={(e) => (touch.current = e.touches[0].clientX)}
+            onTouchEnd={onTouchEnd}
+          >
+            {page === 0 && card.image_url ? (
+              <img className="card-picture" src={card.image_url} alt="" />
+            ) : (
+              <span className="story__icon" aria-hidden="true">
+                <Emoji char={part.icon} />
+              </span>
+            )}
+            <span className="chip story__label">{t(`card.${part.key}`)}</span>
+            {part.key === "action" ? (
               <ul className="checklist">
                 {actions.map((action, i) => (
                   <li key={action}>
@@ -114,20 +117,32 @@ export function CardScreen() {
                   </li>
                 ))}
               </ul>
-            </section>
-          )}
+            ) : (
+              <p className="story__text">{sections?.[part.key]}</p>
+            )}
+          </article>
+        </>
+      )}
 
-          <Link className="card card--amber row" to="/games/quiz" style={{ textDecoration: "none", gap: 12 }}>
-            <span className="flame" aria-hidden="true">
-              <Play size={20} />
-            </span>
-            <span className="list-row__text">
-              <strong>{t("card.quizTitle")}</strong>
-              <span className="small text-2">{t("card.quizText")}</span>
-            </span>
-            <ChevronRight size={20} />
-          </Link>
-        </article>
+      {card && part && (
+        <div className="action-bar">
+          <div className="row">
+            {page > 0 && (
+              <button type="button" className="btn btn--soft story__prev" onClick={() => go(page - 1)} aria-label={t("common.back")}>
+                <ArrowLeft size={20} />
+              </button>
+            )}
+            {page < last ? (
+              <button type="button" className="btn btn--block" onClick={() => go(page + 1)}>
+                {t("card.next")} <ArrowRight size={20} />
+              </button>
+            ) : (
+              <Link className="btn btn--block" to="/games/quiz">
+                <Emoji char="🧠" /> {t("card.quizTitle")}
+              </Link>
+            )}
+          </div>
+        </div>
       )}
     </main>
   );
