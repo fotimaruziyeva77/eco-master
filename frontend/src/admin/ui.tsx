@@ -208,7 +208,7 @@ export function ConfirmModal({
   }
 
   return (
-    <Modal title={title} onClose={onClose}>
+    <Modal title={title} onClose={busy ? () => undefined : onClose}>
       {text && <div className="a-muted">{text}</div>}
       {reason && (
         <label className="a-field" style={{ margin: 0 }}>
@@ -221,7 +221,7 @@ export function ConfirmModal({
       )}
       {error && <p className="a-error">{error}</p>}
       <div className="a-row" style={{ justifyContent: "flex-end" }}>
-        <button type="button" className="a-btn a-btn--ghost" onClick={onClose}>
+        <button type="button" className="a-btn a-btn--ghost" disabled={busy} onClick={onClose}>
           Bekor qilish
         </button>
         <button

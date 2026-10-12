@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router";
 
-import { api } from "../../api/client";
+import { api, ApiError } from "../../api/client";
 import { InlineLoading } from "../../components/common";
 import { Emoji } from "../../components/Emoji";
 import { SubpageHeader } from "../../components/ui";
@@ -50,6 +50,11 @@ export function JoinClassScreen() {
             <Emoji char="🔎" />
           </span>
           <p className="text-2">{classError(t, preview.error)}</p>
+          {!(preview.error instanceof ApiError) && (
+            <button type="button" className="btn" onClick={preview.reload}>
+              {t("common.retry")}
+            </button>
+          )}
           <button type="button" className="btn btn--soft" onClick={back}>
             {t("common.back")}
           </button>

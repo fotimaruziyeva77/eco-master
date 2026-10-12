@@ -23,7 +23,7 @@ from app.bot.handlers import open_app_keyboard
 from app.daily import current_streak, task_of_the_day
 from app.db import SessionLocal, engine
 from app.i18n import t
-from app.leagues import WeekResult, result_of
+from app.leagues import Standing, WeekResult, result_of
 from app.models import ActivityLog, DailyTask, LeagueMember, OnboardingStep, User
 from app.timeutil import TASHKENT
 
@@ -171,10 +171,12 @@ async def _send_all(session: AsyncSession, bot: Bot, now: datetime, today: date)
     task = await task_of_the_day(session, today)
     sent = 0
     last_monday = today - timedelta(days=7)
+    # Last week can not change any more: each group's standings are worked out once.
+    tables: dict[int, list[Standing]] = {}
     for user in await weekly_due_users(session, now):
         points = await week_points(session, user.id, last_monday)
         if points > 0:
-            result = await result_of(session, user.id, last_monday)
+            result = await result_of(session, user.id, last_monday, tables)
             open_task = _task_text(task, user) if user.last_task_date != today else None
             message = weekly_text(user, points, result, open_task)
             if await _deliver(session, bot, user, message, start="weekly"):

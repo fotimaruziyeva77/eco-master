@@ -709,6 +709,9 @@ class LeagueMember(Base):
     # The tier the week was played in; the result moves users.league_tier for the next week.
     tier: Mapped[int] = mapped_column(SmallInteger)
 
+    # The last week a user played (app.leagues.latest_result).
+    __table_args__ = (Index("ix_league_members_user_week", "user_id", "week_start"),)
+
 
 # -------------------------------------------------------------------- broadcasts
 

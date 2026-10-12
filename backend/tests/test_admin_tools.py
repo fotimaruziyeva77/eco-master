@@ -4,6 +4,7 @@ from datetime import UTC, datetime, timedelta
 
 from sqlalchemy import select
 
+from app import broadcasts
 from app.admin.stats import growth
 from app.broadcasts import send_next_chunk
 from app.config import get_settings
@@ -84,34 +85,46 @@ async def test_no_team_chat_no_alerts(session, monkeypatch):
 # ------------------------------------------------------------------ broadcasts
 
 
+# 12:00 and 23:00 in Tashkent: broadcasts go out only in the day, like the reminders.
+NOON = datetime(2026, 10, 12, 7, 0, tzinfo=UTC)
+NIGHT = datetime(2026, 10, 12, 18, 0, tzinfo=UTC)
+
+
+async def send_all(session, bot, now=NOON) -> None:
+    while await send_next_chunk(session, bot, now=now):
+        pass
+
+
 async def test_broadcast_from_the_admin_panel(client, session):
     student = await make_user(session, 61, path=UserPath.STUDENT, language="ru")
     teacher = await make_user(session, 62, path=UserPath.TEACHER)
     await make_user(session, 63, path=UserPath.STUDENT, reminders_enabled=False)
     await make_user(session, 64, path=UserPath.STUDENT, onboarding_step=OnboardingStep.INTRO)
+    await make_user(session, 66, path=UserPath.STUDENT, language="uz")
     await admin_client(client, session)
 
     count = (await client.get("/api/admin/broadcasts/audience?audience=student")).json()
-    assert count == {"audience": "student", "count": 1}
-    assert (await client.get("/api/admin/broadcasts/audience")).json()["count"] == 2
+    assert count == {"audience": "student", "count": 2}
+    assert (await client.get("/api/admin/broadcasts/audience")).json()["count"] == 3
 
     response = await client.post(
         "/api/admin/broadcasts",
-        json={"text": {"uz": "Yangi o'yin <b>chiqdi</b>!", "ru": "Новая игра!", "en": " "}},
+        json={"text": {"uz": "Yangi o'yin chiqdi!", "ru": "Новая игра!", "en": " "}},
     )
     assert response.status_code == 201, response.text
     created = response.json()
     assert created["status"] == "queued"
-    assert created["text"] == {"uz": "Yangi o'yin <b>chiqdi</b>!", "ru": "Новая игра!"}
+    assert created["text"] == {"uz": "Yangi o'yin chiqdi!", "ru": "Новая игра!"}
 
     bot = FakeBot(blocked={62})
-    while await send_next_chunk(session, bot):
-        pass
-    # Each in their language, as plain text.
-    assert bot.messages == [(61, "Новая игра!")]
+    await send_all(session, bot)
+    assert [chat_id for chat_id, _ in bot.messages] == [61, 66]
+    await send_all(session, bot)
+    assert len(bot.messages) == 2  # nobody gets it twice
+
     broadcast = await session.scalar(select(Broadcast).execution_options(populate_existing=True))
     assert broadcast.status == BroadcastStatus.DONE
-    assert (broadcast.total, broadcast.sent, broadcast.failed) == (2, 1, 1)
+    assert (broadcast.total, broadcast.sent, broadcast.failed) == (3, 2, 1)
     await session.refresh(teacher)
     assert teacher.write_access is False  # blocked the bot: no more messages
 
@@ -126,6 +139,29 @@ async def test_broadcast_from_the_admin_panel(client, session):
     assert "broadcast_create" in actions
 
 
+async def test_broadcast_text_goes_as_typed(client, session):
+    await make_user(session, 67, path=UserPath.STUDENT, language="ru")
+    await make_user(session, 68, path=UserPath.STUDENT, language="uz")
+    await admin_client(client, session)
+    text = {"uz": "Yangi o'yin <b>chiqdi</b>!", "ru": "Новая игра!"}
+    assert (await client.post("/api/admin/broadcasts", json={"text": text})).status_code == 201
+    bot = FakeBot()
+    await send_all(session, bot)
+    # Each in their language, as plain text: nothing the admin types becomes markup.
+    assert bot.messages == [(67, "Новая игра!"), (68, "Yangi o'yin &lt;b&gt;chiqdi&lt;/b&gt;!")]
+
+
+async def test_broadcast_waits_for_the_morning(client, session):
+    await make_user(session, 69)
+    await admin_client(client, session)
+    await client.post("/api/admin/broadcasts", json={"text": {"uz": "Salom"}})
+    bot = FakeBot()
+    assert await send_next_chunk(session, bot, now=NIGHT) is False
+    assert bot.messages == []
+    await send_all(session, bot)
+    assert [chat_id for chat_id, _ in bot.messages] == [69]
+
+
 async def test_broadcast_needs_uzbek_and_respects_the_weekly_limit(client, session):
     await admin_client(client, session)
     response = await client.post("/api/admin/broadcasts", json={"text": {"ru": "Привет"}})
@@ -133,12 +169,25 @@ async def test_broadcast_needs_uzbek_and_respects_the_weekly_limit(client, sessi
     response = await client.post("/api/admin/broadcasts", json={"text": {"uz": "x" * 1001}})
     assert response.status_code == 422
 
-    for _ in range(2):
-        response = await client.post("/api/admin/broadcasts", json={"text": {"uz": "Salom"}})
+    for n in (1, 2):
+        response = await client.post("/api/admin/broadcasts", json={"text": {"uz": f"Salom {n}"}})
         assert response.status_code == 201
-    response = await client.post("/api/admin/broadcasts", json={"text": {"uz": "Salom"}})
+    response = await client.post("/api/admin/broadcasts", json={"text": {"uz": "Salom 3"}})
     assert response.status_code == 409
     assert response.json()["detail"] == "weekly_limit"
+
+
+async def test_the_same_broadcast_is_not_queued_twice(client, session):
+    # A double click, or a retry after the answer got lost.
+    await admin_client(client, session)
+    body = {"text": {"uz": "Salom"}, "audience": "student"}
+    assert (await client.post("/api/admin/broadcasts", json=body)).status_code == 201
+    response = await client.post("/api/admin/broadcasts", json=body)
+    assert response.status_code == 409
+    assert response.json()["detail"] == "duplicate_broadcast"
+    # The same words to other people are a new broadcast.
+    body["audience"] = "teacher"
+    assert (await client.post("/api/admin/broadcasts", json=body)).status_code == 201
 
 
 async def test_cancelled_broadcast_is_not_sent(client, session):
@@ -148,12 +197,31 @@ async def test_cancelled_broadcast_is_not_sent(client, session):
     response = await client.post(f"/api/admin/broadcasts/{created['id']}/cancel")
     assert response.json()["status"] == "cancelled"
     bot = FakeBot()
-    assert await send_next_chunk(session, bot) is False
+    assert await send_next_chunk(session, bot, now=NOON) is False
     assert bot.messages == []
     # A cancelled broadcast that sent nothing does not count towards the limit.
     assert (await client.get("/api/admin/broadcasts")).json()["sent_this_week"] == 0
     response = await client.post(f"/api/admin/broadcasts/{created['id']}/cancel")
     assert response.status_code == 409
+
+
+async def test_a_cancel_while_sending_starts_wins(client, session, monkeypatch):
+    await make_user(session, 70)
+    await admin_client(client, session)
+    created = (await client.post("/api/admin/broadcasts", json={"text": {"uz": "Salom"}})).json()
+    real_size = broadcasts.audience_size
+
+    async def cancel_meanwhile(session_, audience):
+        # The admin presses "To'xtatish" between the bot reading the queue and starting.
+        await client.post(f"/api/admin/broadcasts/{created['id']}/cancel")
+        return await real_size(session_, audience)
+
+    monkeypatch.setattr(broadcasts, "audience_size", cancel_meanwhile)
+    bot = FakeBot()
+    await send_all(session, bot)
+    assert bot.messages == []
+    status = await session.scalar(select(Broadcast.status).where(Broadcast.id == created["id"]))
+    assert status == BroadcastStatus.CANCELLED
 
 
 async def test_editors_can_not_broadcast(client, session):

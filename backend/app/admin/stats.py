@@ -589,7 +589,8 @@ async def growth(session: AsyncSession, days: int) -> GrowthOut:
         for user_id, day in rows.all():
             open_days.setdefault(user_id, set()).add(day)
         returned = sum(len(d) >= 2 for d in open_days.values())
-        eligible = [uid for uid, d0 in joined.items() if d0 + timedelta(days=7) <= today]
+        # Only those whose whole second week (days 7–13) has come.
+        eligible = [uid for uid, d0 in joined.items() if d0 + timedelta(days=13) <= today]
         kept = sum(
             any(7 <= (day - joined[uid]).days <= 13 for day in open_days.get(uid, ()))
             for uid in eligible
@@ -648,7 +649,7 @@ async def _cohorts(session: AsyncSession, today: date) -> list[CohortOut]:
         weeks: list[float | None] = []
         for offset in range(1, COHORT_WEEKS):
             later = monday + timedelta(weeks=offset)
-            if later > this_week:
+            if later >= this_week:  # still to come, or not over yet
                 weeks.append(None)
                 continue
             back = sum((uid, later) in seen for uid in members)
@@ -658,19 +659,34 @@ async def _cohorts(session: AsyncSession, today: date) -> list[CohortOut]:
 
 
 async def _bot_messages(session: AsyncSession, since: datetime) -> list[BotMessageOut]:
-    names = [name for _, sent, opened in BOT_MESSAGES for name in (sent, opened)]
-    counts = dict(
+    sent_names = [sent for _, sent, _ in BOT_MESSAGES]
+    sent_counts = dict(
         (
             await session.execute(
                 select(AnalyticsEvent.name, func.count())
-                .where(AnalyticsEvent.name.in_(names), AnalyticsEvent.created_at >= since)
+                .where(AnalyticsEvent.name.in_(sent_names), AnalyticsEvent.created_at >= since)
                 .group_by(AnalyticsEvent.name)
             )
         ).all()
     )
+    # An open counts once per message, however often its button was pressed: per user and
+    # day for reminders, per user and week for the Monday summary, per user and broadcast.
+    local = func.timezone(TASHKENT_SQL, AnalyticsEvent.created_at)
+    message_of = {
+        "reminder_open": cast(local, Date),
+        "weekly_open": func.date_trunc("week", local),
+        "broadcast_open": AnalyticsEvent.props["broadcast"].astext,
+    }
     result = []
     for kind, sent_name, open_name in BOT_MESSAGES:
-        sent, opened = counts.get(sent_name, 0), counts.get(open_name, 0)
+        opens = (
+            select(AnalyticsEvent.user_id, message_of[open_name])
+            .where(AnalyticsEvent.name == open_name, AnalyticsEvent.created_at >= since)
+            .distinct()
+            .subquery()
+        )
+        sent = sent_counts.get(sent_name, 0)
+        opened = await session.scalar(select(func.count()).select_from(opens))
         result.append(
             BotMessageOut(
                 kind=kind, sent=sent, opened=opened, rate=round(opened / sent, 4) if sent else None

@@ -94,15 +94,19 @@ async def member_counts(session: AsyncSession, class_ids: list[int]) -> dict[int
         return {}
     rows = await session.execute(
         select(ClassMember.class_id, func.count())
-        .where(ClassMember.class_id.in_(class_ids))
+        .join(User, User.id == ClassMember.user_id)
+        .where(ClassMember.class_id.in_(class_ids), User.is_blocked.is_(False))
         .group_by(ClassMember.class_id)
     )
     return dict(rows.all())
 
 
 async def member_ids(session: AsyncSession, class_id: int) -> list[int]:
+    """Pupils of the class; blocked users are left out everywhere they would be shown (QM-13)."""
     rows = await session.scalars(
-        select(ClassMember.user_id).where(ClassMember.class_id == class_id)
+        select(ClassMember.user_id)
+        .join(User, User.id == ClassMember.user_id)
+        .where(ClassMember.class_id == class_id, User.is_blocked.is_(False))
     )
     return list(rows.all())
 
@@ -328,8 +332,11 @@ async def delete_task(class_id: int, task_id: int, user: CurrentUser, session: S
 async def class_by_code(session: AsyncSession, user: User, code: str) -> SchoolClass:
     if not code_limit.allow(user.id):
         raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS, "too_many_attempts")
+    # A blocked teacher's classes can not be joined.
     school_class = await session.scalar(
-        select(SchoolClass).where(SchoolClass.code == code.strip().upper())
+        select(SchoolClass)
+        .join(User, User.id == SchoolClass.teacher_id)
+        .where(SchoolClass.code == code.strip().upper(), User.is_blocked.is_(False))
     )
     if school_class is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "class_not_found")
@@ -338,7 +345,9 @@ async def class_by_code(session: AsyncSession, user: User, code: str) -> SchoolC
 
 async def teacher_nickname(session: AsyncSession, school_class: SchoolClass) -> str | None:
     teacher = await session.get(User, school_class.teacher_id)
-    return None if teacher is None or teacher.nickname_hidden else teacher.nickname
+    if teacher is None or teacher.nickname_hidden or teacher.is_blocked:
+        return None
+    return teacher.nickname
 
 
 @router.get("/classes/preview/{code}")

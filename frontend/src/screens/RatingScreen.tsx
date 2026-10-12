@@ -1,7 +1,7 @@
 import { ChevronRight, Flag, Trophy } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 import { api, type LeaderboardEntry } from "../api/client";
 import { InlineError, InlineLoading } from "../components/common";
@@ -123,6 +123,7 @@ function ClassView() {
       <section className="empty-state section">
         <Emoji char="🏫" className="empty-state__icon" />
         <p className="text-2">{t("classes.none")}</p>
+        <ClassCodeForm />
       </section>
     );
   }
@@ -146,6 +147,38 @@ function ClassView() {
         ))}
       </ol>
     </div>
+  );
+}
+
+/** The code the teacher wrote on the board: the same join screen as the QR code. */
+function ClassCodeForm() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [code, setCode] = useState("");
+  const clean = code.replace(/[^0-9a-z]/gi, "").toUpperCase();
+  return (
+    <form
+      className="code-form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (clean.length >= 4) navigate(`/join/${clean}`);
+      }}
+    >
+      <input
+        className="input input--boxed code-form__input"
+        value={code}
+        maxLength={12}
+        autoCapitalize="characters"
+        autoComplete="off"
+        spellCheck={false}
+        placeholder={t("classes.code")}
+        aria-label={t("classes.code")}
+        onChange={(e) => setCode(e.target.value)}
+      />
+      <button type="submit" className="btn" disabled={clean.length < 4}>
+        {t("classes.join.button")}
+      </button>
+    </form>
   );
 }
 

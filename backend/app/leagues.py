@@ -5,7 +5,7 @@ people of their own tier. A player joins a group with their first points of a we
 next week starts, last week's group decides their tier: the top five go one tier up, the bottom
 five of a group of ten or more go one down, the rest stay. That is worked out the moment they
 join the new week, from a week that can no longer change, so no weekly job is needed. Players
-who sit a week out keep their tier.
+who sit weeks out keep the tier their last week played gave them.
 """
 
 from dataclasses import dataclass
@@ -56,13 +56,21 @@ def moved_tier(tier: int, rank: int, size: int, points: int) -> int:
 
 async def standings(session: AsyncSession, group_id: int, monday: date) -> list[Standing]:
     """The group's players by points of that week; equal points: who got them first."""
+    group = select(LeagueMember.user_id).where(
+        LeagueMember.group_id == group_id, LeagueMember.week_start == monday
+    )
+    # Only the group's players: reads their rows through the (user, date) index instead of
+    # adding up the whole week of every user.
     week = (
         select(
             ActivityLog.user_id,
             func.sum(ActivityLog.points).label("points"),
             func.max(ActivityLog.created_at).filter(ActivityLog.points > 0).label("last_gain"),
         )
-        .where(ActivityLog.local_date.between(monday, monday + timedelta(days=6)))
+        .where(
+            ActivityLog.user_id.in_(group),
+            ActivityLog.local_date.between(monday, monday + timedelta(days=6)),
+        )
         .group_by(ActivityLog.user_id)
         .subquery()
     )
@@ -110,17 +118,43 @@ class WeekResult:
     size: int
 
 
-async def result_of(session: AsyncSession, user_id: int, monday: date) -> WeekResult | None:
-    """How the user did in that week's group, and the tier it gives them."""
+async def result_of(
+    session: AsyncSession,
+    user_id: int,
+    monday: date,
+    tables: dict[int, list[Standing]] | None = None,
+) -> WeekResult | None:
+    """How the user did in that week's group, and the tier it gives them.
+
+    `tables` keeps each group's standings for callers that ask about many players of one week.
+    """
     member = await membership(session, user_id, monday)
     if member is None:
         return None
-    table = await standings(session, member.group_id, monday)
+    if tables is not None and member.group_id in tables:
+        table = tables[member.group_id]
+    else:
+        table = await standings(session, member.group_id, monday)
+        if tables is not None:
+            tables[member.group_id] = table
     mine = next((s for s in table if s.user_id == user_id), None)
     if mine is None:
         return None
     after = moved_tier(member.tier, mine.rank, len(table), mine.points)
     return WeekResult(member.tier, after, mine.rank, len(table))
+
+
+async def latest_result(session: AsyncSession, user_id: int, monday: date) -> WeekResult | None:
+    """The result of the last week the user played before this one, however long ago: a tier
+    won (or lost) is kept through the weeks sat out."""
+    played = await session.scalar(
+        select(func.max(LeagueMember.week_start)).where(
+            LeagueMember.user_id == user_id, LeagueMember.week_start < monday
+        )
+    )
+    if played is None:
+        return None
+    return await result_of(session, user_id, played)
 
 
 async def join_week(session: AsyncSession, user_id: int, monday: date) -> None:
@@ -134,7 +168,7 @@ async def join_week(session: AsyncSession, user_id: int, monday: date) -> None:
     if user is None:
         return
     tier = user.league_tier
-    last = await result_of(session, user_id, monday - timedelta(days=7))
+    last = await latest_result(session, user_id, monday)
     if last is not None:
         tier = last.tier_after
     lock = LOCK_BASE + monday.toordinal() * 10 + tier

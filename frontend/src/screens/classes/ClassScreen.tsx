@@ -1,7 +1,7 @@
 import { Check, Copy, Pencil, Plus, Share2, Trash2, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 
 import { api, type ClassDetail, type ClassMember } from "../../api/client";
 import { InlineError, InlineLoading } from "../../components/common";
@@ -10,6 +10,7 @@ import { QrCode } from "../../components/QrCode";
 import { Avatar, LEVEL_EMOJI, SubpageHeader } from "../../components/ui";
 import { useBack } from "../../hooks/useBack";
 import { useLoad } from "../../hooks/useLoad";
+import { isoDay } from "../../i18n/dates";
 import { useTr } from "../../i18n/tr";
 import { haptic, openTelegramLink } from "../../telegram";
 import { classError, TaskRow } from "./parts";
@@ -21,11 +22,23 @@ export function ClassScreen() {
   const { id = "" } = useParams();
   const { t } = useTranslation();
   const back = useBack("/teachers");
-  const navigate = useNavigate();
   const data = useLoad(() => api.classDetail(Number(id)), [id]);
   const [sheet, setSheet] = useState<Sheet>(null);
   const [error, setError] = useState<string | null>(null);
   const detail = data.data;
+
+  // Every sheet starts clean; a mistake made in one never shows up in the next.
+  function openSheet(next: Sheet) {
+    setError(null);
+    setSheet(next);
+  }
+
+  // An error outside a sheet (deleting a task) shows on top for a moment.
+  useEffect(() => {
+    if (!error || sheet) return;
+    const timer = window.setTimeout(() => setError(null), 4000);
+    return () => window.clearTimeout(timer);
+  }, [error, sheet]);
 
   async function run(action: () => Promise<unknown>, after?: () => void) {
     setError(null);
@@ -48,7 +61,7 @@ export function ClassScreen() {
         title={detail?.name ?? t("classes.title")}
         right={
           detail && (
-            <button type="button" className="icon-button" onClick={() => setSheet({ kind: "rename" })} aria-label={t("classes.rename")}>
+            <button type="button" className="icon-button" onClick={() => openSheet({ kind: "rename" })} aria-label={t("classes.rename")}>
               <Pencil size={18} />
             </button>
           )
@@ -64,7 +77,7 @@ export function ClassScreen() {
           <section className="stack">
             <div className="section-head">
               <h2>{t("classes.tasks")}</h2>
-              <button type="button" className="btn btn--soft btn--sm" onClick={() => setSheet({ kind: "task" })}>
+              <button type="button" className="btn btn--soft btn--sm" onClick={() => openSheet({ kind: "task" })}>
                 <Plus size={16} /> {t("classes.addTask")}
               </button>
             </div>
@@ -111,7 +124,7 @@ export function ClassScreen() {
                       type="button"
                       className="icon-button"
                       aria-label={t("classes.remove")}
-                      onClick={() => setSheet({ kind: "remove", member })}
+                      onClick={() => openSheet({ kind: "remove", member })}
                     >
                       <X size={16} />
                     </button>
@@ -122,14 +135,14 @@ export function ClassScreen() {
             <p className="hint small">{t("classes.weekPoints")}</p>
           </section>
 
-          <button type="button" className="link-button error-text" onClick={() => setSheet({ kind: "delete" })}>
+          <button type="button" className="link-button error-text" onClick={() => openSheet({ kind: "delete" })}>
             <Trash2 size={16} /> {t("classes.delete")}
           </button>
         </div>
       )}
 
       {error && !sheet && (
-        <p className="toast toast--error" role="alert">
+        <p className="toast toast--error toast--float" role="alert">
           {error}
         </p>
       )}
@@ -138,7 +151,7 @@ export function ClassScreen() {
         <NameSheet
           initial={detail.name}
           error={error}
-          onClose={() => setSheet(null)}
+          onClose={() => openSheet(null)}
           onSave={(name) => run(() => api.renameClass(detail.id, name))}
         />
       )}
@@ -146,7 +159,7 @@ export function ClassScreen() {
         <TaskSheet
           detail={detail}
           error={error}
-          onClose={() => setSheet(null)}
+          onClose={() => openSheet(null)}
           onSave={(slug, due) => run(() => api.addClassTask(detail.id, slug, due))}
         />
       )}
@@ -155,7 +168,7 @@ export function ClassScreen() {
           title={t("classes.remove")}
           text={sheet.member.nickname ? `@${sheet.member.nickname}` : t("market.anonymous")}
           error={error}
-          onClose={() => setSheet(null)}
+          onClose={() => openSheet(null)}
           onConfirm={() => run(() => api.removeMember(detail.id, sheet.member.user_id))}
         />
       )}
@@ -164,8 +177,8 @@ export function ClassScreen() {
           title={t("classes.delete")}
           text={t("classes.deleteText")}
           error={error}
-          onClose={() => setSheet(null)}
-          onConfirm={() => run(() => api.deleteClass(detail.id), () => navigate("/teachers", { replace: true }))}
+          onClose={() => openSheet(null)}
+          onConfirm={() => run(() => api.deleteClass(detail.id), back)}
         />
       )}
     </main>
@@ -291,7 +304,11 @@ function TaskSheet({
   const projects = useLoad(() => api.projects(), []);
   const categories = useLoad(() => api.categories(), []);
   const given = new Set(detail.tasks.map((task) => task.project_slug));
-  const inWeek = new Date(Date.now() + 7 * 86_400_000).toISOString().slice(0, 10);
+  const today = isoDay(new Date());
+  const weekLater = new Date();
+  weekLater.setDate(weekLater.getDate() + 7);
+  const inWeek = isoDay(weekLater);
+  const open = projects.data?.filter((p) => !given.has(p.slug));
   const [slug, setSlug] = useState<string | null>(null);
   const [due, setDue] = useState(inWeek);
   const [busy, setBusy] = useState(false);
@@ -302,10 +319,12 @@ function TaskSheet({
       <div className="sheet stack sheet--tall" onClick={(e) => e.stopPropagation()}>
         <h2>{t("classes.addTask")}</h2>
         {projects.loading && !projects.data && <InlineLoading />}
+        {projects.error !== undefined && !projects.data && (
+          <InlineError error={projects.error} onRetry={projects.reload} />
+        )}
+        {open?.length === 0 && <p className="hint">{t("classes.allGiven")}</p>}
         <div className="stack task-picker">
-          {projects.data
-            ?.filter((p) => !given.has(p.slug))
-            .map((p) => (
+          {open?.map((p) => (
               <button
                 key={p.slug}
                 type="button"
@@ -324,7 +343,7 @@ function TaskSheet({
         </div>
         <label className="field">
           <span className="field__label">{t("classes.taskDue")}</span>
-          <input className="input input--boxed" type="date" value={due} min={new Date().toISOString().slice(0, 10)} onChange={(e) => setDue(e.target.value)} />
+          <input className="input input--boxed" type="date" value={due} min={today} onChange={(e) => setDue(e.target.value)} />
         </label>
         {error && <p className="error-text small">{error}</p>}
         <button

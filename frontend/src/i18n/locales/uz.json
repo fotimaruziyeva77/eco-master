@@ -540,7 +540,6 @@
     "mine": "Mening sinfim",
     "leave": "Sinfdan chiqish",
     "leaveText": "Sinf reytingi va vazifalari ko'rinmay qoladi.",
-    "none": "Siz sinfda emassiz. O'qituvchingizdan QR-kod so'rang.",
     "open": "Sinf sahifasi",
     "errors": {
       "class_not_found": "Bunday sinf topilmadi. Kodni tekshiring.",
@@ -555,7 +554,9 @@
       "teachers_only": "Sinfni faqat o'qituvchi ocha oladi.",
       "project_not_found": "Loyiha topilmadi.",
       "unknown": "Xatolik. Qayta urinib ko'ring."
-    }
+    },
+    "allGiven": "Hamma loyihalar berib bo'lingan.",
+    "none": "O'qituvchi bergan kod yoki QR-kod bilan sinfga qo'shiling."
   },
   "league": {
     "tier0": "Bronza liga",

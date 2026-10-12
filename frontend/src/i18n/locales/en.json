@@ -540,7 +540,6 @@
     "mine": "My class",
     "leave": "Leave the class",
     "leaveText": "You will no longer see the class board and tasks.",
-    "none": "You are not in a class. Ask your teacher for the QR code.",
     "open": "Class page",
     "errors": {
       "class_not_found": "No class with this code. Check it.",
@@ -555,7 +554,9 @@
       "teachers_only": "Only teachers can create classes.",
       "project_not_found": "Project not found.",
       "unknown": "Something went wrong. Try again."
-    }
+    },
+    "allGiven": "Every project has been given already.",
+    "none": "Join a class with your teacher's code or QR code."
   },
   "league": {
     "tier0": "Bronze league",

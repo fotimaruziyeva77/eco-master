@@ -6,7 +6,15 @@ from datetime import timedelta
 from fastapi import APIRouter
 
 from app.deps import CurrentUser, SessionDep
-from app.leagues import days_left, demote_count, membership, promote_count, result_of, standings
+from app.leagues import (
+    days_left,
+    demote_count,
+    latest_result,
+    membership,
+    promote_count,
+    result_of,
+    standings,
+)
 from app.levels import level_for
 from app.schemas import LeagueOut, LeagueResultOut, RankedMemberOut
 from app.timeutil import local_today, week_start
@@ -36,9 +44,11 @@ async def league(user: CurrentUser, session: SessionDep) -> LeagueOut:
             )
             for s in await standings(session, member.group_id, monday)
         ]
-    elif last is not None:
-        # Not in a group yet this week: last week's result says where they will play.
-        tier = last.tier_after
+    else:
+        # Not in a group yet this week: the last week played says where they will play.
+        latest = last or await latest_result(session, user.id, monday)
+        if latest is not None:
+            tier = latest.tier_after
     return LeagueOut(
         tier=tier,
         week_start=monday,

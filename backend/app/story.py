@@ -5,11 +5,13 @@ language. Files are named by a keyed hash of what is drawn, so the URLs can not 
 used to make the server draw anything else, and they are removed after a few days.
 """
 
+import contextlib
 import hashlib
 import hmac
 import io
 import math
 import os
+import secrets
 import time
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -64,18 +66,32 @@ def story_picture(settings: Settings, language: str, points: int) -> str:
     folder = media_folder(FOLDER)
     name = story_name(settings, language, points)
     path = folder / name
-    if not path.exists():
+    if path.exists():
+        # Handed out again: it must outlive Telegram fetching it.
+        with contextlib.suppress(OSError):
+            os.utime(path)
+    else:
         data = render(language, points, settings.bot_username)
-        tmp = folder / f".{name}.{os.getpid()}.tmp"
+        # Its own temporary name: a whole class may share the same picture at the same moment.
+        tmp = folder / f".{name}.{secrets.token_hex(6)}.tmp"
         tmp.write_bytes(data)
-        os.replace(tmp, path)
-    _forget_old(folder)
+        try:
+            os.replace(tmp, path)
+        except OSError:
+            # Another request put the same picture there first (Windows will not replace a file
+            # someone has open): theirs is just as good.
+            tmp.unlink(missing_ok=True)
+            if not path.exists():
+                raise
+    _forget_old(folder, keep=path)
     return name
 
 
-def _forget_old(folder: Path) -> None:
+def _forget_old(folder: Path, keep: Path) -> None:
     cutoff = time.time() - KEEP_SECONDS
     for old in folder.glob("*.jpg"):
+        if old == keep:
+            continue
         try:
             if old.stat().st_mtime < cutoff:
                 old.unlink()

@@ -59,6 +59,8 @@ export function StatsPage() {
       {stats.loading && !s && <Loading />}
       {stats.error !== undefined && !s && <LoadError error={stats.error} onRetry={stats.reload} />}
       {s && <Overview stats={s} days={days} />}
+      {s && growth.loading && !growth.data && <Loading />}
+      {growth.error !== undefined && !growth.data && <LoadError error={growth.error} onRetry={growth.reload} />}
       {growth.data && <GrowthSection growth={growth.data} days={days} />}
 
       <section className="a-card" style={{ marginTop: 16 }}>

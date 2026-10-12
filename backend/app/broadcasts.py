@@ -15,13 +15,15 @@ from typing import Literal, get_args
 
 from aiogram import Bot
 from aiogram.exceptions import TelegramAPIError, TelegramForbiddenError, TelegramRetryAfter
-from sqlalchemy import func, or_, select, text
+from sqlalchemy import func, or_, select, text, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.analytics import track
 from app.bot.handlers import open_app_keyboard
 from app.db import SessionLocal, engine
 from app.models import Broadcast, BroadcastStatus, OnboardingStep, User, UserPath
+from app.reminders import QUIET_FROM, QUIET_UNTIL
+from app.timeutil import TASHKENT
 
 log = logging.getLogger(__name__)
 
@@ -31,7 +33,11 @@ WEEKLY_LIMIT = 2
 MAX_TEXT = 1000
 CHUNK = 100
 SEND_INTERVAL = 1 / 25
-LOCK_KEY = 73_6202
+# Messages between looks for a cancel from the admin panel.
+CHECK_EVERY = 10
+# Advisory lock keys: sending (one bot process at a time) and queueing (one admin at a time).
+LOCK_KEY = 73_6203
+QUEUE_LOCK_KEY = 73_6204
 
 
 def recipients(audience: str):
@@ -52,26 +58,42 @@ async def audience_size(session: AsyncSession, audience: str) -> int:
 
 
 async def sent_this_week(session: AsyncSession, now: datetime | None = None) -> int:
-    """Broadcasts of the last seven days that went (or are going) out."""
+    """Broadcasts of the last seven days that reached someone or are still going out."""
     since = (now or datetime.now(UTC)) - timedelta(days=7)
     return await session.scalar(
         select(func.count())
         .select_from(Broadcast)
         .where(
             Broadcast.created_at >= since,
-            or_(Broadcast.status != BroadcastStatus.CANCELLED, Broadcast.sent > 0),
+            or_(
+                Broadcast.status.in_((BroadcastStatus.QUEUED, BroadcastStatus.SENDING)),
+                Broadcast.sent > 0,
+            ),
         )
     )
 
 
+async def cancelled(session: AsyncSession, broadcast_id: int) -> bool:
+    status = await session.scalar(select(Broadcast.status).where(Broadcast.id == broadcast_id))
+    return status == BroadcastStatus.CANCELLED
+
+
 def message_for(broadcast: Broadcast, language: str) -> str:
-    """Plain text: whatever the administrator typed is shown as typed."""
+    """Plain text: whatever the administrator typed is shown as typed. Telegram's HTML mode
+    needs only <, > and & replaced; apostrophes, common in Uzbek, stay as they are."""
     body = broadcast.text.get(language) or broadcast.text.get("uz", "")
-    return html.escape(body)
+    return html.escape(body, quote=False)
 
 
-async def send_next_chunk(session: AsyncSession, bot: Bot) -> bool:
-    """Send one chunk of the oldest unfinished broadcast. Returns whether work is left."""
+async def send_next_chunk(session: AsyncSession, bot: Bot, now: datetime | None = None) -> bool:
+    """Send one chunk of the oldest unfinished broadcast. Returns whether work is left.
+
+    Like the reminders, nothing goes out between 21:00 and 08:00 Tashkent time: a broadcast
+    queued in the evening (or still going at nine) goes on in the morning.
+    """
+    clock = (now or datetime.now(UTC)).astimezone(TASHKENT).time()
+    if not (QUIET_UNTIL <= clock < QUIET_FROM):
+        return False
     async with engine.connect() as lock_conn:
         if not await lock_conn.scalar(text("SELECT pg_try_advisory_lock(:k)"), {"k": LOCK_KEY}):
             return False
@@ -79,6 +101,21 @@ async def send_next_chunk(session: AsyncSession, bot: Bot) -> bool:
             return await _chunk(session, bot)
         finally:
             await lock_conn.execute(text("SELECT pg_advisory_unlock(:k)"), {"k": LOCK_KEY})
+
+
+async def _move(
+    session: AsyncSession, broadcast: Broadcast, old: BroadcastStatus, **values
+) -> bool:
+    """Change the status only if nobody else did meanwhile (a cancel from the admin panel)."""
+    moved = await session.scalar(
+        update(Broadcast)
+        .where(Broadcast.id == broadcast.id, Broadcast.status == old)
+        .values(**values)
+        .returning(Broadcast.id)
+    )
+    await session.commit()
+    await session.refresh(broadcast)
+    return moved is not None
 
 
 async def _chunk(session: AsyncSession, bot: Bot) -> bool:
@@ -92,10 +129,17 @@ async def _chunk(session: AsyncSession, bot: Bot) -> bool:
     if broadcast is None:
         return False
     if broadcast.status == BroadcastStatus.QUEUED:
-        broadcast.status = BroadcastStatus.SENDING
-        broadcast.started_at = datetime.now(UTC)
-        broadcast.total = await audience_size(session, broadcast.audience)
-        await session.commit()
+        total = await audience_size(session, broadcast.audience)
+        started = await _move(
+            session,
+            broadcast,
+            BroadcastStatus.QUEUED,
+            status=BroadcastStatus.SENDING,
+            started_at=datetime.now(UTC),
+            total=total,
+        )
+        if not started:
+            return True  # cancelled just now
 
     users = (
         await session.scalars(
@@ -103,25 +147,29 @@ async def _chunk(session: AsyncSession, bot: Bot) -> bool:
         )
     ).all()
     if not users:
-        broadcast.status = BroadcastStatus.DONE
-        broadcast.finished_at = datetime.now(UTC)
-        await session.commit()
+        await _move(
+            session,
+            broadcast,
+            BroadcastStatus.SENDING,
+            status=BroadcastStatus.DONE,
+            finished_at=datetime.now(UTC),
+        )
         return True
 
-    for user in users:
+    for i, user in enumerate(users):
+        # A cancel from the admin panel stops it within a few messages.
+        if i % CHECK_EVERY == 0 and await cancelled(session, broadcast.id):
+            broadcast.status = BroadcastStatus.CANCELLED
+            return True
         if await _send(bot, user, message_for(broadcast, user.language), broadcast.id):
             broadcast.sent += 1
             track(session, user, "broadcast_sent", broadcast=broadcast.id)
         else:
             broadcast.failed += 1
         broadcast.last_user_id = user.id
+        # Saved after every message: after a restart nobody gets the same broadcast twice.
+        await session.commit()
         await asyncio.sleep(SEND_INTERVAL)
-    # A cancel from the admin panel while the chunk was going out wins.
-    current = await session.scalar(select(Broadcast.status).where(Broadcast.id == broadcast.id))
-    if current == BroadcastStatus.CANCELLED:
-        broadcast.status = BroadcastStatus.CANCELLED
-        broadcast.finished_at = broadcast.finished_at or datetime.now(UTC)
-    await session.commit()
     return True
 
 

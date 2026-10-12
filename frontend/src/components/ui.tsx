@@ -6,6 +6,7 @@ import { Link } from "react-router";
 import type { User } from "../api/client";
 import mark from "../assets/brand/eco-master-mark.webp";
 import { Emoji } from "./Emoji";
+import { TREE_THRESHOLDS, treeGrowth } from "./treeDrawing";
 import { useUser } from "../state/user";
 import { insideTelegram, useTelegramBackButton } from "../telegram";
 
@@ -143,14 +144,19 @@ export function tint(color: string, alpha = "26"): CSSProperties {
   return { background: `${color}${alpha}` };
 }
 
+/** The level from the points themselves, like the tree: after a game the points change at once,
+ * the level the server sent only with the next reload. */
 export function levelProgress(user: User) {
-  const { code, min_points: min, next_min_points: next } = user.level;
   const points = user.points_total;
+  const { stage } = treeGrowth(points);
+  const code = LEVEL_ORDER[stage];
+  const min = TREE_THRESHOLDS[stage];
+  const next = TREE_THRESHOLDS[stage + 1] ?? null;
   return {
     code,
     next,
     nextCode: nextLevelCode(code),
     percent: next ? Math.round(((points - min) / (next - min)) * 100) : 100,
-    index: LEVEL_ORDER.indexOf(code as (typeof LEVEL_ORDER)[number]) + 1,
+    index: stage + 1,
   };
 }

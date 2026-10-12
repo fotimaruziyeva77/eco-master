@@ -88,11 +88,21 @@ async def test_top_five_go_up_and_bottom_five_go_down(session):
     assert tiers == [2] * 5 + [1] * 2 + [0] * 5
 
 
-async def test_a_week_away_keeps_the_tier(session):
+async def test_time_away_keeps_the_tier_won(session):
+    # First of a gold group, then two weeks away: back in diamond, not in gold again.
     [user] = await make_users(session, 1, tier=2)
     await earn(session, user, 10, MONDAY - timedelta(days=14))
     await earn(session, user, 10, NEXT_MONDAY)
-    assert await tier_of(session, user) == 2
+    assert await tier_of(session, user) == 3
+
+
+async def test_time_away_does_not_escape_going_down(session):
+    silver = await make_users(session, 10, tier=1)
+    for rank, user in enumerate(silver):
+        await earn(session, user, 100 - rank, MONDAY - timedelta(days=7))
+    last = silver[-1]  # the bottom five of ten go down
+    await earn(session, last, 5, NEXT_MONDAY)
+    assert await tier_of(session, last) == 0
 
 
 async def test_league_endpoint(client, session, monkeypatch):

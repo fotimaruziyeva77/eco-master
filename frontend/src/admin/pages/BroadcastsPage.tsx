@@ -47,8 +47,10 @@ export function BroadcastsPage() {
   }, [busy, list.reload]);
 
   const limitReached = list.data ? list.data.sent_this_week >= list.data.weekly_limit : false;
-  const nobody = size.data?.count === 0;
-  const ready = texts.uz.trim().length > 0 && !limitReached && !nobody;
+  // Only a count for the audience now picked: never the previous one while it reloads.
+  const count = size.data?.audience === audience && size.error === undefined ? size.data.count : null;
+  const nobody = count === 0;
+  const ready = texts.uz.trim().length > 0 && !limitReached && count !== null && count > 0;
 
   return (
     <>
@@ -74,7 +76,18 @@ export function BroadcastsPage() {
                 </option>
               ))}
             </select>
-            <span className="a-help">{size.data ? `${size.data.count} kishi oladi` : "…"}</span>
+            <span className="a-help">
+              {count !== null && `${count} kishi oladi`}
+              {count === null && size.error === undefined && "…"}
+              {size.error !== undefined && (
+                <>
+                  Sonini bilib bo'lmadi.{" "}
+                  <button type="button" className="a-btn a-btn--ghost a-btn--sm" onClick={size.reload}>
+                    Qayta urinish
+                  </button>
+                </>
+              )}
+            </span>
           </label>
           {LANGUAGES.map(([lang, label]) => (
             <label key={lang} className="a-field">
@@ -144,12 +157,18 @@ export function BroadcastsPage() {
       {confirming && (
         <ConfirmModal
           title="Xabar yuborilsinmi?"
-          text={`${size.data?.count ?? "?"} kishiga (${AUDIENCE_LABEL[audience].toLowerCase()}) yuboriladi. Buni qaytarib bo'lmaydi.`}
+          text={`${count} kishiga (${AUDIENCE_LABEL[audience].toLowerCase()}) yuboriladi. Buni qaytarib bo'lmaydi.`}
           confirm="Yuborish"
           onClose={() => setConfirming(false)}
           onConfirm={async () => {
             const text = Object.fromEntries(Object.entries(texts).filter(([, value]) => value.trim()));
-            await adminApi.createBroadcast({ text, audience });
+            try {
+              await adminApi.createBroadcast({ text, audience });
+            } catch (failure) {
+              // The server may have queued it and only the answer got lost: show the list as it is.
+              list.reload();
+              throw failure;
+            }
             toast("Navbatga qo'yildi");
             setTexts({ uz: "", ru: "", en: "" });
             list.reload();

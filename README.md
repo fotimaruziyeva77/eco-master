@@ -107,8 +107,9 @@ authenticator app (Google Authenticator, Authy, 2FAS...); the app is connected o
 ## Classes and weekly leagues
 
 - **Classes.** A user on the teacher path makes classes in the Mini App (O'qituvchilar uchun →
-  Sinflarim) and shows the class's QR code, or sends its link
-  (`https://t.me/<bot>/app?startapp=class_<CODE>`). A pupil who opens it sees the class name and
+  Sinflarim) and shows the class's QR code, writes its code on the board (pupils type it under
+  Reyting → Sinf), or sends its link (`https://t.me/<bot>/app?startapp=class_<CODE>`). A pupil
+  who opens it sees the class name and
   the teacher's nickname and joins with one tap; nobody is put into a class by someone else, a
   pupil is in one class at a time and can leave at any time. The teacher sees the pupils'
   nicknames, levels and points (this week and in total) and gives projects as class tasks with a
@@ -120,7 +121,8 @@ authenticator app (Google Authenticator, Authy, 2FAS...); the app is connected o
   instead of one board a newcomer never climbs. A player joins a group with their first points of
   a week; when the next week starts, the top five of last week's group go a tier up and the bottom
   five of a group of ten or more go down. This is worked out when the player joins the new week,
-  from a week that can no longer change, so there is no weekly job. The Rating tab shows the
+  from a week that can no longer change, so there is no weekly job; weeks sat out keep the tier
+  the last week played gave. The Rating tab shows the
   league group, the class board and the all-time board.
 
 ## Rewards and bot messages
@@ -149,7 +151,9 @@ authenticator app (Google Authenticator, Authy, 2FAS...); the app is connected o
 - **Broadcasts** (admin panel → "Xabar yuborish", administrators only). A message in Uzbek, and
   Russian / English if wanted, to everyone or to pupils, teachers or parents. Only users who
   keep bot messages on get it; at most two in seven days; every broadcast and cancel is in the
-  audit log. The bot sends it in chunks below Telegram's limit and goes on after a restart. The
+  audit log; the same text to the same people twice within an hour is refused as a double
+  click. The bot sends it only between 08:00 and 21:00 (Tashkent), below Telegram's limit, and
+  goes on after a restart without sending anyone the same message twice. The
   list shows how many got it and how many opened the app from its button.
 - **Growth statistics** (admin panel → Statistika): how far new users get (onboarding, first
   points, daily task, coming back), weekly cohorts, and how many open the app from reminders,

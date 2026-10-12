@@ -35,7 +35,14 @@ export function TeacherClasses() {
     <section className="stack">
       <div className="section-head">
         <h2>{t("classes.title")}</h2>
-        <button type="button" className="btn btn--soft btn--sm" onClick={() => setCreating(true)}>
+        <button
+          type="button"
+          className="btn btn--soft btn--sm"
+          onClick={() => {
+            setError(null);
+            setCreating(true);
+          }}
+        >
           <Plus size={16} /> {t("classes.new")}
         </button>
       </div>

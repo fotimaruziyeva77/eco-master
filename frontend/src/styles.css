@@ -3161,3 +3161,34 @@ img.emoji {
   box-shadow: var(--shadow-1);
   font-size: 15px;
 }
+
+/* An error that belongs to no sheet: on top of the screen for a moment. */
+.toast--float {
+  position: fixed;
+  top: calc(8px + var(--tg-content-safe-area-inset-top, 0px));
+  left: var(--gutter);
+  right: var(--gutter);
+  z-index: 95;
+  max-width: 528px;
+  margin: 0 auto;
+  box-shadow: var(--shadow-2);
+}
+
+/* Typing the class code from the board. */
+.code-form {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  max-width: 340px;
+  margin-top: 6px;
+}
+
+.code-form__input {
+  flex: 1;
+  min-width: 0;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+}
+

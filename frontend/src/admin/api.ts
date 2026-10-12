@@ -277,6 +277,10 @@ const MESSAGES: Record<string, string> = {
   interrupted: "Server qayta ishga tushdi. Videoni qaytadan yuklang.",
   no_ffmpeg: "Serverda video tayyorlovchi dastur (ffmpeg) yo'q. Administratorga ayting.",
   media_not_writable: "Serverda fayllar papkasiga yozib bo'lmadi. Administratorga ayting.",
+  weekly_limit: "Bu hafta ruxsat etilgan xabarlar yuborib bo'lingan.",
+  duplicate_broadcast: "Bu xabar shu odamlarga allaqachon navbatga qo'yilgan. Ro'yxatni ko'ring.",
+  broadcast_finished: "Bu xabar yuborib bo'lingan yoki to'xtatilgan.",
+  broadcast_not_found: "Xabar topilmadi.",
 };
 
 /** Text for an error code the server sent, e.g. the reason a video conversion failed. */

@@ -7,7 +7,7 @@ import pytest
 from sqlalchemy import select
 
 from app.api import classes as classes_api
-from app.models import AdminAuditLog, AdminRole, ClassMember, Project, SchoolClass
+from app.models import AdminAuditLog, AdminRole, ClassMember, Project, SchoolClass, User
 from app.seed import seed_badges, seed_banned_words, seed_categories, seed_demo
 from app.timeutil import local_today
 from tests.admin_helpers import admin_client
@@ -255,3 +255,33 @@ async def test_admin_sees_and_removes_classes(client, teacher, session):
 async def test_all_projects_for_the_task_picker(client, teacher):
     projects = (await client.get("/api/projects", headers=teacher[0])).json()
     assert projects and all(p["slug"] for p in projects)
+
+
+async def test_blocked_users_are_not_shown_in_classes(client, session, teacher):
+    made = await make_class(client, teacher)
+    kind, kind_id = await onboard(client, 560, "Yaxshi_Bola")
+    rude, rude_id = await onboard(client, 561, "Yomon_Bola")
+    for headers in (kind, rude):
+        r = await client.post("/api/classes/join", json={"code": made["code"]}, headers=headers)
+        assert r.status_code == 200, r.text
+    blocked = await session.get(User, rude_id)
+    blocked.is_blocked = True
+    await session.commit()
+
+    detail = (await client.get(f"/api/classes/{made['id']}", headers=teacher[0])).json()
+    assert [m["user_id"] for m in detail["members"]] == [kind_id]
+    assert detail["member_count"] == 1
+    mine = (await client.get("/api/my-class", headers=kind)).json()
+    assert [m["user_id"] for m in mine["members"]] == [kind_id]
+
+
+async def test_a_blocked_teachers_class_can_not_be_joined(client, session, teacher):
+    made = await make_class(client, teacher)
+    headers, _ = await onboard(client, 562, "Yangi_Bola")
+    owner = await session.get(User, teacher[1])
+    owner.is_blocked = True
+    await session.commit()
+    r = await client.get(f"/api/classes/preview/{made['code']}", headers=headers)
+    assert r.status_code == 404
+    r = await client.post("/api/classes/join", json={"code": made["code"]}, headers=headers)
+    assert r.status_code == 404

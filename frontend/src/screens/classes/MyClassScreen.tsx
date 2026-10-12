@@ -10,7 +10,7 @@ import { SubpageHeader } from "../../components/ui";
 import { useBack } from "../../hooks/useBack";
 import { useLoad } from "../../hooks/useLoad";
 import { haptic } from "../../telegram";
-import { BoardRow, TaskRow } from "./parts";
+import { BoardRow, classError, TaskRow } from "./parts";
 
 /** The pupil's class: the teacher's tasks, the class board of this week, leaving. */
 export function MyClassScreen() {
@@ -20,14 +20,19 @@ export function MyClassScreen() {
   const data = useLoad(() => api.myClass(), []);
   const [leaving, setLeaving] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const mine = data.data;
 
   async function leave() {
     setBusy(true);
+    setError(null);
     try {
       await api.leaveClass();
       haptic.success();
       navigate("/rating", { replace: true });
+    } catch (e) {
+      haptic.error();
+      setError(classError(t, e));
     } finally {
       setBusy(false);
     }
@@ -68,7 +73,14 @@ export function MyClassScreen() {
               ))}
             </ol>
           </section>
-          <button type="button" className="link-button" onClick={() => setLeaving(true)}>
+          <button
+            type="button"
+            className="link-button"
+            onClick={() => {
+              setError(null);
+              setLeaving(true);
+            }}
+          >
             <LogOut size={16} /> {t("classes.leave")}
           </button>
         </div>
@@ -78,6 +90,11 @@ export function MyClassScreen() {
           <div className="sheet stack" onClick={(e) => e.stopPropagation()}>
             <h2>{t("classes.leave")}</h2>
             <p className="text-2">{t("classes.leaveText")}</p>
+            {error && (
+              <p className="error-text small" role="alert">
+                {error}
+              </p>
+            )}
             <button type="button" className="btn btn--block btn--danger" disabled={busy} onClick={() => void leave()}>
               {t("classes.leave")}
             </button>

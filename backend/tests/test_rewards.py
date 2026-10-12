@@ -6,8 +6,9 @@ import pytest
 from PIL import Image
 from sqlalchemy import update
 
-from app import leagues
+from app import leagues, story
 from app.api import share as share_api
+from app.config import get_settings
 from app.content_media import media_root
 from app.leagues import WeekResult
 from app.models import LeagueMember, User
@@ -15,6 +16,7 @@ from app.points import award
 from app.ratelimit import RateLimiter
 from app.reminders import send_due_reminders, weekly_text
 from app.seed import seed_badges, seed_categories, seed_demo
+from app.story import story_picture
 from app.tree import Growth, tree_growth, tree_parts
 from tests.conftest import login
 from tests.test_phase5 import DAY, FakeBot, at, make_user
@@ -197,3 +199,35 @@ async def test_story_picture(client, monkeypatch):
     monkeypatch.setattr(share_api, "story_limit", RateLimiter(limit=0, window=3600))
     response = await client.post("/api/share/story", headers=headers)
     assert response.status_code == 429
+
+
+def test_a_whole_class_can_share_the_same_picture():
+    # The same points and language at the same moment: one picture, no clash, no error.
+    from concurrent.futures import ThreadPoolExecutor
+
+    settings = get_settings()
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        names = list(pool.map(lambda _: story_picture(settings, "uz", 4321), range(4)))
+    assert len(set(names)) == 1
+    folder = media_root() / "s"
+    assert (folder / names[0]).exists()
+    assert not list(folder.glob("*.tmp"))
+
+
+def test_old_pictures_go_but_the_one_handed_out_stays(monkeypatch):
+    import os
+    import time
+
+    settings = get_settings()
+    name = story_picture(settings, "en", 1234)
+    path = media_root() / "s" / name
+    other = media_root() / "s" / "old-picture.jpg"
+    other.write_bytes(b"x")
+    long_ago = time.time() - story.KEEP_SECONDS - 60
+    os.utime(path, (long_ago, long_ago))
+    os.utime(other, (long_ago, long_ago))
+    # Handing the old picture out again keeps it (and refreshes it); the other one goes.
+    assert story_picture(settings, "en", 1234) == name
+    assert path.exists()
+    assert path.stat().st_mtime > long_ago
+    assert not other.exists()

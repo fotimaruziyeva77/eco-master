@@ -25,6 +25,7 @@ export function ProfileScreen() {
 
   const s = stats.data;
   const earned = badges.data?.filter((b) => b.earned_at).length ?? 0;
+  const level = levelProgress(user).code;
 
   return (
     <main className="screen screen--with-nav">
@@ -45,7 +46,7 @@ export function ProfileScreen() {
         <div className="stack" style={{ gap: 6, minWidth: 0 }}>
           <h2 className="profile-head__name">@{user.nickname}</h2>
           <span className="ok-text strong">
-            <Emoji char={LEVEL_EMOJI[user.level.code]} /> {t(`levels.${user.level.code}`)}
+            <Emoji char={LEVEL_EMOJI[level]} /> {t(`levels.${level}`)}
           </span>
           <div className="row row--wrap">
             <span className="chip chip--amber chip--sm">
@@ -109,12 +110,16 @@ function TreeCard() {
       {level.next && level.nextCode ? (
         <div className="tree-card__next">
           <ProgressBar value={level.percent} max={100} />
-          <span className="tree-card__goal" aria-label={t("tree.toNext", { count: level.next - user.points_total })}>
+          <span
+            className="tree-card__goal"
+            role="img"
+            aria-label={t("tree.toNext", { count: level.next - user.points_total })}
+          >
             <Emoji char="⭐" /> {level.next - user.points_total} → <Emoji char={LEVEL_EMOJI[level.nextCode]} />
           </span>
         </div>
       ) : (
-        <span className="chip tree-card__fruits" aria-label={t("tree.fruits", { count: fruits })}>
+        <span className="chip tree-card__fruits" role="img" aria-label={t("tree.fruits", { count: fruits })}>
           <Emoji char="🍎" /> {fruits}
         </span>
       )}
@@ -204,7 +209,7 @@ function AvatarSheet({ onClose }: { onClose: () => void }) {
                     className={`avatar-grid__item${chosen ? " is-chosen" : ""}${avatar.unlocked ? "" : " is-locked"}`}
                     disabled={saving}
                     aria-pressed={chosen}
-                    aria-label={avatar.unlocked ? undefined : t("profile.avatarLocked", { level })}
+                    aria-label={avatar.unlocked ? avatar.emoji : t("profile.avatarLocked", { level })}
                     onClick={() => {
                       if (avatar.unlocked) void choose(avatar.emoji);
                       else setHint(t("profile.avatarLocked", { level }));

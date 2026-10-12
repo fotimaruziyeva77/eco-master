@@ -1,5 +1,6 @@
 """Broadcasts: a message from the team to many users through the bot (app/broadcasts.py)."""
 
+from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, Query, status
@@ -14,11 +15,15 @@ from app.admin.schemas import (
     BroadcastListOut,
     BroadcastOut,
 )
-from app.broadcasts import WEEKLY_LIMIT, audience_size, sent_this_week
+from app.broadcasts import QUEUE_LOCK_KEY, WEEKLY_LIMIT, audience_size, sent_this_week
 from app.deps import SessionDep
 from app.models import AdminUser, AnalyticsEvent, Broadcast, BroadcastStatus
 
 router = APIRouter(prefix="/broadcasts", tags=["admin-broadcasts"])
+
+# The same text to the same people again within this time is taken for a double click or a
+# retried request, not for a new broadcast.
+DUPLICATE_WINDOW = timedelta(hours=1)
 
 
 def broadcast_out(broadcast: Broadcast, author: str | None, opened: int) -> BroadcastOut:
@@ -80,6 +85,20 @@ async def audience(
 async def create_broadcast(
     body: BroadcastIn, admin: AdminOnly, session: SessionDep
 ) -> BroadcastOut:
+    # One request at a time, so two tabs or two administrators can not both pass the checks.
+    await session.execute(select(func.pg_advisory_xact_lock(QUEUE_LOCK_KEY)))
+    duplicate = await session.scalar(
+        select(Broadcast.id)
+        .where(
+            Broadcast.text == body.text,
+            Broadcast.audience == body.audience,
+            Broadcast.status != BroadcastStatus.CANCELLED,
+            Broadcast.created_at >= datetime.now(UTC) - DUPLICATE_WINDOW,
+        )
+        .limit(1)
+    )
+    if duplicate is not None:
+        raise HTTPException(status.HTTP_409_CONFLICT, "duplicate_broadcast")
     if await sent_this_week(session) >= WEEKLY_LIMIT:
         raise HTTPException(status.HTTP_409_CONFLICT, "weekly_limit")
     broadcast = Broadcast(text=body.text, audience=body.audience, created_by=admin.id)
