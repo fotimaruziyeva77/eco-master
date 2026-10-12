@@ -502,3 +502,52 @@ class VideoOut(BaseModel):
     duration_ms: int | None = None
     size_bytes: int | None = None
     error: str | None = None
+
+
+# ----------------------------------------------------------------- broadcasts
+
+BroadcastAudience = Literal["all", "student", "teacher", "general"]
+BROADCAST_MAX_TEXT = 1000
+
+
+class BroadcastIn(BaseModel):
+    # Uzbek is required; Russian and English readers get the Uzbek text if theirs is empty.
+    text: dict[Literal["uz", "ru", "en"], str]
+    audience: BroadcastAudience = "all"
+
+    @field_validator("text")
+    @classmethod
+    def _texts(cls, value: dict[str, str]) -> dict[str, str]:
+        cleaned = {lang: body.strip() for lang, body in value.items() if body and body.strip()}
+        if not cleaned.get("uz"):
+            raise ValueError("the Uzbek text is required")
+        if any(len(body) > BROADCAST_MAX_TEXT for body in cleaned.values()):
+            raise ValueError(f"at most {BROADCAST_MAX_TEXT} characters")
+        return cleaned
+
+
+class BroadcastOut(BaseModel):
+    id: int
+    text: dict[str, str]
+    audience: BroadcastAudience
+    status: Literal["queued", "sending", "done", "cancelled"]
+    created_by: str | None
+    created_at: datetime
+    started_at: datetime | None
+    finished_at: datetime | None
+    total: int
+    sent: int
+    failed: int
+    # Users who opened the app from its button.
+    opened: int
+
+
+class BroadcastListOut(BaseModel):
+    items: list[BroadcastOut]
+    weekly_limit: int
+    sent_this_week: int
+
+
+class AudienceOut(BaseModel):
+    audience: BroadcastAudience
+    count: int

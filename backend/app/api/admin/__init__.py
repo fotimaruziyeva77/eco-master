@@ -7,6 +7,7 @@ from app.api.admin import (
     admins,
     audit,
     auth,
+    broadcasts,
     classes,
     content,
     market,
@@ -32,5 +33,6 @@ for module in (
     audit,
     market,
     classes,
+    broadcasts,
 ):
     router.include_router(module.router)

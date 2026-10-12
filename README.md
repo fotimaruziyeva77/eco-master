@@ -140,6 +140,21 @@ authenticator app (Google Authenticator, Authy, 2FAS...); the app is connected o
   after a week away it comes once a week; after five weeks it stops. All of it follows the one
   reminders switch in the settings.
 
+## Team tools
+
+- **Moderation alerts.** The bot tells the team chat (`MODERATION_CHAT_ID`, or
+  `FEEDBACK_CHAT_ID` when that is empty) when market listings or complaints wait for a
+  moderator: one short message with links to the admin panel, only when something new arrived,
+  at most every 30 minutes.
+- **Broadcasts** (admin panel → "Xabar yuborish", administrators only). A message in Uzbek, and
+  Russian / English if wanted, to everyone or to pupils, teachers or parents. Only users who
+  keep bot messages on get it; at most two in seven days; every broadcast and cancel is in the
+  audit log. The bot sends it in chunks below Telegram's limit and goes on after a restart. The
+  list shows how many got it and how many opened the app from its button.
+- **Growth statistics** (admin panel → Statistika): how far new users get (onboarding, first
+  points, daily task, coming back), weekly cohorts, and how many open the app from reminders,
+  Monday summaries and broadcasts.
+
 ## Market (phase 9)
 
 Children show things they made from waste, or give away things they no longer need. Added on

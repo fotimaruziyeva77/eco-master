@@ -1724,6 +1724,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/stats/growth": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Growth Stats
+         * @description How far new users get, weekly cohorts, and whether bot messages bring people back.
+         */
+        get: operations["growth_stats_api_admin_stats_growth_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/stats/questions": {
         parameters: {
             query?: never;
@@ -2091,6 +2111,61 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/broadcasts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Broadcasts */
+        get: operations["list_broadcasts_api_admin_broadcasts_get"];
+        put?: never;
+        /** Create Broadcast */
+        post: operations["create_broadcast_api_admin_broadcasts_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/broadcasts/audience": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Audience
+         * @description How many users would get a broadcast now.
+         */
+        get: operations["audience_api_admin_broadcasts_audience_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/broadcasts/{broadcast_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cancel Broadcast */
+        post: operations["cancel_broadcast_api_admin_broadcasts__broadcast_id__cancel_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/dev/init-data": {
         parameters: {
             query?: never;
@@ -2115,6 +2190,23 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * ActivationOut
+         * @description Users who registered in the period and how far they got.
+         */
+        ActivationOut: {
+            /** Registered */
+            registered: number;
+            /** Onboarded */
+            onboarded: number;
+            /** First Points */
+            first_points: number;
+            /** Daily Task */
+            daily_task: number;
+            /** Returned */
+            returned: number;
+            second_week: components["schemas"]["RateOut"];
+        };
         /** ActivityRowOut */
         ActivityRowOut: {
             /** Id */
@@ -2358,6 +2450,16 @@ export interface components {
              */
             last_active_at: string;
         };
+        /** AudienceOut */
+        AudienceOut: {
+            /**
+             * Audience
+             * @enum {string}
+             */
+            audience: "all" | "student" | "teacher" | "general";
+            /** Count */
+            count: number;
+        };
         /** AuditPageOut */
         AuditPageOut: {
             /** Rows */
@@ -2445,6 +2547,80 @@ export interface components {
             blocked: boolean;
             /** Reason */
             reason?: string | null;
+        };
+        /** BotMessageOut */
+        BotMessageOut: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "reminder" | "weekly" | "broadcast";
+            /** Sent */
+            sent: number;
+            /** Opened */
+            opened: number;
+            /** Rate */
+            rate: number | null;
+        };
+        /** BroadcastIn */
+        BroadcastIn: {
+            /** Text */
+            text: {
+                [key: string]: string;
+            };
+            /**
+             * Audience
+             * @default all
+             * @enum {string}
+             */
+            audience: "all" | "student" | "teacher" | "general";
+        };
+        /** BroadcastListOut */
+        BroadcastListOut: {
+            /** Items */
+            items: components["schemas"]["BroadcastOut"][];
+            /** Weekly Limit */
+            weekly_limit: number;
+            /** Sent This Week */
+            sent_this_week: number;
+        };
+        /** BroadcastOut */
+        BroadcastOut: {
+            /** Id */
+            id: number;
+            /** Text */
+            text: {
+                [key: string]: string;
+            };
+            /**
+             * Audience
+             * @enum {string}
+             */
+            audience: "all" | "student" | "teacher" | "general";
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "queued" | "sending" | "done" | "cancelled";
+            /** Created By */
+            created_by: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Started At */
+            started_at: string | null;
+            /** Finished At */
+            finished_at: string | null;
+            /** Total */
+            total: number;
+            /** Sent */
+            sent: number;
+            /** Failed */
+            failed: number;
+            /** Opened */
+            opened: number;
         };
         /** CardDetailOut */
         CardDetailOut: {
@@ -2635,6 +2811,18 @@ export interface components {
             token: string;
             /** Code */
             code: string;
+        };
+        /** CohortOut */
+        CohortOut: {
+            /**
+             * Week Start
+             * Format: date
+             */
+            week_start: string;
+            /** Size */
+            size: number;
+            /** Weeks */
+            weeks: (number | null)[];
         };
         /** ContentItemOut */
         ContentItemOut: {
@@ -2983,6 +3171,16 @@ export interface components {
             game_points_today: number;
             /** Game Daily Cap */
             game_daily_cap: number;
+        };
+        /** GrowthOut */
+        GrowthOut: {
+            activation: components["schemas"]["ActivationOut"];
+            /** Cohorts */
+            cohorts: components["schemas"]["CohortOut"][];
+            /** Messages */
+            messages: components["schemas"]["BotMessageOut"][];
+            /** Stories */
+            stories: number;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -7390,6 +7588,37 @@ export interface operations {
             };
         };
     };
+    growth_stats_api_admin_stats_growth_get: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GrowthOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     questions_api_admin_stats_questions_get: {
         parameters: {
             query?: {
@@ -7969,6 +8198,121 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_broadcasts_api_admin_broadcasts_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BroadcastListOut"];
+                };
+            };
+        };
+    };
+    create_broadcast_api_admin_broadcasts_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BroadcastIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BroadcastOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    audience_api_admin_broadcasts_audience_get: {
+        parameters: {
+            query?: {
+                audience?: "all" | "student" | "teacher" | "general";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AudienceOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cancel_broadcast_api_admin_broadcasts__broadcast_id__cancel_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                broadcast_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BroadcastOut"];
+                };
             };
             /** @description Validation Error */
             422: {

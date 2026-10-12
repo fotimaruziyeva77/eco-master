@@ -23,7 +23,7 @@ from app.models import (
     TeacherLesson,
     User,
 )
-from app.timeutil import TASHKENT, local_today
+from app.timeutil import TASHKENT, local_today, week_start
 
 HARD_QUESTION_RATE = 0.3  # below: too hard or a wrong answer key
 EASY_QUESTION_RATE = 0.95
@@ -502,3 +502,178 @@ USERS_CSV_HEADER = [
     "blocked",
     "nickname_hidden",
 ]
+
+
+# ---------------------------------------------------------------- growth (stage 7)
+
+COHORT_WEEKS = 8
+BOT_MESSAGES = (
+    ("reminder", "reminder_sent", "reminder_open"),
+    ("weekly", "weekly_sent", "weekly_open"),
+    ("broadcast", "broadcast_sent", "broadcast_open"),
+)
+
+
+class ActivationOut(BaseModel):
+    """Users who registered in the period and how far they got."""
+
+    registered: int
+    onboarded: int
+    first_points: int
+    daily_task: int
+    # Opened the app on at least two different days.
+    returned: int
+    # Opened it 7–13 days after registering, of those registered at least a week ago.
+    second_week: RateOut
+
+
+class CohortOut(BaseModel):
+    week_start: date
+    size: int
+    # Share of the cohort that opened the app in week 1, 2, … after the one they joined in;
+    # None for weeks still to come.
+    weeks: list[float | None]
+
+
+class BotMessageOut(BaseModel):
+    kind: Literal["reminder", "weekly", "broadcast"]
+    sent: int
+    opened: int
+    rate: float | None
+
+
+class GrowthOut(BaseModel):
+    activation: ActivationOut
+    cohorts: list[CohortOut]
+    messages: list[BotMessageOut]
+    stories: int
+
+
+async def growth(session: AsyncSession, days: int) -> GrowthOut:
+    today = local_today()
+    since = day_start(today - timedelta(days=days - 1))
+    opens = AnalyticsEvent.name == "app_open"
+
+    joined = dict(
+        (
+            await session.execute(
+                select(User.id, local_day(User.created_at)).where(User.created_at >= since)
+            )
+        ).all()
+    )
+    ids = list(joined)
+    onboarded = first_points = daily_task = returned = 0
+    week_two = _rate(0, 0)
+    if ids:
+        onboarded = await session.scalar(
+            select(func.count())
+            .select_from(User)
+            .where(User.id.in_(ids), User.onboarding_step == OnboardingStep.DONE)
+        )
+
+        async def users_with(*conditions) -> int:
+            return await session.scalar(
+                select(func.count(func.distinct(ActivityLog.user_id))).where(
+                    ActivityLog.user_id.in_(ids), *conditions
+                )
+            )
+
+        first_points = await users_with(ActivityLog.points > 0)
+        daily_task = await users_with(ActivityLog.action == "daily_task")
+        open_days: dict[int, set[date]] = {}
+        rows = await session.execute(
+            select(AnalyticsEvent.user_id, local_day(AnalyticsEvent.created_at))
+            .where(opens, AnalyticsEvent.user_id.in_(ids))
+            .distinct()
+        )
+        for user_id, day in rows.all():
+            open_days.setdefault(user_id, set()).add(day)
+        returned = sum(len(d) >= 2 for d in open_days.values())
+        eligible = [uid for uid, d0 in joined.items() if d0 + timedelta(days=7) <= today]
+        kept = sum(
+            any(7 <= (day - joined[uid]).days <= 13 for day in open_days.get(uid, ()))
+            for uid in eligible
+        )
+        week_two = _rate(len(eligible), kept)
+
+    return GrowthOut(
+        activation=ActivationOut(
+            registered=len(ids),
+            onboarded=onboarded,
+            first_points=first_points,
+            daily_task=daily_task,
+            returned=returned,
+            second_week=week_two,
+        ),
+        cohorts=await _cohorts(session, today),
+        messages=await _bot_messages(session, since),
+        stories=await session.scalar(
+            select(func.count()).where(
+                AnalyticsEvent.name == "story_share", AnalyticsEvent.created_at >= since
+            )
+        ),
+    )
+
+
+async def _cohorts(session: AsyncSession, today: date) -> list[CohortOut]:
+    """Weekly cohorts: users by the week they joined, then the weeks they came back in."""
+    this_week = week_start(today)
+    first = this_week - timedelta(weeks=COHORT_WEEKS - 1)
+    joined = {
+        user_id: week_start(day)
+        for user_id, day in (
+            await session.execute(
+                select(User.id, local_day(User.created_at)).where(
+                    User.created_at >= day_start(first)
+                )
+            )
+        ).all()
+    }
+    seen: set[tuple[int, date]] = set()
+    if joined:
+        rows = await session.execute(
+            select(AnalyticsEvent.user_id, local_day(AnalyticsEvent.created_at))
+            .where(
+                AnalyticsEvent.name == "app_open",
+                AnalyticsEvent.user_id.in_(list(joined)),
+                AnalyticsEvent.created_at >= day_start(first),
+            )
+            .distinct()
+        )
+        seen = {(user_id, week_start(day)) for user_id, day in rows.all()}
+    cohorts = []
+    for i in range(COHORT_WEEKS):
+        monday = first + timedelta(weeks=i)
+        members = [uid for uid, week in joined.items() if week == monday]
+        weeks: list[float | None] = []
+        for offset in range(1, COHORT_WEEKS):
+            later = monday + timedelta(weeks=offset)
+            if later > this_week:
+                weeks.append(None)
+                continue
+            back = sum((uid, later) in seen for uid in members)
+            weeks.append(round(back / len(members), 4) if members else None)
+        cohorts.append(CohortOut(week_start=monday, size=len(members), weeks=weeks))
+    return cohorts
+
+
+async def _bot_messages(session: AsyncSession, since: datetime) -> list[BotMessageOut]:
+    names = [name for _, sent, opened in BOT_MESSAGES for name in (sent, opened)]
+    counts = dict(
+        (
+            await session.execute(
+                select(AnalyticsEvent.name, func.count())
+                .where(AnalyticsEvent.name.in_(names), AnalyticsEvent.created_at >= since)
+                .group_by(AnalyticsEvent.name)
+            )
+        ).all()
+    )
+    result = []
+    for kind, sent_name, open_name in BOT_MESSAGES:
+        sent, opened = counts.get(sent_name, 0), counts.get(open_name, 0)
+        result.append(
+            BotMessageOut(
+                kind=kind, sent=sent, opened=opened, rate=round(opened / sent, 4) if sent else None
+            )
+        )
+    return result

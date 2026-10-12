@@ -11,6 +11,7 @@ import {
   ListChecks,
   LogOut,
   MapPin,
+  Megaphone,
   Menu,
   PackageCheck,
   MessageSquareWarning,
@@ -117,6 +118,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <div className="a-nav-title">Moderatsiya</div>
             <Link to="/users" icon={Users} label="Foydalanuvchilar" />
             <Link to="/classes" icon={School} label="Sinflar" />
+            <Link to="/broadcasts" icon={Megaphone} label="Xabar yuborish" />
             <Link
               to="/reports"
               icon={MessageSquareWarning}

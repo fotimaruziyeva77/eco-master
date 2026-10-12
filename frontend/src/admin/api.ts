@@ -38,6 +38,10 @@ export type PictureUpload = S["PictureOut"];
 export type VideoUpload = S["VideoOut"];
 export type MediaStatus = S["MediaStatusOut"];
 export type AdminClass = S["AdminClassOut"];
+export type Growth = S["GrowthOut"];
+export type Broadcast = S["BroadcastOut"];
+export type BroadcastList = S["BroadcastListOut"];
+export type BroadcastAudience = Broadcast["audience"];
 export type MarketFilter = "pending" | "reported" | "approved" | "rejected" | "hidden" | "handover" | "all";
 
 /** Values of a content form: {"uz": ..., "ru": ..., "en": ...} for multilingual fields. */
@@ -178,6 +182,7 @@ export const adminApi = {
   deleteWord: (id: number) => send<void>("DELETE", `/words/${id}`),
 
   stats: (days: number) => get<Stats>(`/stats${query({ days })}`),
+  growth: (days: number) => get<Growth>(`/stats/growth${query({ days })}`),
   questionStats: () => get<QuestionStat[]>("/stats/questions"),
   flags: (days: number) => get<Flags>(`/stats/flags${query({ days })}`),
   audit: (beforeId?: number | null) => get<AuditPage>(`/audit${query({ before_id: beforeId })}`),
@@ -209,6 +214,11 @@ export const adminApi = {
   dismissReports: (id: number) => send<MarketListing>("POST", `/market/${id}/dismiss-reports`),
 
   classes: (q: string) => get<AdminClass[]>(`/classes${query({ q })}`),
+  broadcasts: () => get<BroadcastList>("/broadcasts"),
+  broadcastAudience: (audience: BroadcastAudience) =>
+    get<S["AudienceOut"]>(`/broadcasts/audience${query({ audience })}`),
+  createBroadcast: (body: S["BroadcastIn"]) => send<Broadcast>("POST", "/broadcasts", body),
+  cancelBroadcast: (id: number) => send<Broadcast>("POST", `/broadcasts/${id}/cancel`),
   deleteClass: (id: number) => send<void>("DELETE", `/classes/${id}`),
 
   handoverPoints: () => get<HandoverPoint[]>("/handover/points"),

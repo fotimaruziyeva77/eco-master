@@ -52,6 +52,8 @@ async def auth_telegram(
         track(session, user, "reminder_open")
     elif source == "weekly":
         track(session, user, "weekly_open")
+    elif source and source.startswith("broadcast_") and source[10:].isdigit():
+        track(session, user, "broadcast_open", broadcast=int(source[10:]))
     # Catch up on badges whose rules were met before they existed (or changed since).
     await award_badges(session, user.id)
     await session.commit()

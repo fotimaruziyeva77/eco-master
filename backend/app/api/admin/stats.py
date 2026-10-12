@@ -11,8 +11,10 @@ from app.admin.schemas import FastFlagOut, FlagsOut, PointsFlagOut
 from app.admin.stats import (
     USERS_CSV_HEADER,
     AdminStatsOut,
+    GrowthOut,
     QuestionStatOut,
     day_start,
+    growth,
     overview,
     project_stats,
     question_stats,
@@ -34,6 +36,12 @@ def since(days: int) -> datetime:
 @router.get("")
 async def stats(admin: AdminOnly, session: SessionDep, days: Days = 30) -> AdminStatsOut:
     return await overview(session, days)
+
+
+@router.get("/growth")
+async def growth_stats(admin: AdminOnly, session: SessionDep, days: Days = 30) -> GrowthOut:
+    """How far new users get, weekly cohorts, and whether bot messages bring people back."""
+    return await growth(session, days)
 
 
 @router.get("/questions")

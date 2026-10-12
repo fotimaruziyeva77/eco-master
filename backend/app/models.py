@@ -708,3 +708,40 @@ class LeagueMember(Base):
     )
     # The tier the week was played in; the result moves users.league_tier for the next week.
     tier: Mapped[int] = mapped_column(SmallInteger)
+
+
+# -------------------------------------------------------------------- broadcasts
+
+
+class BroadcastStatus(enum.StrEnum):
+    QUEUED = "queued"
+    SENDING = "sending"
+    DONE = "done"
+    CANCELLED = "cancelled"
+
+
+class Broadcast(Base):
+    """A message from the team to many users through the bot (app/broadcasts.py)."""
+
+    __tablename__ = "broadcasts"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    # {"uz": ..., "ru": ..., "en": ...}; a language left out gets the Uzbek text.
+    text: Mapped[I18n]
+    # "all" or a user path: student, teacher, general.
+    audience: Mapped[str] = mapped_column(String(16))
+    status: Mapped[BroadcastStatus] = mapped_column(
+        str_enum(BroadcastStatus), server_default=BroadcastStatus.QUEUED.value
+    )
+    created_by: Mapped[int | None] = mapped_column(
+        ForeignKey("admin_users.id", ondelete="SET NULL")
+    )
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    started_at: Mapped[datetime | None]
+    finished_at: Mapped[datetime | None]
+    # Recipients when sending started, and how it went.
+    total: Mapped[int] = mapped_column(server_default=text("0"))
+    sent: Mapped[int] = mapped_column(server_default=text("0"))
+    failed: Mapped[int] = mapped_column(server_default=text("0"))
+    # Users get it in id order; the last one handled, so a restart goes on from there.
+    last_user_id: Mapped[int] = mapped_column(BigInteger, server_default=text("0"))

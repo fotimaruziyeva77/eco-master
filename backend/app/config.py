@@ -27,6 +27,8 @@ class Settings(BaseSettings):
     webapp_url: str = "http://localhost:5180"
     # Private team chat that receives messages users write to the bot (TZ 8.11).
     feedback_chat_id: int | None = None
+    # Team chat told when listings or complaints wait for a moderator; the feedback chat if unset.
+    moderation_chat_id: int | None = None
 
     jwt_secret: str = INSECURE_JWT_SECRET
     jwt_ttl_hours: int = 24

@@ -1,11 +1,11 @@
 import { Download } from "lucide-react";
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { Link } from "react-router";
 
 import { useLoad } from "../../hooks/useLoad";
-import { adminApi, exportUrl, type Stats } from "../api";
+import { adminApi, exportUrl, type Growth, type Stats } from "../api";
 import { DayChart, Meter } from "../charts";
-import { LoadError, Loading, PageHead, percent } from "../ui";
+import { fmtDate, LoadError, Loading, PageHead, percent } from "../ui";
 
 const EXPORTS = [
   ["daily", "Kunlar bo'yicha"],
@@ -19,6 +19,13 @@ const SOURCE_LABEL: Record<string, string> = {
   teacher: "O'qituvchi havolasi",
   share: "Ulashilgan xabar",
   reminder: "Eslatma",
+  weekly: "Dushanba natijasi",
+};
+
+const MESSAGE_LABEL: Record<string, string> = {
+  reminder: "Kunlik eslatma",
+  weekly: "Dushanba natijasi",
+  broadcast: "Jamoa xabari",
 };
 
 function Kpi({ value, label }: { value: string | number; label: string }) {
@@ -34,6 +41,7 @@ function Kpi({ value, label }: { value: string | number; label: string }) {
 export function StatsPage() {
   const [days, setDays] = useState(30);
   const stats = useLoad(() => adminApi.stats(days), [days]);
+  const growth = useLoad(() => adminApi.growth(days), [days]);
   const questions = useLoad(() => adminApi.questionStats(), []);
   const s = stats.data;
 
@@ -51,6 +59,7 @@ export function StatsPage() {
       {stats.loading && !s && <Loading />}
       {stats.error !== undefined && !s && <LoadError error={stats.error} onRetry={stats.reload} />}
       {s && <Overview stats={s} days={days} />}
+      {growth.data && <GrowthSection growth={growth.data} days={days} />}
 
       <section className="a-card" style={{ marginTop: 16 }}>
         <h2>Savollar bo'yicha to'g'ri javoblar</h2>
@@ -263,3 +272,96 @@ function Overview({ stats: s, days }: { stats: Stats; days: number }) {
     </div>
   );
 }
+
+/** Cohort cells get greener the more of the cohort came back. */
+function heat(rate: number | null): CSSProperties | undefined {
+  if (rate === null) return undefined;
+  return { background: `rgba(16, 185, 129, ${(0.08 + rate * 0.8).toFixed(2)})` };
+}
+
+/** Stage 7: how far new users get, weekly cohorts, and whether bot messages bring people back. */
+function GrowthSection({ growth: g, days }: { growth: Growth; days: number }) {
+  const a = g.activation;
+  return (
+    <div className="a-stack" style={{ marginTop: 16 }}>
+      <div className="a-grid-2">
+        <section className="a-card">
+          <h2>Faollashuv voronkasi</h2>
+          <div className="a-stack">
+            <Meter label="Ro'yxatdan o'tdi" value={a.registered} total={a.registered} />
+            <Meter label="Onboardingni tugatdi" value={a.onboarded} total={a.registered} />
+            <Meter label="Birinchi ballni oldi" value={a.first_points} total={a.registered} />
+            <Meter label="Kunlik topshiriq bajardi" value={a.daily_task} total={a.registered} />
+            <Meter label="Boshqa kuni qaytib keldi" value={a.returned} total={a.registered} />
+          </div>
+          <p className="a-help" style={{ marginTop: 8 }}>
+            Oxirgi {days} kunda qo'shilganlar. 2-haftada (7–13-kun) qaytganlar: {percent(a.second_week.rate)} (
+            {a.second_week.value}/{a.second_week.size}).
+          </p>
+        </section>
+        <section className="a-card">
+          <h2>Bot xabarlari</h2>
+          <table className="a-table">
+            <thead>
+              <tr>
+                <th>Xabar</th>
+                <th className="num">Yuborildi</th>
+                <th className="num">Ilovani ochdi</th>
+                <th className="num">Ulush</th>
+              </tr>
+            </thead>
+            <tbody>
+              {g.messages.map((m) => (
+                <tr key={m.kind}>
+                  <td>{MESSAGE_LABEL[m.kind]}</td>
+                  <td className="num">{m.sent}</td>
+                  <td className="num">{m.opened}</td>
+                  <td className="num">{percent(m.rate)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="a-help" style={{ marginTop: 8 }}>
+            Oxirgi {days} kun. Stories'ga joylangan daraxt rasmlari: {g.stories}.
+          </p>
+        </section>
+      </div>
+
+      <section className="a-card">
+        <h2>Haftalik kogortalar</h2>
+        <p className="a-help" style={{ marginBottom: 10 }}>
+          Har qator — o'sha haftada qo'shilganlar. Ustunlar — keyingi haftalarda ilovani ochganlar ulushi.
+        </p>
+        <div className="a-table-wrap">
+          <table className="a-table a-cohorts">
+            <thead>
+              <tr>
+                <th>Hafta</th>
+                <th className="num">Odam</th>
+                {g.cohorts[0]?.weeks.map((_, i) => (
+                  <th key={i} className="num">
+                    {i + 1}-hafta
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {g.cohorts.map((c) => (
+                <tr key={c.week_start}>
+                  <td>{fmtDate(c.week_start)}</td>
+                  <td className="num">{c.size}</td>
+                  {c.weeks.map((w, i) => (
+                    <td key={i} className="a-heat" style={heat(c.size ? w : null)}>
+                      {w === null || !c.size ? "" : percent(w)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  );
+}
+
