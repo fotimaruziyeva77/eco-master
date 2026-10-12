@@ -11,17 +11,12 @@ from app.deps import CurrentUser, SessionDep
 from app.levels import level_for
 from app.models import ActivityLog, OnboardingStep, Report, ReportStatus, User
 from app.schemas import LeaderboardEntryOut, LeaderboardOut, ReportIn
-from app.timeutil import local_today
+from app.timeutil import local_today, week_start
 
 router = APIRouter(tags=["rating"])
 
 TOP_SIZE = 100
 Period = Literal["week", "all"]
-
-
-def week_start(day: date) -> date:
-    """Monday of the week (weeks run Monday 00:00 – Sunday 23:59, Tashkent time)."""
-    return day - timedelta(days=day.weekday())
 
 
 def ranked_query(period: Period, today: date):

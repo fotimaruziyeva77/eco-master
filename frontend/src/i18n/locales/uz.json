@@ -92,7 +92,8 @@
     "wasteTypes": "Nimadan yasaymiz?",
     "tipTitle": "Bilasizmi?",
     "streakDots_one": "{{count}} kun ketma-ket. 7 kun to'lsa: +{{points}} ball",
-    "streakDots_other": "{{count}} kun ketma-ket. 7 kun to'lsa: +{{points}} ball"
+    "streakDots_other": "{{count}} kun ketma-ket. 7 kun to'lsa: +{{points}} ball",
+    "classTask": "{{name}} sinfi vazifasi"
   },
   "learn": {
     "title": "O'rganish",
@@ -179,7 +180,9 @@
     "contactTitle": "Bog'lanish",
     "contactText": "Savollar bo'lsa, Eco-Master botiga yozing.",
     "marketTitle": "Bozor",
-    "marketText": "Bozorga e'lon bersangiz, buyumning 1–3 ta rasmi, nomi va tavsifi saqlanadi. Rasmlardan joylashuv va kamera ma'lumotlari o'chiriladi. E'lonni avval moderator tekshiradi; tasdiqlangan e'lonni ilova foydalanuvchilari taxallusingiz bilan ko'radi. Buyum faqat topshirish joyida, kattalar orqali beriladi — kontaktlaringiz hech kimga ko'rsatilmaydi. E'lon yoki hisobingiz o'chirilsa, rasmlar ham o'chadi."
+    "marketText": "Bozorga e'lon bersangiz, buyumning 1–3 ta rasmi, nomi va tavsifi saqlanadi. Rasmlardan joylashuv va kamera ma'lumotlari o'chiriladi. E'lonni avval moderator tekshiradi; tasdiqlangan e'lonni ilova foydalanuvchilari taxallusingiz bilan ko'radi. Buyum faqat topshirish joyida, kattalar orqali beriladi — kontaktlaringiz hech kimga ko'rsatilmaydi. E'lon yoki hisobingiz o'chirilsa, rasmlar ham o'chadi.",
+    "classesTitle": "Sinf va liga",
+    "classesText": "O'qituvchi QR-kodi orqali sinfga faqat o'zingiz qo'shilasiz va istalgan vaqtda chiqib keta olasiz. O'qituvchi sinfdagilarning faqat taxallusi, darajasi va ballarini ko'radi; yozishma yo'q. Haftalik ligada ham faqat taxallus va ball ko'rinadi."
   },
   "games": {
     "title": "O'yinlar",
@@ -247,7 +250,12 @@
     "reported": "Rahmat! Shikoyat moderatorga yuborildi.",
     "title": "Reyting",
     "week": "Hafta",
-    "all": "Hammasi"
+    "all": "Hammasi",
+    "tabs": {
+      "league": "Liga",
+      "class": "Sinf",
+      "all": "Hammasi"
+    }
   },
   "share": {
     "button": "Ulashish",
@@ -490,5 +498,73 @@
       "condition_required": "Holatini tanlang.",
       "unknown": "Xatolik yuz berdi. Qayta urinib ko'ring."
     }
+  },
+  "classes": {
+    "title": "Sinflarim",
+    "new": "Yangi sinf",
+    "name": "Sinf nomi",
+    "namePlaceholder": "Masalan: 7-B",
+    "create": "Yaratish",
+    "empty": "Sinf yarating va QR-kodni o'quvchilarga ko'rsating.",
+    "members_one": "{{count}} o'quvchi",
+    "members_other": "{{count}} o'quvchi",
+    "invite": "O'quvchilarni taklif qilish",
+    "inviteHint": "QR-kodni doskada ko'rsating yoki havolani sinf guruhiga yuboring.",
+    "code": "Sinf kodi",
+    "shareText": "{{name}} sinfiga qo'shiling — Eco-Master'da birga o'rganamiz! 🌱",
+    "tasks": "Vazifalar",
+    "addTask": "Vazifa berish",
+    "deleteTask": "Vazifani o'chirish",
+    "taskDue": "Muddati",
+    "noTasks": "Hali vazifa yo'q.",
+    "noMembers": "Hali hech kim qo'shilmagan.",
+    "pupils": "O'quvchilar",
+    "weekPoints": "Ballar — shu hafta uchun.",
+    "rename": "Nomini o'zgartirish",
+    "delete": "Sinfni o'chirish",
+    "deleteText": "Sinf va uning vazifalari o'chiriladi. O'quvchilar ilovada qoladi.",
+    "remove": "Sinfdan chiqarish",
+    "dueBy": "{{date}}gacha",
+    "overdue": "Muddati o'tdi",
+    "board": "Shu hafta",
+    "join": {
+      "teacher": "O'qituvchi: {{name}}",
+      "privacy": "O'qituvchi taxallusingiz, darajangiz va ballaringizni ko'radi. Istalgan vaqtda chiqib ketishingiz mumkin.",
+      "button": "Qo'shilish",
+      "later": "Keyinroq",
+      "already": "Siz shu sinfdasiz"
+    },
+    "mine": "Mening sinfim",
+    "leave": "Sinfdan chiqish",
+    "leaveText": "Sinf reytingi va vazifalari ko'rinmay qoladi.",
+    "none": "Siz sinfda emassiz. O'qituvchingizdan QR-kod so'rang.",
+    "open": "Sinf sahifasi",
+    "errors": {
+      "class_not_found": "Bunday sinf topilmadi. Kodni tekshiring.",
+      "class_full": "Sinf to'lgan.",
+      "own_class": "Bu sizning sinfingiz.",
+      "too_many_classes": "Ko'pi bilan 10 ta sinf ochish mumkin.",
+      "too_many_tasks": "Bir vaqtda ko'pi bilan 5 ta vazifa.",
+      "task_exists": "Bu loyiha allaqachon berilgan.",
+      "bad_due_date": "Muddat bugundan 60 kungacha bo'lsin.",
+      "too_many_attempts": "Juda ko'p urinish. Keyinroq urinib ko'ring.",
+      "name": "Bu nomni ishlatib bo'lmaydi.",
+      "teachers_only": "Sinfni faqat o'qituvchi ocha oladi.",
+      "project_not_found": "Loyiha topilmadi.",
+      "unknown": "Xatolik. Qayta urinib ko'ring."
+    }
+  },
+  "league": {
+    "tier0": "Bronza liga",
+    "tier1": "Kumush liga",
+    "tier2": "Oltin liga",
+    "tier3": "Olmos liga",
+    "daysLeft_one": "{{count}} kun qoldi",
+    "daysLeft_other": "{{count}} kun qoldi",
+    "promoted": "Tabriklaymiz! Endi siz — {{tier}}da.",
+    "demoted": "Bu hafta {{tier}}dasiz. Qaytib chiqing!",
+    "notJoined": "Bu hafta ball to'plang — ligadagi guruhingiz paydo bo'ladi.",
+    "rules_one": "Hafta oxirida eng yaxshi {{count}} kishi yuqori ligaga chiqadi.",
+    "rules_other": "Hafta oxirida eng yaxshi {{count}} kishi yuqori ligaga chiqadi."
   }
 }

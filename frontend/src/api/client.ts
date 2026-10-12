@@ -42,6 +42,15 @@ export type MyRequest = Schemas["MyRequestOut"];
 export type PickupPoint = Schemas["PickupPointOut"];
 export type Photo = Schemas["PhotoOut"];
 export type ReportReason = Schemas["ListingReportIn"]["reason"];
+export type SchoolClass = Schemas["ClassOut"];
+export type ClassDetail = Schemas["ClassDetailOut"];
+export type ClassMember = Schemas["ClassMemberOut"];
+export type ClassTask = Schemas["ClassTaskOut"];
+export type ClassPreview = Schemas["ClassPreviewOut"];
+export type MyClass = Schemas["MyClassOut"];
+export type RankedMember = Schemas["RankedMemberOut"];
+export type League = Schemas["LeagueOut"];
+export type HomeClassTask = Schemas["HomeClassTaskOut"];
 
 /** One language of a lesson body (TZ 8.9); the API types it as a free-form object. */
 export type LessonBody = {
@@ -155,6 +164,7 @@ export const api = {
     post<DoneResult>(`/projects/${encodeURIComponent(slug)}/done`, {
       client_event_id: clientEventId,
     }),
+  projects: () => request<ProjectSummary[]>("/projects"),
   cards: () => request<CardSummary[]>("/cards"),
   card: (slug: string) => request<CardDetail>(`/cards/${encodeURIComponent(slug)}`),
 
@@ -175,6 +185,7 @@ export const api = {
   dailyDone: (clientEventId: string) =>
     post<DailyDone>("/daily/done", { client_event_id: clientEventId }),
   leaderboard: (period: Period) => request<Leaderboard>(`/leaderboard?period=${period}`),
+  league: () => request<League>("/league"),
   report: (targetUserId: number) => post<{ ok: boolean }>("/reports", { target_user_id: targetUserId }),
   myStats: () => request<Stats>("/me/stats"),
   changeNickname: (nickname: string) => post<User>("/me/nickname", { nickname }),
@@ -220,4 +231,23 @@ export const api = {
   acceptRequest: (requestId: number) => post<Listing>(`/market/requests/${requestId}/accept`),
   declineRequest: (requestId: number) => post<Listing>(`/market/requests/${requestId}/decline`),
   cancelHandover: (id: number) => post<Listing>(`/market/${id}/cancel`),
+
+  // A teacher's classes.
+  classes: () => request<SchoolClass[]>("/classes"),
+  createClass: (name: string) => post<SchoolClass>("/classes", { name }),
+  classDetail: (id: number) => request<ClassDetail>(`/classes/${id}`),
+  renameClass: (id: number, name: string) =>
+    request<SchoolClass>(`/classes/${id}`, { method: "PATCH", body: JSON.stringify({ name }) }),
+  deleteClass: (id: number) => request<void>(`/classes/${id}`, { method: "DELETE" }),
+  removeMember: (id: number, userId: number) =>
+    request<void>(`/classes/${id}/members/${userId}`, { method: "DELETE" }),
+  addClassTask: (id: number, projectSlug: string, dueDate: string) =>
+    post<ClassTask>(`/classes/${id}/tasks`, { project_slug: projectSlug, due_date: dueDate }),
+  deleteClassTask: (id: number, taskId: number) =>
+    request<void>(`/classes/${id}/tasks/${taskId}`, { method: "DELETE" }),
+  // A pupil's class.
+  previewClass: (code: string) => request<ClassPreview>(`/classes/preview/${encodeURIComponent(code)}`),
+  joinClass: (code: string) => post<MyClass>("/classes/join", { code }),
+  myClass: () => request<MyClass | null>("/my-class"),
+  leaveClass: () => request<void>("/my-class", { method: "DELETE" }),
 };

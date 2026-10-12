@@ -14,9 +14,12 @@ from app.deps import CurrentUser, SessionDep
 from app.models import (
     ActivityLog,
     Category,
+    ClassMember,
+    ClassTask,
     ContentStatus,
     KnowledgeCard,
     Project,
+    SchoolClass,
 )
 from app.points import PROJECT_DONE_POINTS, award
 from app.schemas import (
@@ -26,6 +29,7 @@ from app.schemas import (
     CategoryOut,
     DoneIn,
     DoneOut,
+    HomeClassTaskOut,
     HomeOut,
     ProjectDetailOut,
     ProjectSummaryOut,
@@ -109,6 +113,34 @@ async def featured_project(
     return project_summary(project, category, done)
 
 
+async def class_task(session: AsyncSession, user_id: int, today: date) -> HomeClassTaskOut | None:
+    """The class task due soonest that the pupil has not done; overdue ones are left out."""
+    done = await done_project_ids(session, user_id)
+    rows = await session.execute(
+        select(ClassTask, Project, Category, SchoolClass)
+        .join(ClassMember, ClassMember.class_id == ClassTask.class_id)
+        .join(SchoolClass, SchoolClass.id == ClassTask.class_id)
+        .join(Project, Project.id == ClassTask.project_id)
+        .join(Category, Category.id == Project.category_id)
+        .where(
+            ClassMember.user_id == user_id,
+            ClassTask.due_date >= today,
+            Project.status == PUBLISHED,
+        )
+        .order_by(ClassTask.due_date, ClassTask.id)
+    )
+    for task, project, category, school_class in rows.all():
+        if str(project.id) not in done:
+            return HomeClassTaskOut(
+                project_slug=project.slug,
+                title=project.title,
+                icon=category.icon,
+                due_date=task.due_date,
+                class_name=school_class.name,
+            )
+    return None
+
+
 @router.get("/home")
 async def home(user: CurrentUser, session: SessionDep) -> HomeOut:
     today = local_today()
@@ -120,12 +152,26 @@ async def home(user: CurrentUser, session: SessionDep) -> HomeOut:
         tip=TipOut(id=tip.id, text=tip.text) if tip else None,
         categories=categories,
         featured=await featured_project(session, user.id, today),
+        class_task=await class_task(session, user.id, today),
     )
 
 
 @router.get("/categories")
 async def categories(user: CurrentUser, session: SessionDep) -> list[CategoryOut]:
     return await list_categories(session)
+
+
+@router.get("/projects")
+async def projects(user: CurrentUser, session: SessionDep) -> list[ProjectSummaryOut]:
+    """Every published project, by waste type (the teacher's task picker)."""
+    done = await done_project_ids(session, user.id)
+    rows = await session.execute(
+        select(Project, Category)
+        .join(Category, Category.id == Project.category_id)
+        .where(Project.status == PUBLISHED)
+        .order_by(Category.sort_order, Project.sort_order, Project.id)
+    )
+    return [project_summary(p, c, done) for p, c in rows.all()]
 
 
 @router.get("/categories/{code}")

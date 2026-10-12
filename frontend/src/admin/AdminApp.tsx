@@ -6,6 +6,7 @@ import { Layout } from "./Layout";
 import { AccountPage } from "./pages/AccountPage";
 import { AdminsPage } from "./pages/AdminsPage";
 import { AuditPage } from "./pages/AuditPage";
+import { ClassesPage } from "./pages/ClassesPage";
 import { ContentEditPage } from "./pages/ContentEditPage";
 import { ContentListPage } from "./pages/ContentListPage";
 import { FlagsPage } from "./pages/FlagsPage";
@@ -73,6 +74,7 @@ export function AdminApp() {
               <Route path="/handover" element={<DeskStaff><HandoverPage /></DeskStaff>} />
               <Route path="/users" element={<AdminOnly><UsersPage /></AdminOnly>} />
               <Route path="/users/:id" element={<AdminOnly><UserPage /></AdminOnly>} />
+              <Route path="/classes" element={<AdminOnly><ClassesPage /></AdminOnly>} />
               <Route path="/reports" element={<AdminOnly><ReportsPage /></AdminOnly>} />
               <Route path="/flags" element={<AdminOnly><FlagsPage /></AdminOnly>} />
               <Route path="/words" element={<AdminOnly><WordsPage /></AdminOnly>} />

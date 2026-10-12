@@ -37,6 +37,7 @@ export type HandoverMatch = S["HandoverMatchOut"];
 export type PictureUpload = S["PictureOut"];
 export type VideoUpload = S["VideoOut"];
 export type MediaStatus = S["MediaStatusOut"];
+export type AdminClass = S["AdminClassOut"];
 export type MarketFilter = "pending" | "reported" | "approved" | "rejected" | "hidden" | "handover" | "all";
 
 /** Values of a content form: {"uz": ..., "ru": ..., "en": ...} for multilingual fields. */
@@ -206,6 +207,9 @@ export const adminApi = {
   hideListing: (id: number, body: MarketDecision) =>
     send<MarketListing>("POST", `/market/${id}/hide`, body),
   dismissReports: (id: number) => send<MarketListing>("POST", `/market/${id}/dismiss-reports`),
+
+  classes: (q: string) => get<AdminClass[]>(`/classes${query({ q })}`),
+  deleteClass: (id: number) => send<void>("DELETE", `/classes/${id}`),
 
   handoverPoints: () => get<HandoverPoint[]>("/handover/points"),
   handoverDesk: (pointId: number | null) => get<HandoverDesk>(`/handover${query({ point_id: pointId })}`),

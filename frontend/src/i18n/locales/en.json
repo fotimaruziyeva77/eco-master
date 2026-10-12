@@ -92,7 +92,8 @@
     "wasteTypes": "What shall we make?",
     "tipTitle": "Did you know?",
     "streakDots_one": "{{count}} day in a row. 7 days: +{{points}} points",
-    "streakDots_other": "{{count}} days in a row. 7 days: +{{points}} points"
+    "streakDots_other": "{{count}} days in a row. 7 days: +{{points}} points",
+    "classTask": "Task for {{name}}"
   },
   "learn": {
     "title": "Learn",
@@ -179,7 +180,9 @@
     "contactTitle": "Contact",
     "contactText": "If you have questions, message the Eco-Master bot.",
     "marketTitle": "Market",
-    "marketText": "If you add a listing, 1–3 photos of the item, its name and description are stored. Location and camera data are removed from the photos. A moderator checks every listing first; once approved, app users see it with your nickname. Items are handed over only at a handover point, through adults — your contacts are never shown to anyone. When you delete the listing or your account, the photos are deleted too."
+    "marketText": "If you add a listing, 1–3 photos of the item, its name and description are stored. Location and camera data are removed from the photos. A moderator checks every listing first; once approved, app users see it with your nickname. Items are handed over only at a handover point, through adults — your contacts are never shown to anyone. When you delete the listing or your account, the photos are deleted too.",
+    "classesTitle": "Class and league",
+    "classesText": "You join a class through the teacher's QR code only yourself and can leave at any time. The teacher sees only the nicknames, levels and points of the class; there is no messaging. The weekly league also shows only nicknames and points."
   },
   "games": {
     "title": "Games",
@@ -247,7 +250,12 @@
     "reported": "Thank you! The report was sent to a moderator.",
     "title": "Leaderboard",
     "week": "This week",
-    "all": "All time"
+    "all": "All time",
+    "tabs": {
+      "league": "League",
+      "class": "Class",
+      "all": "Everyone"
+    }
   },
   "share": {
     "button": "Share",
@@ -490,5 +498,73 @@
       "condition_required": "Choose the condition.",
       "unknown": "Something went wrong. Please try again."
     }
+  },
+  "classes": {
+    "title": "My classes",
+    "new": "New class",
+    "name": "Class name",
+    "namePlaceholder": "For example: 7B",
+    "create": "Create",
+    "empty": "Create a class and show your pupils its QR code.",
+    "members_one": "{{count}} pupil",
+    "members_other": "{{count}} pupils",
+    "invite": "Invite your pupils",
+    "inviteHint": "Show the QR code on the board or send the link to the class chat.",
+    "code": "Class code",
+    "shareText": "Join {{name}} — let's learn together in Eco-Master! 🌱",
+    "tasks": "Tasks",
+    "addTask": "Give a task",
+    "deleteTask": "Delete the task",
+    "taskDue": "Due",
+    "noTasks": "No tasks yet.",
+    "noMembers": "Nobody has joined yet.",
+    "pupils": "Pupils",
+    "weekPoints": "Points are for this week.",
+    "rename": "Rename",
+    "delete": "Delete the class",
+    "deleteText": "The class and its tasks are deleted. The pupils stay in the app.",
+    "remove": "Remove from the class",
+    "dueBy": "by {{date}}",
+    "overdue": "Overdue",
+    "board": "This week",
+    "join": {
+      "teacher": "Teacher: {{name}}",
+      "privacy": "The teacher will see your nickname, level and points. You can leave at any time.",
+      "button": "Join",
+      "later": "Later",
+      "already": "You are in this class"
+    },
+    "mine": "My class",
+    "leave": "Leave the class",
+    "leaveText": "You will no longer see the class board and tasks.",
+    "none": "You are not in a class. Ask your teacher for the QR code.",
+    "open": "Class page",
+    "errors": {
+      "class_not_found": "No class with this code. Check it.",
+      "class_full": "The class is full.",
+      "own_class": "This is your class.",
+      "too_many_classes": "You can have at most 10 classes.",
+      "too_many_tasks": "At most 5 open tasks at a time.",
+      "task_exists": "This project is already a task.",
+      "bad_due_date": "Pick a day between today and 60 days ahead.",
+      "too_many_attempts": "Too many attempts. Try again later.",
+      "name": "This name can't be used.",
+      "teachers_only": "Only teachers can create classes.",
+      "project_not_found": "Project not found.",
+      "unknown": "Something went wrong. Try again."
+    }
+  },
+  "league": {
+    "tier0": "Bronze league",
+    "tier1": "Silver league",
+    "tier2": "Gold league",
+    "tier3": "Diamond league",
+    "daysLeft_one": "{{count}} day left",
+    "daysLeft_other": "{{count}} days left",
+    "promoted": "Well done! You moved up to the {{tier}}.",
+    "demoted": "This week you are in the {{tier}}. Win your place back!",
+    "notJoined": "Earn points this week and your league group appears.",
+    "rules_one": "At the end of the week the top {{count}} moves up a league.",
+    "rules_other": "At the end of the week the top {{count}} move up a league."
   }
 }

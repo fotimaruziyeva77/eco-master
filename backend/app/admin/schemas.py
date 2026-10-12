@@ -463,6 +463,20 @@ class HandoverMatchOut(BaseModel):
     item: HandoverItemOut
 
 
+# -------------------------------------------------------------------- classes
+
+
+class AdminClassOut(BaseModel):
+    id: int
+    name: str
+    code: str
+    teacher_id: int
+    teacher_nickname: str | None
+    member_count: int
+    task_count: int
+    created_at: datetime
+
+
 # ---------------------------------------------------------------------- media
 
 

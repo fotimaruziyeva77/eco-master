@@ -269,6 +269,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/projects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Projects
+         * @description Every published project, by waste type (the teacher's task picker).
+         */
+        get: operations["projects_api_projects_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/categories/{code}": {
         parameters: {
             query?: never;
@@ -511,6 +531,169 @@ export interface paths {
          */
         post: operations["report_nickname_api_reports_post"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/league": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** League */
+        get: operations["league_api_league_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/classes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** My Classes */
+        get: operations["my_classes_api_classes_get"];
+        put?: never;
+        /** Create Class */
+        post: operations["create_class_api_classes_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/classes/{class_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Class Detail */
+        get: operations["class_detail_api_classes__class_id__get"];
+        put?: never;
+        post?: never;
+        /** Delete Class */
+        delete: operations["delete_class_api_classes__class_id__delete"];
+        options?: never;
+        head?: never;
+        /** Rename Class */
+        patch: operations["rename_class_api_classes__class_id__patch"];
+        trace?: never;
+    };
+    "/api/classes/{class_id}/members/{user_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remove Member */
+        delete: operations["remove_member_api_classes__class_id__members__user_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/classes/{class_id}/tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add Task */
+        post: operations["add_task_api_classes__class_id__tasks_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/classes/{class_id}/tasks/{task_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Task */
+        delete: operations["delete_task_api_classes__class_id__tasks__task_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/classes/preview/{code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Preview Class
+         * @description What the join screen shows before the pupil decides.
+         */
+        get: operations["preview_class_api_classes_preview__code__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/classes/join": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Join Class
+         * @description Join with the code; a pupil is in one class at a time, so another class is left.
+         */
+        post: operations["join_class_api_classes_join_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/my-class": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** My Class */
+        get: operations["my_class_api_my_class_get"];
+        put?: never;
+        post?: never;
+        /** Leave Class */
+        delete: operations["leave_class_api_my_class_delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1814,6 +1997,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/classes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Classes */
+        get: operations["list_classes_api_admin_classes_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/classes/{class_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Class
+         * @description E.g. an offensive class name: the class goes, its pupils stay in the app.
+         */
+        delete: operations["delete_class_api_admin_classes__class_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/dev/init-data": {
         parameters: {
             query?: never;
@@ -1862,6 +2082,28 @@ export interface components {
             voided: {
                 [key: string]: unknown;
             } | null;
+        };
+        /** AdminClassOut */
+        AdminClassOut: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+            /** Code */
+            code: string;
+            /** Teacher Id */
+            teacher_id: number;
+            /** Teacher Nickname */
+            teacher_nickname: string | null;
+            /** Member Count */
+            member_count: number;
+            /** Task Count */
+            task_count: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
         };
         /** AdminCreateIn */
         AdminCreateIn: {
@@ -2190,6 +2432,114 @@ export interface components {
              * @default 0
              */
             project_count: number;
+        };
+        /** ClassDetailOut */
+        ClassDetailOut: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+            /** Code */
+            code: string;
+            /** Member Count */
+            member_count: number;
+            /** Link */
+            link: string;
+            /** Members */
+            members: components["schemas"]["ClassMemberOut"][];
+            /** Tasks */
+            tasks: components["schemas"]["ClassTaskOut"][];
+        };
+        /** ClassIn */
+        ClassIn: {
+            /** Name */
+            name: string;
+        };
+        /** ClassJoinIn */
+        ClassJoinIn: {
+            /** Code */
+            code: string;
+        };
+        /** ClassMemberOut */
+        ClassMemberOut: {
+            /** User Id */
+            user_id: number;
+            /** Nickname */
+            nickname: string | null;
+            /** Level Code */
+            level_code: string;
+            /** Points Week */
+            points_week: number;
+            /** Points Total */
+            points_total: number;
+            /** Projects Done */
+            projects_done: number;
+        };
+        /** ClassOut */
+        ClassOut: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+            /** Code */
+            code: string;
+            /** Member Count */
+            member_count: number;
+            /** Link */
+            link: string;
+        };
+        /** ClassPreviewOut */
+        ClassPreviewOut: {
+            /** Name */
+            name: string;
+            /** Teacher Nickname */
+            teacher_nickname: string | null;
+            /** Member Count */
+            member_count: number;
+            /** Is Member */
+            is_member: boolean;
+        };
+        /** ClassTaskIn */
+        ClassTaskIn: {
+            /** Project Slug */
+            project_slug: string;
+            /**
+             * Due Date
+             * Format: date
+             */
+            due_date: string;
+        };
+        /** ClassTaskOut */
+        ClassTaskOut: {
+            /** Id */
+            id: number;
+            /** Project Slug */
+            project_slug: string;
+            /** Title */
+            title: {
+                [key: string]: unknown;
+            };
+            /** Icon */
+            icon: string;
+            /**
+             * Due Date
+             * Format: date
+             */
+            due_date: string;
+            /** Done Count */
+            done_count: number;
+            /** Member Count */
+            member_count: number;
+            /**
+             * Done By
+             * @default []
+             */
+            done_by: number[];
+            /**
+             * Done
+             * @default false
+             */
+            done: boolean;
         };
         /**
          * ClientEventIn
@@ -2634,6 +2984,27 @@ export interface components {
             /** Name */
             name: string;
         };
+        /**
+         * HomeClassTaskOut
+         * @description A project the pupil's teacher gave the class, not done yet.
+         */
+        HomeClassTaskOut: {
+            /** Project Slug */
+            project_slug: string;
+            /** Title */
+            title: {
+                [key: string]: unknown;
+            };
+            /** Icon */
+            icon: string;
+            /**
+             * Due Date
+             * Format: date
+             */
+            due_date: string;
+            /** Class Name */
+            class_name: string;
+        };
         /** HomeOut */
         HomeOut: {
             user: components["schemas"]["UserOut"];
@@ -2642,6 +3013,7 @@ export interface components {
             /** Categories */
             categories: components["schemas"]["CategoryOut"][];
             featured?: components["schemas"]["ProjectSummaryOut"] | null;
+            class_task?: components["schemas"]["HomeClassTaskOut"] | null;
         };
         /** IssueOut */
         IssueOut: {
@@ -2684,6 +3056,38 @@ export interface components {
             /** Entries */
             entries: components["schemas"]["LeaderboardEntryOut"][];
             me: components["schemas"]["LeaderboardEntryOut"] | null;
+        };
+        /** LeagueOut */
+        LeagueOut: {
+            /** Tier */
+            tier: number;
+            /**
+             * Week Start
+             * Format: date
+             */
+            week_start: string;
+            /** Days Left */
+            days_left: number;
+            /** Joined */
+            joined: boolean;
+            /** Entries */
+            entries: components["schemas"]["RankedMemberOut"][];
+            /** Promote */
+            promote: number;
+            /** Demote */
+            demote: number;
+            last_week: components["schemas"]["LeagueResultOut"] | null;
+        };
+        /** LeagueResultOut */
+        LeagueResultOut: {
+            /** Tier Before */
+            tier_before: number;
+            /** Tier After */
+            tier_after: number;
+            /** Rank */
+            rank: number;
+            /** Size */
+            size: number;
         };
         /** LessonOut */
         LessonOut: {
@@ -3067,6 +3471,24 @@ export interface components {
             /** Video */
             video: boolean;
         };
+        /** MyClassOut */
+        MyClassOut: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+            /** Teacher Nickname */
+            teacher_nickname: string | null;
+            /**
+             * Week Start
+             * Format: date
+             */
+            week_start: string;
+            /** Members */
+            members: components["schemas"]["RankedMemberOut"][];
+            /** Tasks */
+            tasks: components["schemas"]["ClassTaskOut"][];
+        };
         /** MyListingOut */
         MyListingOut: {
             /** Id */
@@ -3387,6 +3809,21 @@ export interface components {
             round_token: string;
             /** Questions */
             questions: components["schemas"]["QuizQuestionOut"][];
+        };
+        /** RankedMemberOut */
+        RankedMemberOut: {
+            /** Rank */
+            rank: number;
+            /** User Id */
+            user_id: number;
+            /** Nickname */
+            nickname: string | null;
+            /** Level Code */
+            level_code: string;
+            /** Points */
+            points: number;
+            /** Is Me */
+            is_me: boolean;
         };
         /** RateOut */
         RateOut: {
@@ -4161,6 +4598,26 @@ export interface operations {
             };
         };
     };
+    projects_api_projects_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectSummaryOut"][];
+                };
+            };
+        };
+    };
     category_detail_api_categories__code__get: {
         parameters: {
             query?: never;
@@ -4564,6 +5021,371 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
                 };
+            };
+        };
+    };
+    league_api_league_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeagueOut"];
+                };
+            };
+        };
+    };
+    my_classes_api_classes_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ClassOut"][];
+                };
+            };
+        };
+    };
+    create_class_api_classes_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ClassIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ClassOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    class_detail_api_classes__class_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                class_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ClassDetailOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_class_api_classes__class_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                class_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    rename_class_api_classes__class_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                class_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ClassIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ClassOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    remove_member_api_classes__class_id__members__user_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                class_id: number;
+                user_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_task_api_classes__class_id__tasks_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                class_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ClassTaskIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ClassTaskOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_task_api_classes__class_id__tasks__task_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                class_id: number;
+                task_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    preview_class_api_classes_preview__code__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ClassPreviewOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    join_class_api_classes_join_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ClassJoinIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyClassOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    my_class_api_my_class_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyClassOut"] | null;
+                };
+            };
+        };
+    };
+    leave_class_api_my_class_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -6928,6 +7750,66 @@ export interface operations {
                         [key: string]: unknown;
                     };
                 };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_classes_api_admin_classes_get: {
+        parameters: {
+            query?: {
+                q?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminClassOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_class_api_admin_classes__class_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                class_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Validation Error */
             422: {

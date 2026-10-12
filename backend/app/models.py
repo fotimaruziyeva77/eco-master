@@ -137,6 +137,8 @@ class User(Base):
     streak_current: Mapped[int] = mapped_column(server_default=text("0"))
     streak_best: Mapped[int] = mapped_column(server_default=text("0"))
     last_task_date: Mapped[date | None]
+    # Weekly league (app/leagues.py): 0 bronze, 1 silver, 2 gold, 3 diamond.
+    league_tier: Mapped[int] = mapped_column(SmallInteger, server_default=text("0"))
 
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     last_active_at: Mapped[datetime] = mapped_column(server_default=func.now())
@@ -632,3 +634,73 @@ class ListingReport(Base):
     resolved_by: Mapped[int | None] = mapped_column(
         ForeignKey("admin_users.id", ondelete="SET NULL")
     )
+
+
+# ---------------------------------------------------------- classes and leagues
+
+
+class SchoolClass(Base):
+    """A teacher's class (app/classes.py). Pupils join with its code; nobody joins unasked."""
+
+    __tablename__ = "classes"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    teacher_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    name: Mapped[str] = mapped_column(String(40))
+    code: Mapped[str] = mapped_column(String(8), unique=True)
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+
+
+class ClassMember(Base):
+    __tablename__ = "class_members"
+
+    class_id: Mapped[int] = mapped_column(
+        ForeignKey("classes.id", ondelete="CASCADE"), primary_key=True
+    )
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    joined_at: Mapped[datetime] = mapped_column(server_default=func.now())
+
+    # A pupil is in one class at a time.
+    __table_args__ = (Index("uq_class_members_user", "user_id", unique=True),)
+
+
+class ClassTask(Base):
+    """A project the teacher gave the class, to be done by a day (Tashkent time)."""
+
+    __tablename__ = "class_tasks"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    class_id: Mapped[int] = mapped_column(ForeignKey("classes.id", ondelete="CASCADE"), index=True)
+    project_id: Mapped[int] = mapped_column(ForeignKey("projects.id", ondelete="CASCADE"))
+    due_date: Mapped[date]
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+
+    __table_args__ = (UniqueConstraint("class_id", "project_id", name="uq_class_tasks_project"),)
+
+
+class LeagueGroup(Base):
+    """Up to 30 players of one tier who compete for one week (app/leagues.py)."""
+
+    __tablename__ = "league_groups"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    week_start: Mapped[date]
+    tier: Mapped[int] = mapped_column(SmallInteger)
+
+    __table_args__ = (Index("ix_league_groups_week_tier", "week_start", "tier"),)
+
+
+class LeagueMember(Base):
+    __tablename__ = "league_members"
+
+    week_start: Mapped[date] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    group_id: Mapped[int] = mapped_column(
+        ForeignKey("league_groups.id", ondelete="CASCADE"), index=True
+    )
+    # The tier the week was played in; the result moves users.league_tier for the next week.
+    tier: Mapped[int] = mapped_column(SmallInteger)

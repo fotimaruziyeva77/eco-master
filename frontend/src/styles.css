@@ -2694,6 +2694,160 @@ button {
   }
 }
 
+/* --------------------------------------------------------- classes & league */
+
+.tabs--three {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.note--ok {
+  background: var(--primary-soft-2);
+  color: var(--on-primary-soft);
+  font-weight: 700;
+}
+
+.empty-state {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 28px 16px;
+  text-align: center;
+}
+
+.empty-state__icon {
+  font-size: 56px;
+}
+
+.league-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.league-head__badge {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--amber-soft);
+  font-size: 36px;
+}
+
+.league-head strong {
+  font-size: 19px;
+}
+
+.league-head--1 .league-head__badge {
+  background: var(--sky-soft);
+}
+
+.league-head--3 .league-head__badge {
+  background: var(--primary-soft-2);
+}
+
+/* Who goes up and who goes down when the week ends. */
+.rank-row--up {
+  box-shadow: inset 4px 0 0 var(--primary);
+}
+
+.rank-row--down {
+  box-shadow: inset 4px 0 0 var(--danger);
+}
+
+.class-code {
+  justify-self: center;
+  padding: 6px 18px;
+  border-radius: 14px;
+  background: var(--primary-soft);
+  color: var(--on-primary-soft);
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  font-variant-numeric: tabular-nums;
+}
+
+.class-code--large {
+  background: #ffffff;
+  color: #065f46;
+  font-size: 40px;
+}
+
+.task-row__progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.task-row__progress .progress {
+  flex: 1;
+}
+
+.task-row__wrap {
+  position: relative;
+}
+
+.task-row__wrap .list-row {
+  padding-right: 56px;
+}
+
+.task-row__delete {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  width: 36px;
+  height: 36px;
+  transform: translateY(-50%);
+  box-shadow: none;
+  color: var(--hint);
+}
+
+.class-task {
+  border: 2px solid var(--sky);
+}
+
+.join {
+  justify-items: center;
+}
+
+.join__icon {
+  display: grid;
+  place-items: center;
+  justify-self: center;
+  width: 120px;
+  height: 120px;
+  border-radius: 40px;
+  background: var(--sky-soft);
+  font-size: 72px;
+}
+
+.input--boxed {
+  flex: none;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 14px;
+  border: 2px solid transparent;
+  border-radius: var(--r-input);
+  background: var(--primary-soft);
+}
+
+.input--boxed:focus {
+  border-color: var(--primary);
+  background: var(--card);
+}
+
+.sheet--tall {
+  max-height: calc(var(--tg-viewport-stable-height, 100vh) - 48px);
+  overflow-y: auto;
+}
+
+.task-picker {
+  max-height: 46vh;
+  overflow-y: auto;
+}
+
 /* -------------------------------------------------------------- card story */
 
 .story-bar {

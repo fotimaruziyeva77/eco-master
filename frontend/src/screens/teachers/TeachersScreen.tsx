@@ -12,6 +12,7 @@ import { useLoad } from "../../hooks/useLoad";
 import { useTr } from "../../i18n/tr";
 import { useUser } from "../../state/user";
 import { haptic, openTelegramLink, telegramAppLink } from "../../telegram";
+import { TeacherClasses } from "../classes/TeacherClasses";
 
 /** Every lesson is one 45-minute class: 5 + 20 + 15 + 5 (TZ 8.9). */
 export const LESSON_MINUTES = 45;
@@ -28,13 +29,11 @@ export function TeachersScreen() {
     <main className="screen">
       <SubpageHeader onBack={back} title={t("teachers.title")} />
       <div className="stack stack--lg">
-        <div className="stack">
-          <h1>{t("teachers.headline")}</h1>
-          <p className="hint">{t("teachers.subtitle")}</p>
-        </div>
+        {user.path === "teacher" && <TeacherClasses />}
 
         <section className="stack">
           <h2>{t("teachers.lessons")}</h2>
+          <p className="hint small">{t("teachers.subtitle")}</p>
           {lessons.loading && !lessons.data && <InlineLoading />}
           {lessons.error !== undefined && !lessons.data && (
             <InlineError error={lessons.error} onRetry={lessons.reload} />

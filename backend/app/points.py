@@ -8,9 +8,10 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.analytics import event_row
+from app.leagues import join_week
 from app.levels import level_for
 from app.models import ActivityLog, User
-from app.timeutil import local_today
+from app.timeutil import local_today, week_start
 
 # TZ 8.6 (proposed values, tuned during the closed test).
 PROJECT_DONE_POINTS = 15
@@ -77,4 +78,7 @@ async def award(
         if level.code != level_for(row.points_total - points).code:
             props = {"level": level.code}
             session.add(event_row(user_id, row.language, row.path, "level_up", props))
+    if points > 0:
+        # The first points of a week put the user into this week's league group.
+        await join_week(session, user_id, week_start(day or local_today()))
     return True

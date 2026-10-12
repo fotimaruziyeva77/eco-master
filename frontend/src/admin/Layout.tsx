@@ -15,6 +15,7 @@ import {
   PackageCheck,
   MessageSquareWarning,
   Recycle,
+  School,
   ScrollText,
   ShieldAlert,
   ShieldCheck,
@@ -115,6 +116,7 @@ export function Layout({ children }: { children: ReactNode }) {
           <>
             <div className="a-nav-title">Moderatsiya</div>
             <Link to="/users" icon={Users} label="Foydalanuvchilar" />
+            <Link to="/classes" icon={School} label="Sinflar" />
             <Link
               to="/reports"
               icon={MessageSquareWarning}

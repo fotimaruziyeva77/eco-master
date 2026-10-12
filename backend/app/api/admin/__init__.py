@@ -7,6 +7,7 @@ from app.api.admin import (
     admins,
     audit,
     auth,
+    classes,
     content,
     market,
     media,
@@ -18,5 +19,18 @@ from app.api.admin import (
 )
 
 router = APIRouter(prefix="/admin", dependencies=[Depends(same_origin_only)])
-for module in (auth, admins, content, media, schedule, users, reports, words, stats, audit, market):
+for module in (
+    auth,
+    admins,
+    content,
+    media,
+    schedule,
+    users,
+    reports,
+    words,
+    stats,
+    audit,
+    market,
+    classes,
+):
     router.include_router(module.router)

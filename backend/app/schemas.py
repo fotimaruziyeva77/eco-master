@@ -235,12 +235,23 @@ class DailyDoneOut(BaseModel):
     new_badges: list["BadgeOut"] = []
 
 
+class HomeClassTaskOut(BaseModel):
+    """A project the pupil's teacher gave the class, not done yet."""
+
+    project_slug: str
+    title: I18nText
+    icon: str
+    due_date: date
+    class_name: str
+
+
 class HomeOut(BaseModel):
     user: UserOut
     daily: DailyOut
     tip: TipOut | None
     categories: list[CategoryOut]
     featured: ProjectSummaryOut | None = None
+    class_task: HomeClassTaskOut | None = None
 
 
 # ---------------------------------------------------------------- profile, rating
@@ -564,3 +575,109 @@ class ListingReportIn(BaseModel):
 class LikeOut(BaseModel):
     likes: int
     liked: bool
+
+
+# --------------------------------------------------------- classes and leagues
+
+
+class ClassIn(BaseModel):
+    name: str = Field(min_length=1, max_length=40)
+
+    @field_validator("name")
+    @classmethod
+    def strip(cls, value: str) -> str:
+        value = " ".join(value.split())
+        if not value:
+            raise ValueError("empty")
+        return value
+
+
+class ClassOut(BaseModel):
+    id: int
+    name: str
+    code: str
+    member_count: int
+    # Opens the Mini App with this class's join screen.
+    link: str
+
+
+class ClassTaskIn(BaseModel):
+    project_slug: str = Field(min_length=1, max_length=64)
+    due_date: date
+
+
+class ClassTaskOut(BaseModel):
+    id: int
+    project_slug: str
+    title: I18nText
+    icon: str
+    due_date: date
+    done_count: int
+    member_count: int
+    # Members who did it (teacher view) — internal ids, matched with the member list.
+    done_by: list[int] = []
+    # The pupil's own state (pupil view).
+    done: bool = False
+
+
+class ClassMemberOut(BaseModel):
+    user_id: int
+    nickname: str | None
+    level_code: str
+    points_week: int
+    points_total: int
+    projects_done: int
+
+
+class ClassDetailOut(ClassOut):
+    members: list[ClassMemberOut]
+    tasks: list[ClassTaskOut]
+
+
+class ClassPreviewOut(BaseModel):
+    name: str
+    teacher_nickname: str | None
+    member_count: int
+    is_member: bool
+
+
+class ClassJoinIn(BaseModel):
+    code: str = Field(min_length=4, max_length=12)
+
+
+class RankedMemberOut(BaseModel):
+    rank: int
+    user_id: int
+    nickname: str | None
+    level_code: str
+    points: int
+    is_me: bool
+
+
+class MyClassOut(BaseModel):
+    id: int
+    name: str
+    teacher_nickname: str | None
+    week_start: date
+    members: list[RankedMemberOut]
+    tasks: list[ClassTaskOut]
+
+
+class LeagueResultOut(BaseModel):
+    tier_before: int
+    tier_after: int
+    rank: int
+    size: int
+
+
+class LeagueOut(BaseModel):
+    tier: int
+    week_start: date
+    days_left: int
+    # False until the user's first points this week put them into a group.
+    joined: bool
+    entries: list[RankedMemberOut]
+    # How many go up / down when the week ends (0 where nobody does).
+    promote: int
+    demote: int
+    last_week: LeagueResultOut | None

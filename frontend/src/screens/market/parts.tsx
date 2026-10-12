@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { ApiError, type Category, type ListingKind, type ListingStatus, type PickupPoint } from "../../api/client";
 import { Emoji } from "../../components/Emoji";
+import { formatDay } from "../../i18n/dates";
 import { useTr } from "../../i18n/tr";
 
 const RULE_KEYS = ["rule1", "rule2", "rule3", "rule4", "rule5", "rule6"] as const;
@@ -138,6 +139,5 @@ export function RulesSheet({ onClose }: { onClose: () => void }) {
 /** A day the user can read, in the app language. */
 export function useShortDate() {
   const { i18n } = useTranslation();
-  return (value: string | null | undefined) =>
-    value ? new Date(value).toLocaleDateString(i18n.language, { day: "numeric", month: "long" }) : "";
+  return (value: string | null | undefined) => (value ? formatDay(new Date(value), i18n.language) : "");
 }

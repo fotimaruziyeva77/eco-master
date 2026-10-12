@@ -28,6 +28,9 @@ const ListingScreen = named(() => import("./screens/market/ListingScreen"), "Lis
 const MarketScreen = named(() => import("./screens/market/MarketScreen"), "MarketScreen");
 const MyMarketScreen = named(() => import("./screens/market/MyMarketScreen"), "MyMarketScreen");
 const TeachersScreen = named(() => import("./screens/teachers/TeachersScreen"), "TeachersScreen");
+const ClassScreen = named(() => import("./screens/classes/ClassScreen"), "ClassScreen");
+const JoinClassScreen = named(() => import("./screens/classes/JoinClassScreen"), "JoinClassScreen");
+const MyClassScreen = named(() => import("./screens/classes/MyClassScreen"), "MyClassScreen");
 
 function ScreenLoading() {
   return (
@@ -44,10 +47,13 @@ function Layout() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
-    // Opened from a market message of the bot (startapp=market): straight to "my listings".
+    // Opened from a market message of the bot (startapp=market): straight to "my listings";
+    // from a teacher's QR code (startapp=class_<code>): the class's join screen.
     if (startHandled) return;
     startHandled = true;
-    if (startParam() === "market") navigate("/market/mine");
+    const start = startParam();
+    if (start === "market") navigate("/market/mine");
+    else if (start?.startsWith("class_")) navigate(`/join/${start.slice("class_".length)}`);
   }, [navigate]);
   return (
     <Suspense fallback={<ScreenLoading />}>
@@ -67,6 +73,9 @@ function Layout() {
         <Route path="/terms" element={<TermsScreen />} />
         <Route path="/teachers" element={<TeachersScreen />} />
         <Route path="/teachers/:slug" element={<LessonScreen />} />
+        <Route path="/classes/:id" element={<ClassScreen />} />
+        <Route path="/join/:code" element={<JoinClassScreen />} />
+        <Route path="/my-class" element={<MyClassScreen />} />
         <Route path="/market" element={<MarketScreen />} />
         <Route path="/market/new" element={<ListingFormScreen />} />
         <Route path="/market/mine" element={<MyMarketScreen />} />

@@ -1,19 +1,158 @@
-import { Flag, Trophy } from "lucide-react";
+import { ChevronRight, Flag, Trophy } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
 
-import { api, type LeaderboardEntry, type Period } from "../api/client";
+import { api, type LeaderboardEntry } from "../api/client";
 import { InlineError, InlineLoading } from "../components/common";
 import { Emoji } from "../components/Emoji";
 import { Avatar, LEVEL_EMOJI, TopBar } from "../components/ui";
 import { useLoad } from "../hooks/useLoad";
 import { haptic } from "../telegram";
+import { BoardRow } from "./classes/parts";
 
-/** Leaderboard (TZ 8.7): weekly and all-time, top 100 plus the user's own place. */
+type Tab = "league" | "class" | "all";
+const TABS: Tab[] = ["league", "class", "all"];
+const TIER_EMOJI = ["🥉", "🥈", "🥇", "💎"];
+
+/** Rating: the weekly league group, the class board and the all-time board. */
 export function RatingScreen() {
   const { t } = useTranslation();
-  const [period, setPeriod] = useState<Period>("week");
-  const board = useLoad(() => api.leaderboard(period), [period]);
+  const [tab, setTab] = useState<Tab>("league");
+  return (
+    <main className="screen screen--with-nav">
+      <TopBar />
+      <h1 className="row">
+        <Trophy size={24} aria-hidden="true" /> {t("rating.title")}
+      </h1>
+      <div className="tabs tabs--three section" role="tablist">
+        {TABS.map((value) => (
+          <button
+            key={value}
+            type="button"
+            role="tab"
+            aria-selected={tab === value}
+            className={tab === value ? "tabs__item is-active" : "tabs__item"}
+            onClick={() => {
+              haptic.tap();
+              setTab(value);
+            }}
+          >
+            {t(`rating.tabs.${value}`)}
+          </button>
+        ))}
+      </div>
+      {tab === "league" && <LeagueView />}
+      {tab === "class" && <ClassView />}
+      {tab === "all" && <AllTimeView />}
+    </main>
+  );
+}
+
+/** The user's group of this week: who goes up, who goes down. */
+function LeagueView() {
+  const { t } = useTranslation();
+  const data = useLoad(() => api.league(), []);
+  const league = data.data;
+  if (data.loading && !league) return <InlineLoading />;
+  if (data.error !== undefined && !league) return <InlineError error={data.error} onRetry={data.reload} />;
+  if (!league) return null;
+
+  const size = league.entries.length;
+  const tierName = (tier: number) => t(`league.tier${tier}`);
+  const last = league.last_week;
+  const marker = (rank: number) =>
+    rank <= league.promote ? "up" : rank > size - league.demote ? "down" : undefined;
+
+  return (
+    <div className="stack section">
+      <section className={`card league-head league-head--${league.tier}`}>
+        <span className="league-head__badge" aria-hidden="true">
+          <Emoji char={TIER_EMOJI[league.tier]} />
+        </span>
+        <span className="list-row__text">
+          <strong>{tierName(league.tier)}</strong>
+          <span className="hint small">{t("league.daysLeft", { count: league.days_left })}</span>
+        </span>
+      </section>
+
+      {last && last.tier_after > last.tier_before && (
+        <p className="note note--ok">
+          <Emoji char="🎉" /> {t("league.promoted", { tier: tierName(last.tier_after) })}
+        </p>
+      )}
+      {last && last.tier_after < last.tier_before && (
+        <p className="note">
+          <Emoji char="💪" /> {t("league.demoted", { tier: tierName(last.tier_after) })}
+        </p>
+      )}
+
+      {!league.joined ? (
+        <section className="empty-state">
+          <Emoji char="🌱" className="empty-state__icon" />
+          <p className="text-2">{t("league.notJoined")}</p>
+          <Link className="btn" to="/games">
+            {t("games.play")}
+          </Link>
+        </section>
+      ) : (
+        <>
+          <ol className="list">
+            {league.entries.map((entry) => (
+              <li key={entry.user_id}>
+                <BoardRow member={entry} marker={marker(entry.rank)} />
+              </li>
+            ))}
+          </ol>
+          {league.promote > 0 && <p className="hint small">{t("league.rules", { count: league.promote })}</p>}
+        </>
+      )}
+    </div>
+  );
+}
+
+/** The pupil's class board of this week, or how to get into a class. */
+function ClassView() {
+  const { t } = useTranslation();
+  const data = useLoad(() => api.myClass(), []);
+  if (data.loading && data.data === undefined) return <InlineLoading />;
+  if (data.error !== undefined && data.data === undefined) return <InlineError error={data.error} onRetry={data.reload} />;
+  const mine = data.data;
+  if (!mine) {
+    return (
+      <section className="empty-state section">
+        <Emoji char="🏫" className="empty-state__icon" />
+        <p className="text-2">{t("classes.none")}</p>
+      </section>
+    );
+  }
+  return (
+    <div className="stack section">
+      <Link className="list-row" to="/my-class">
+        <span className="icon-tile icon-tile--sky" aria-hidden="true">
+          <Emoji char="🏫" />
+        </span>
+        <span className="list-row__text">
+          <strong>{mine.name}</strong>
+          <span className="hint small">{t("classes.open")}</span>
+        </span>
+        <ChevronRight className="list-row__chevron" size={20} />
+      </Link>
+      <ol className="list">
+        {mine.members.map((member) => (
+          <li key={member.user_id}>
+            <BoardRow member={member} />
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+/** All-time board (TZ 8.7): the top 100 and the user's own place. */
+function AllTimeView() {
+  const { t } = useTranslation();
+  const board = useLoad(() => api.leaderboard("all"), []);
   const [reporting, setReporting] = useState<LeaderboardEntry | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -35,27 +174,7 @@ export function RatingScreen() {
   }
 
   return (
-    <main className="screen screen--with-nav">
-      <TopBar />
-      <div className="section-head">
-        <h1 className="row">
-          <Trophy size={24} aria-hidden="true" /> {t("rating.title")}
-        </h1>
-      </div>
-      <div className="tabs" role="tablist">
-        {(["week", "all"] as const).map((p) => (
-          <button
-            key={p}
-            type="button"
-            role="tab"
-            aria-selected={period === p}
-            className={period === p ? "tabs__item is-active" : "tabs__item"}
-            onClick={() => setPeriod(p)}
-          >
-            {t(`rating.${p}`)}
-          </button>
-        ))}
-      </div>
+    <>
       {notice && (
         <p className="toast" role="status" style={{ marginTop: 12 }}>
           {notice}
@@ -117,7 +236,7 @@ export function RatingScreen() {
           </div>
         </div>
       )}
-    </main>
+    </>
   );
 }
 

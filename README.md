@@ -104,6 +104,25 @@ authenticator app (Google Authenticator, Authy, 2FAS...); the app is connected o
 - The admin page is a separate build entry (`frontend/admin/index.html`), so the Mini App
   never loads its code. A web server must answer `/admin/*` with `dist/admin/index.html`.
 
+## Classes and weekly leagues
+
+- **Classes.** A user on the teacher path makes classes in the Mini App (O'qituvchilar uchun →
+  Sinflarim) and shows the class's QR code, or sends its link
+  (`https://t.me/<bot>/app?startapp=class_<CODE>`). A pupil who opens it sees the class name and
+  the teacher's nickname and joins with one tap; nobody is put into a class by someone else, a
+  pupil is in one class at a time and can leave at any time. The teacher sees the pupils'
+  nicknames, levels and points (this week and in total) and gives projects as class tasks with a
+  due day; pupils see an open task on the home screen until they have done it, and the class
+  board of the week. Nobody can write to anybody. Limits: 10 classes per teacher, 60 pupils per
+  class, 5 open tasks; looking up codes is rate limited. Administrators see every class under
+  "Sinflar" and can delete one (audit log).
+- **Leagues.** Weekly groups of up to 30 players of one tier (bronze, silver, gold, diamond)
+  instead of one board a newcomer never climbs. A player joins a group with their first points of
+  a week; when the next week starts, the top five of last week's group go a tier up and the bottom
+  five of a group of ten or more go down. This is worked out when the player joins the new week,
+  from a week that can no longer change, so there is no weekly job. The Rating tab shows the
+  league group, the class board and the all-time board.
+
 ## Market (phase 9)
 
 Children show things they made from waste, or give away things they no longer need. Added on

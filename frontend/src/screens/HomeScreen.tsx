@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
-import { api, ApiError, type Daily, type Home } from "../api/client";
+import { api, ApiError, type Daily, type Home, type HomeClassTask } from "../api/client";
 import { InlineError, InlineLoading } from "../components/common";
 import { Emoji } from "../components/Emoji";
 import { LevelProgress } from "../components/LevelProgress";
@@ -15,6 +15,7 @@ import { enqueue } from "../outbox";
 import { useCelebrate } from "../state/celebration";
 import { useUser } from "../state/user";
 import { haptic } from "../telegram";
+import { useDue } from "./classes/parts";
 
 /** Days in a row for the weekly bonus (the server's STREAK_BONUS_EVERY). */
 const STREAK_DAYS = 7;
@@ -47,6 +48,7 @@ export function HomeScreen() {
         {home.loading && !data && <InlineLoading />}
         {home.error !== undefined && !data && <InlineError error={home.error} onRetry={home.reload} />}
         {daily?.task && <DailyTaskCard daily={daily} onChange={setDaily} />}
+        {data?.class_task && <ClassTaskCard task={data.class_task} />}
         <PlayTiles />
         <LevelProgress user={user} />
         {data?.featured && <FeaturedProject project={data.featured} categories={data.categories} />}
@@ -161,6 +163,28 @@ function DailyTaskCard({ daily, onChange }: { daily: Daily; onChange: (d: Daily)
         )}
       </div>
     </section>
+  );
+}
+
+/** A project the pupil's teacher gave the class (stage 5), until it is done. */
+function ClassTaskCard({ task }: { task: HomeClassTask }) {
+  const { t } = useTranslation();
+  const tr = useTr();
+  const due = useDue();
+  return (
+    <Link className="list-row class-task" to={`/projects/${task.project_slug}`}>
+      <span className="icon-tile icon-tile--sky" aria-hidden="true">
+        <Emoji char={task.icon} />
+      </span>
+      <span className="list-row__text">
+        <span className="hint small strong">
+          <Emoji char="🏫" /> {t("home.classTask", { name: task.class_name })}
+        </span>
+        <strong>{tr(task.title)}</strong>
+        <span className="hint small">{due(task.due_date)}</span>
+      </span>
+      <ChevronRight className="list-row__chevron" size={20} />
+    </Link>
   );
 }
 
