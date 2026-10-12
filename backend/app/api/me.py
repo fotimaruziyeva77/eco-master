@@ -5,6 +5,7 @@ from sqlalchemy import and_, func, select
 from sqlalchemy.exc import IntegrityError
 
 from app.api.rating import user_rank
+from app.avatars import AVATARS, unlocked
 from app.badges import badge_progress
 from app.daily import current_streak
 from app.deps import CurrentUser, SessionDep
@@ -20,6 +21,8 @@ from app.models import (
 from app.nickname import NicknameError, validate_nickname
 from app.schemas import (
     NICKNAME_CHANGE_INTERVAL,
+    AvatarIn,
+    AvatarOut,
     BadgeOut,
     MeUpdate,
     NicknameIn,
@@ -78,6 +81,27 @@ async def change_nickname(body: NicknameIn, user: CurrentUser, session: SessionD
     except IntegrityError as exc:
         await session.rollback()
         raise HTTPException(status.HTTP_409_CONFLICT, "nickname_taken") from exc
+    return UserOut.model_validate(user)
+
+
+@router.get("/me/avatars")
+async def my_avatars(user: CurrentUser) -> list[AvatarOut]:
+    """Every picture with the level that unlocks it; the locked ones show what is coming."""
+    return [
+        AvatarOut(emoji=emoji, level_code=level, unlocked=unlocked(emoji, user.points_total))
+        for emoji, level in AVATARS.items()
+    ]
+
+
+@router.post("/me/avatar")
+async def set_avatar(body: AvatarIn, user: CurrentUser, session: SessionDep) -> UserOut:
+    if body.avatar is not None:
+        if body.avatar not in AVATARS:
+            raise HTTPException(422, "avatar_unknown")
+        if not unlocked(body.avatar, user.points_total):
+            raise HTTPException(status.HTTP_409_CONFLICT, "avatar_locked")
+    user.avatar = body.avatar
+    await session.commit()
     return UserOut.model_validate(user)
 
 

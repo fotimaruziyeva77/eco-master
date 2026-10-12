@@ -38,10 +38,10 @@
 		reverse_proxy api:8000
 	}
 
-	# Pictures and videos uploaded in the admin panel (deploy/media, read-only here). Only
-	# the finished files: tmp/ holds uploads not converted yet. Names are hashes of the files,
-	# so browsers may keep them for a year.
-	@media path /media/i/* /media/v/*
+	# Pictures and videos uploaded in the admin panel and the Stories pictures (deploy/media,
+	# read-only here). Only the finished files: tmp/ holds uploads not converted yet. Names are
+	# hashes of the files, so browsers may keep them for a year.
+	@media path /media/i/* /media/v/* /media/s/*
 	handle @media {
 		uri strip_prefix /media
 		root * /media-files

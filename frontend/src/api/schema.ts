@@ -110,6 +110,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/me/avatars": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * My Avatars
+         * @description Every picture with the level that unlocks it; the locked ones show what is coming.
+         */
+        get: operations["my_avatars_api_me_avatars_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/me/avatar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Set Avatar */
+        post: operations["set_avatar_api_me_avatar_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/me/badges": {
         parameters: {
             query?: never;
@@ -785,6 +822,26 @@ export interface paths {
          *     (Bot API 8.0+) and an inline query for older clients.
          */
         post: operations["share_api_share_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/share/story": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Share Story
+         * @description A picture of the user's tree, level and points for Telegram Stories (Bot API 7.8+).
+         */
+        post: operations["share_story_api_share_story_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2338,6 +2395,20 @@ export interface components {
             token: string;
             user: components["schemas"]["UserOut"];
         };
+        /** AvatarIn */
+        AvatarIn: {
+            /** Avatar */
+            avatar?: string | null;
+        };
+        /** AvatarOut */
+        AvatarOut: {
+            /** Emoji */
+            emoji: string;
+            /** Level Code */
+            level_code: string;
+            /** Unlocked */
+            unlocked: boolean;
+        };
         /** BadgeOut */
         BadgeOut: {
             /** Code */
@@ -2466,6 +2537,8 @@ export interface components {
             user_id: number;
             /** Nickname */
             nickname: string | null;
+            /** Avatar */
+            avatar?: string | null;
             /** Level Code */
             level_code: string;
             /** Points Week */
@@ -3037,6 +3110,8 @@ export interface components {
             user_id: number;
             /** Nickname */
             nickname: string;
+            /** Avatar */
+            avatar?: string | null;
             /** Level Code */
             level_code: string;
             /** Points */
@@ -3818,6 +3893,8 @@ export interface components {
             user_id: number;
             /** Nickname */
             nickname: string | null;
+            /** Avatar */
+            avatar?: string | null;
             /** Level Code */
             level_code: string;
             /** Points */
@@ -4015,6 +4092,13 @@ export interface components {
         StatusIn: {
             status: components["schemas"]["ContentStatus"];
         };
+        /** StoryOut */
+        StoryOut: {
+            /** Media Url */
+            media_url: string;
+            /** Text */
+            text: string;
+        };
         /** TelegramAuthIn */
         TelegramAuthIn: {
             /** Init Data */
@@ -4085,6 +4169,8 @@ export interface components {
             nickname_changed_at: string | null;
             /** Onboarded At */
             onboarded_at?: string | null;
+            /** Avatar */
+            avatar?: string | null;
             /** Done Today */
             readonly done_today: boolean;
             /** Nickname Change Available At */
@@ -4345,6 +4431,59 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["NicknameIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    my_avatars_api_me_avatars_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AvatarOut"][];
+                };
+            };
+        };
+    };
+    set_avatar_api_me_avatar_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AvatarIn"];
             };
         };
         responses: {
@@ -5539,6 +5678,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    share_story_api_share_story_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StoryOut"];
                 };
             };
         };

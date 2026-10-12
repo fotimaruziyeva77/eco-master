@@ -30,6 +30,7 @@ export type LessonSummary = Schemas["LessonSummaryOut"];
 export type Lesson = Schemas["LessonOut"];
 export type ShareKind = Schemas["ShareIn"]["kind"];
 export type ShareResult = Schemas["ShareOut"];
+export type StoryShare = Schemas["StoryOut"];
 export type ListingCard = Schemas["ListingCardOut"];
 export type ListingPage = Schemas["ListingPageOut"];
 export type Listing = Schemas["ListingOut"];
@@ -51,6 +52,7 @@ export type MyClass = Schemas["MyClassOut"];
 export type RankedMember = Schemas["RankedMemberOut"];
 export type League = Schemas["LeagueOut"];
 export type HomeClassTask = Schemas["HomeClassTaskOut"];
+export type AvatarChoice = Schemas["AvatarOut"];
 
 /** One language of a lesson body (TZ 8.9); the API types it as a free-form object. */
 export type LessonBody = {
@@ -189,6 +191,8 @@ export const api = {
   report: (targetUserId: number) => post<{ ok: boolean }>("/reports", { target_user_id: targetUserId }),
   myStats: () => request<Stats>("/me/stats"),
   changeNickname: (nickname: string) => post<User>("/me/nickname", { nickname }),
+  myAvatars: () => request<AvatarChoice[]>("/me/avatars"),
+  setAvatar: (avatar: string | null) => post<User>("/me/avatar", { avatar }),
   deleteMe: () => request<void>("/me", { method: "DELETE" }),
 
   lessons: () => request<LessonSummary[]>("/lessons"),
@@ -199,6 +203,7 @@ export const api = {
     post<{ sent: boolean }>(`/lessons/${encodeURIComponent(slug)}/send`, { language }),
   share: (kind: ShareKind, objectId?: string) =>
     post<ShareResult>("/share", { kind, object_id: objectId ?? null }),
+  shareStory: () => post<StoryShare>("/share/story", {}),
   events: (events: Schemas["EventsIn"]["events"]) => post<void>("/events", { events }),
 
   market: (params: { kind?: ListingKind | null; point?: number | null; offset?: number }) => {

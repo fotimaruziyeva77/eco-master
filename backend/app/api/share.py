@@ -1,18 +1,25 @@
 """Ready-made share messages (TZ 8.11, QM-16)."""
 
+import asyncio
 import logging
 
 from aiogram import Bot
 from aiogram.exceptions import TelegramAPIError
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, status
 
 from app.analytics import track
 from app.deps import BotDep, CurrentUser, SessionDep, SettingsDep
-from app.schemas import ShareIn, ShareOut
+from app.i18n import t
+from app.ratelimit import RateLimiter
+from app.schemas import ShareIn, ShareOut, StoryOut
 from app.sharing import ShareError, inline_query_for, share_article, share_text, share_url
+from app.story import story_picture, story_url
 
 log = logging.getLogger(__name__)
 router = APIRouter(tags=["share"])
+
+# Drawing a picture takes a moment of CPU; nobody needs more than a few an hour.
+story_limit = RateLimiter(limit=20, window=3600)
 
 
 async def inline_mode_enabled(bot: Bot) -> bool:
@@ -54,3 +61,17 @@ async def share(
     if await inline_mode_enabled(bot):
         out.inline_query = inline_query_for(body.kind, body.object_id)
     return out
+
+
+@router.post("/share/story")
+async def share_story(user: CurrentUser, session: SessionDep, settings: SettingsDep) -> StoryOut:
+    """A picture of the user's tree, level and points for Telegram Stories (Bot API 7.8+)."""
+    if not story_limit.allow(user.id):
+        raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS, "too_many_requests")
+    name = await asyncio.to_thread(story_picture, settings, user.language, user.points_total)
+    track(session, user, "story_share")
+    await session.commit()
+    return StoryOut(
+        media_url=story_url(settings, name),
+        text=t("story_caption", user.language, link=share_url(settings)),
+    )

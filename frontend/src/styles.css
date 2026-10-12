@@ -3017,3 +3017,147 @@ img.emoji {
 .emoji--text {
   line-height: 1;
 }
+
+/* ----------------------------------------------------------- my tree, avatars */
+
+.level-row {
+  text-decoration: none;
+}
+
+.level-tree {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #e0f2fe, #dcfce7);
+}
+
+.tree-card {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.tree-card__sky {
+  display: grid;
+  place-items: center;
+  padding: 8px 0 0;
+  overflow: hidden;
+  border-radius: var(--r-tile);
+  background: linear-gradient(180deg, #e0f2fe, #dcfce7);
+}
+
+:root.theme-dark .tree-card__sky,
+:root.theme-dark .level-tree {
+  background: linear-gradient(180deg, #12324a, #12301f);
+}
+
+.tree-card__next {
+  display: grid;
+  gap: 6px;
+}
+
+.tree-card__goal {
+  justify-self: end;
+  color: var(--on-primary-soft);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.tree-card__fruits {
+  justify-self: center;
+}
+
+.tree-card__actions {
+  display: grid;
+  gap: 8px;
+}
+
+.tree__grow {
+  transform-box: view-box;
+  transform-origin: 100px 172px;
+  animation: tree-grow 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.25) both;
+}
+
+@keyframes tree-grow {
+  from {
+    transform: scale(0.82);
+    opacity: 0.4;
+  }
+}
+
+.avatar-button {
+  position: relative;
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+}
+
+.avatar-button__edit {
+  position: absolute;
+  right: 0;
+  bottom: 2px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 3px solid var(--card);
+  border-radius: 50%;
+  background: var(--primary-strong);
+  color: var(--on-primary);
+}
+
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+  gap: 10px;
+  max-height: 52vh;
+  margin: 0;
+  padding: 2px;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.avatar-grid__item {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 3px solid transparent;
+  border-radius: 50%;
+  background: var(--primary-soft);
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.avatar-grid__item.is-chosen {
+  border-color: var(--primary-strong);
+}
+
+.avatar-grid__item.is-locked > :first-child {
+  opacity: 0.4;
+  filter: grayscale(1);
+}
+
+.avatar-grid__level {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow: var(--shadow-1);
+  font-size: 15px;
+}

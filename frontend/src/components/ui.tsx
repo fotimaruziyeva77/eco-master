@@ -9,12 +9,26 @@ import { Emoji } from "./Emoji";
 import { useUser } from "../state/user";
 import { insideTelegram, useTelegramBackButton } from "../telegram";
 
-// No profile photos are collected (TZ 11.2), so everyone gets a friendly animal picked from their id.
+// No profile photos are collected (TZ 11.2), so everyone gets a friendly animal picked from their id,
+// or the one they chose (more unlock with levels, backend/app/avatars.py).
 const AVATAR_EMOJI = ["🦊", "🐼", "🐢", "🦉", "🐝", "🦋", "🐞", "🐬", "🦔", "🐸", "🐨", "🦁"];
 const AVATAR_BG = ["#d1fae5", "#fef3c7", "#e0f2fe", "#ede9fe", "#fce7f3", "#ecfccb"];
 
-export function Avatar({ id, size = "md" }: { id: number; size?: "md" | "lg" | "xl" }) {
-  const emoji = AVATAR_EMOJI[id % AVATAR_EMOJI.length];
+/** The animal someone chose, or the one picked from their id. */
+export function avatarEmoji(id: number, chosen?: string | null): string {
+  return chosen || AVATAR_EMOJI[id % AVATAR_EMOJI.length];
+}
+
+export function Avatar({
+  id,
+  emoji: chosen,
+  size = "md",
+}: {
+  id: number;
+  emoji?: string | null;
+  size?: "md" | "lg" | "xl";
+}) {
+  const emoji = avatarEmoji(id, chosen);
   const background = AVATAR_BG[Math.floor(id / AVATAR_EMOJI.length) % AVATAR_BG.length];
   const className = size === "md" ? "avatar" : `avatar avatar--${size}`;
   return (
@@ -58,7 +72,7 @@ export function TopBar({ subtitle }: { subtitle?: string }) {
         <Emoji char="⭐" /> {user.points_total}
       </span>
       <Link to="/profile" aria-label={t("nav.profile")}>
-        <Avatar id={user.id} />
+        <Avatar id={user.id} emoji={user.avatar} />
       </Link>
     </header>
   );

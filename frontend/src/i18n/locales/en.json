@@ -162,19 +162,18 @@
     "streak": "In a row",
     "tasks": "Tasks",
     "projects": "Projects",
-    "sorted": "Sorted"
+    "sorted": "Sorted",
+    "avatarTitle": "Choose an avatar",
+    "avatarLocked": "Unlocks at «{{level}}»"
   },
   "privacy": {
     "title": "Privacy policy",
     "draft": "Draft. The final text will be published after legal review.",
     "collectTitle": "What we store",
-    "collectText": "Your Telegram ID, the nickname you choose, your language and your activity in the app (points, completed tasks).",
     "notCollectTitle": "What we never ask for",
     "notCollectText": "We don't ask for your real name, phone number or address. Your Telegram name and photo are not stored.",
     "whyTitle": "Why",
-    "whyText": "To count your points, show the rating and, if you allow it, send reminders.",
     "whoTitle": "Who can see it",
-    "whoText": "Only your nickname is shown in the rating. Your data is not used for advertising and is never sold.",
     "deleteTitle": "Deleting your data",
     "deleteText": "You can delete your data at any time: Profile → \"Delete my data\".",
     "contactTitle": "Contact",
@@ -182,7 +181,10 @@
     "marketTitle": "Market",
     "marketText": "If you add a listing, 1–3 photos of the item, its name and description are stored. Location and camera data are removed from the photos. A moderator checks every listing first; once approved, app users see it with your nickname. Items are handed over only at a handover point, through adults — your contacts are never shown to anyone. When you delete the listing or your account, the photos are deleted too.",
     "classesTitle": "Class and league",
-    "classesText": "You join a class through the teacher's QR code only yourself and can leave at any time. The teacher sees only the nicknames, levels and points of the class; there is no messaging. The weekly league also shows only nicknames and points."
+    "classesText": "You join a class through the teacher's QR code only yourself and can leave at any time. The teacher sees only the nicknames, levels and points of the class; there is no messaging. The weekly league also shows only nicknames and points.",
+    "collectText": "Your Telegram ID, the nickname and avatar you choose, your language and your activity in the app (points, completed tasks).",
+    "whyText": "To count your points, show the rating and, if you allow it, send reminders and the week's results.",
+    "whoText": "Only your nickname and avatar are shown in the rating. The picture for Stories carries no nickname. Your data is not used for advertising and is never sold."
   },
   "games": {
     "title": "Games",
@@ -262,7 +264,8 @@
     "project": "Share with friends",
     "result": "Share my result",
     "error": "Couldn't share. Please try again.",
-    "progress": "Share my progress"
+    "progress": "Share my progress",
+    "story": "Post to Stories"
   },
   "teachers": {
     "title": "For teachers",
@@ -566,5 +569,13 @@
     "notJoined": "Earn points this week and your league group appears.",
     "rules_one": "At the end of the week the top {{count}} moves up a league.",
     "rules_other": "At the end of the week the top {{count}} move up a league."
+  },
+  "tree": {
+    "title": "My tree",
+    "label": "My tree: {{level}}",
+    "toNext_one": "{{count}} point to the next level",
+    "toNext_other": "{{count}} points to the next level",
+    "fruits_one": "{{count}} apple",
+    "fruits_other": "{{count}} apples"
   }
 }

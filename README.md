@@ -123,6 +123,23 @@ authenticator app (Google Authenticator, Authy, 2FAS...); the app is connected o
   from a week that can no longer change, so there is no weekly job. The Rating tab shows the
   league group, the class board and the all-time board.
 
+## Rewards and bot messages
+
+- **My tree.** A tree on the home screen and in the profile grows with the points: a seed, a
+  sprout, a sapling, a young tree in bloom and, at the top level, a big tree that gets an apple
+  for every 300 more points (up to eight).
+- **Avatars.** Instead of a photo, an animal: twelve to start with, four more with every level.
+  The chosen one is shown in the rating, the league and the class.
+- **Stories.** Inside Telegram (Bot API 7.8+) the profile can post the tree, level and points to
+  Telegram Stories. The server draws the 1080x1920 picture (`backend/app/story.py`); it carries
+  no nickname, is named by a keyed hash of what is drawn and is served from `/media/s/` for three
+  days.
+- **Bot messages.** One message a day at most, at the time the user chose, never 21:00–08:00. On
+  Monday whoever earned points last week gets the week's result (points, league place, a new
+  league) instead of the reminder. After three days away the reminder says "we missed you";
+  after a week away it comes once a week; after five weeks it stops. All of it follows the one
+  reminders switch in the settings.
+
 ## Market (phase 9)
 
 Children show things they made from waste, or give away things they no longer need. Added on

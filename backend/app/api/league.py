@@ -29,6 +29,7 @@ async def league(user: CurrentUser, session: SessionDep) -> LeagueOut:
                 rank=s.rank,
                 user_id=s.user_id,
                 nickname=s.nickname,
+                avatar=s.avatar,
                 level_code=level_for(s.points_total).code,
                 points=s.points,
                 is_me=s.user_id == user.id,

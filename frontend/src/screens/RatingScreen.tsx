@@ -245,7 +245,7 @@ function PodiumPlace({ entry, onReport }: { entry: LeaderboardEntry; onReport: (
   const medal = ["🥇", "🥈", "🥉"][entry.rank - 1];
   return (
     <div className={`podium__place podium__place--${entry.rank}`}>
-      <Avatar id={entry.user_id} size={entry.rank === 1 ? "xl" : "lg"} />
+      <Avatar id={entry.user_id} emoji={entry.avatar} size={entry.rank === 1 ? "xl" : "lg"} />
       <strong>{entry.is_me ? t("rating.you") : `@${entry.nickname}`}</strong>
       <span className="podium__points">{t("home.points", { count: entry.points })}</span>
       <span className="hint small">
@@ -268,7 +268,7 @@ function RankRowContent({ entry }: { entry: LeaderboardEntry }) {
   return (
     <>
       <span className="rank-row__place">{entry.rank}</span>
-      <Avatar id={entry.user_id} />
+      <Avatar id={entry.user_id} emoji={entry.avatar} />
       <span className="rank-row__name">
         <strong>
           @{entry.nickname} {entry.is_me && <span className="chip chip--sm">{t("rating.you")}</span>}

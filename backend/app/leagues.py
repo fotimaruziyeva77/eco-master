@@ -32,6 +32,7 @@ class Standing:
     rank: int
     user_id: int
     nickname: str | None
+    avatar: str | None
     points_total: int
     points: int
 
@@ -68,7 +69,12 @@ async def standings(session: AsyncSession, group_id: int, monday: date) -> list[
     points = func.coalesce(week.c.points, 0)
     rows = await session.execute(
         select(
-            User.id, User.nickname, User.nickname_hidden, User.points_total, points.label("points")
+            User.id,
+            User.nickname,
+            User.nickname_hidden,
+            User.avatar,
+            User.points_total,
+            points.label("points"),
         )
         .join(LeagueMember, LeagueMember.user_id == User.id)
         .outerjoin(week, week.c.user_id == User.id)
@@ -84,6 +90,7 @@ async def standings(session: AsyncSession, group_id: int, monday: date) -> list[
             rank=i,
             user_id=row.id,
             nickname=None if row.nickname_hidden else row.nickname,
+            avatar=row.avatar,
             points_total=row.points_total,
             points=row.points,
         )

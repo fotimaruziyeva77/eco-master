@@ -96,7 +96,7 @@ export function ClassScreen() {
                 <li key={member.user_id}>
                   <div className="rank-row">
                     <span className="rank-row__place">{i + 1}</span>
-                    <Avatar id={member.user_id} />
+                    <Avatar id={member.user_id} emoji={member.avatar} />
                     <span className="rank-row__name">
                       <strong>{member.nickname ? `@${member.nickname}` : t("market.anonymous")}</strong>
                       <span className="hint small">

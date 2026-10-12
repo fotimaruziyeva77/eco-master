@@ -112,6 +112,16 @@ export function openTelegramLink(url: string): void {
   else window.open(url, "_blank", "noopener");
 }
 
+/** Telegram's story editor can take our picture (Bot API 7.8+). */
+export function canShareStory(): boolean {
+  return supports("7.8");
+}
+
+/** Open the story editor with the picture at this https address and a caption. */
+export function shareStory(mediaUrl: string, text: string): void {
+  tg!.shareToStory(mediaUrl, { text });
+}
+
 type Shareable = {
   text: string;
   url: string;

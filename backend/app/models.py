@@ -120,6 +120,8 @@ class User(Base):
     onboarded_at: Mapped[datetime | None]
     # Deep-link start parameter of the first visit (school / teacher link), for analytics.
     source: Mapped[str | None] = mapped_column(String(64))
+    # Chosen animal picture (app/avatars.py); None shows the one the app picks from the id.
+    avatar: Mapped[str | None] = mapped_column(String(16))
 
     reminders_enabled: Mapped[bool] = mapped_column(server_default=text("true"))
     reminder_time: Mapped[time] = mapped_column(server_default=text("'18:00'"))
@@ -127,6 +129,8 @@ class User(Base):
     write_access: Mapped[bool] = mapped_column(server_default=text("false"))
     # Tashkent date of the last reminder, so a restart never sends a second one that day.
     last_reminder_date: Mapped[date | None]
+    # Tashkent date (a Monday) of the last weekly summary, sent once a week.
+    last_weekly_date: Mapped[date | None]
 
     is_blocked: Mapped[bool] = mapped_column(server_default=text("false"))
     nickname_hidden: Mapped[bool] = mapped_column(server_default=text("false"))

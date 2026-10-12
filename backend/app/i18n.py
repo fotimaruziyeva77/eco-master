@@ -83,7 +83,7 @@ BOT_TEXTS.update(
             "<b>{task}</b>\n"
             "\n"
             "{streak}",
-            "ru": "🌱 Привет, {name}! Тебя ждёт задание дня:\n\n<b>{task}</b>\n\n{streak}",
+            "ru": "🌱 Привет, {name}! Вас ждёт задание дня:\n\n<b>{task}</b>\n\n{streak}",
             "en": "🌱 Hi {name}! Today's task is waiting for you:\n\n<b>{task}</b>\n\n{streak}",
         },
         "reminder_streak": {
@@ -96,6 +96,77 @@ BOT_TEXTS.update(
             "ru": "🔥 Начните сегодня новую серию!",
             "en": "🔥 Start a new streak today!",
         },
+        # After three days without opening the app.
+        "reminder_comeback": {
+            "uz": "🌱 {name}, sizni sog'indik! Bugungi topshiriq bir daqiqa oladi:\n"
+            "\n"
+            "<b>{task}</b>\n"
+            "\n"
+            "{streak}",
+            "ru": "🌱 {name}, мы соскучились! Задание дня займёт минуту:\n\n<b>{task}</b>\n\n"
+            "{streak}",
+            "en": "🌱 {name}, we missed you! Today's task takes a minute:\n\n<b>{task}</b>\n\n"
+            "{streak}",
+        },
+        # Monday summary of last week (app/reminders.py).
+        "weekly_points": {
+            "uz": "📊 {name}, o'tgan haftadagi natijangiz: <b>{points}</b> ⭐",
+            "ru": "📊 {name}, ваш итог прошлой недели: <b>{points}</b> ⭐",
+            "en": "📊 {name}, your last week: <b>{points}</b> ⭐",
+        },
+        "weekly_rank": {
+            "uz": "🏆 Ligada {rank}-o'rin",
+            "ru": "🏆 {rank}-е место в лиге",
+            "en": "🏆 Place {rank} in your league",
+        },
+        "weekly_up": {
+            "uz": "⬆️ Tabriklaymiz! Endi siz <b>{tier}</b>dasiz.",
+            "ru": "⬆️ Поздравляем! Вы поднялись: <b>{tier}</b>.",
+            "en": "⬆️ Well done! You moved up to the <b>{tier}</b>.",
+        },
+        "weekly_down": {
+            "uz": "Bu hafta — <b>{tier}</b>. Qaytib chiqing!",
+            "ru": "На этой неделе: <b>{tier}</b>. Возвращайтесь наверх!",
+            "en": "This week: the <b>{tier}</b>. Win your place back!",
+        },
+        "weekly_task": {
+            "uz": "🌱 Yangi hafta! Bugungi topshiriq: <b>{task}</b>",
+            "ru": "🌱 Новая неделя! Задание дня: <b>{task}</b>",
+            "en": "🌱 A new week! Today's task: <b>{task}</b>",
+        },
+        "weekly_go": {
+            "uz": "🌱 Yangi hafta boshlandi — omad!",
+            "ru": "🌱 Новая неделя началась — удачи!",
+            "en": "🌱 A new week has begun — good luck!",
+        },
+        "league_tier_0": {"uz": "Bronza liga", "ru": "Бронзовая лига", "en": "Bronze league"},
+        "league_tier_1": {"uz": "Kumush liga", "ru": "Серебряная лига", "en": "Silver league"},
+        "league_tier_2": {"uz": "Oltin liga", "ru": "Золотая лига", "en": "Gold league"},
+        "league_tier_3": {"uz": "Olmos liga", "ru": "Алмазная лига", "en": "Diamond league"},
+        # Stories picture (app/story.py); level names as in the Mini App.
+        "story_title": {"uz": "Mening daraxtim", "ru": "Моё дерево", "en": "My tree"},
+        "story_caption": {
+            "uz": "Mening Eco-Master'dagi daraxtim o'syapti! 🌳 Sen ham qo'shil: {link}",
+            "ru": "Моё дерево в Eco-Master растёт! 🌳 Присоединяйся: {link}",
+            "en": "My Eco-Master tree is growing! 🌳 Join me: {link}",
+        },
+        "level_seed": {"uz": "Urug'", "ru": "Семечко", "en": "Seed"},
+        "level_beginner": {
+            "uz": "Ekologiya boshlovchisi",
+            "ru": "Начинающий эколог",
+            "en": "Eco beginner",
+        },
+        "level_young_ecologist": {
+            "uz": "Yosh ekolog",
+            "ru": "Юный эколог",
+            "en": "Young ecologist",
+        },
+        "level_helper": {
+            "uz": "Eco-Master yordamchisi",
+            "ru": "Помощник Eco-Master",
+            "en": "Eco-Master helper",
+        },
+        "level_ekoustoz": {"uz": "Eco-Master", "ru": "Eco-Master", "en": "Eco-Master"},
         "feedback_thanks": {
             "uz": "Rahmat! Xabaringiz jamoaga yetkazildi. 💚",
             "ru": "Спасибо! Ваше сообщение передано команде. 💚",

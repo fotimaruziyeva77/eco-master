@@ -50,6 +50,8 @@ async def auth_telegram(
     track(session, user, "app_open", source=source, new=created is not None)
     if source == "reminder":
         track(session, user, "reminder_open")
+    elif source == "weekly":
+        track(session, user, "weekly_open")
     # Catch up on badges whose rules were met before they existed (or changed since).
     await award_badges(session, user.id)
     await session.commit()

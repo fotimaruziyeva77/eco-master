@@ -1,18 +1,21 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
 
 import type { User } from "../api/client";
 import { Emoji } from "./Emoji";
+import { Tree } from "./Tree";
 import { LEVEL_EMOJI, levelProgress, ProgressBar } from "./ui";
 
-/** Level in one row: picture, name, points to the next level and the next level's picture. */
+/** Level in one row: the user's tree, level name, points to the next level and its picture.
+ * Opens the profile, where the tree is big. */
 export function LevelProgress({ user }: { user: User }) {
   const { t } = useTranslation();
   const level = levelProgress(user);
 
   return (
-    <section className="card level-row">
-      <span className="level-emoji" aria-hidden="true">
-        <Emoji char={LEVEL_EMOJI[level.code]} />
+    <Link to="/profile" className="card level-row">
+      <span className="level-tree" aria-hidden="true">
+        <Tree points={user.points_total} size={56} fit />
       </span>
       <div className="level-row__main">
         <div className="level-row__top">
@@ -33,6 +36,6 @@ export function LevelProgress({ user }: { user: User }) {
           <Emoji char="👑" label={t("home.topLevel")} />
         </span>
       )}
-    </section>
+    </Link>
   );
 }

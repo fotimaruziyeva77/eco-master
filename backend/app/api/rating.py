@@ -37,7 +37,7 @@ def ranked_query(period: Period, today: date):
         points = User.points_total
         last_gain = gains.c.last_gain
         base = (
-            select(User.id, User.nickname, User.points_total)
+            select(User.id, User.nickname, User.avatar, User.points_total)
             .outerjoin(gains, gains.c.user_id == User.id)
             .where(visible, User.points_total > 0)
         )
@@ -56,7 +56,7 @@ def ranked_query(period: Period, today: date):
         points = week.c.points
         last_gain = week.c.last_gain
         base = (
-            select(User.id, User.nickname, User.points_total)
+            select(User.id, User.nickname, User.avatar, User.points_total)
             .join(week, week.c.user_id == User.id)
             .where(visible, week.c.points > 0)
         )
@@ -71,6 +71,7 @@ def entry(row, me_id: int) -> LeaderboardEntryOut:
         rank=row.rank,
         user_id=row.id,
         nickname=row.nickname,
+        avatar=row.avatar,
         level_code=level_for(row.points_total).code,
         points=row.points,
         is_me=row.id == me_id,

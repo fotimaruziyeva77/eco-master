@@ -52,6 +52,8 @@ class UserOut(BaseModel):
     # Set once onboarding was finished; with onboarding_step "nickname" it means a moderator
     # asked for a new nickname.
     onboarded_at: datetime | None = None
+    # Chosen animal picture; None: the app picks one from the id.
+    avatar: str | None = None
 
     @model_validator(mode="after")
     def _live_streak(self) -> "UserOut":
@@ -106,6 +108,18 @@ class MeUpdate(BaseModel):
 
 class WriteAccessIn(BaseModel):
     granted: bool
+
+
+class AvatarIn(BaseModel):
+    # None goes back to the picture the app picks from the id.
+    avatar: str | None = Field(default=None, max_length=16)
+
+
+class AvatarOut(BaseModel):
+    emoji: str
+    # Level that unlocks it.
+    level_code: str
+    unlocked: bool
 
 
 class DevInitDataOut(BaseModel):
@@ -276,6 +290,7 @@ class LeaderboardEntryOut(BaseModel):
     rank: int
     user_id: int
     nickname: str
+    avatar: str | None = None
     level_code: str
     points: int
     is_me: bool
@@ -395,6 +410,12 @@ class ShareIn(BaseModel):
     kind: ShareKind = "progress"
     # project slug, badge code, or "correct/total" for game results
     object_id: str | None = Field(default=None, max_length=64)
+
+
+class StoryOut(BaseModel):
+    # Picture for WebApp.shareToStory and the caption under it.
+    media_url: str
+    text: str
 
 
 class ShareOut(BaseModel):
@@ -623,6 +644,7 @@ class ClassTaskOut(BaseModel):
 class ClassMemberOut(BaseModel):
     user_id: int
     nickname: str | None
+    avatar: str | None = None
     level_code: str
     points_week: int
     points_total: int
@@ -649,6 +671,7 @@ class RankedMemberOut(BaseModel):
     rank: int
     user_id: int
     nickname: str | None
+    avatar: str | None = None
     level_code: str
     points: int
     is_me: bool

@@ -37,7 +37,7 @@ export function BoardRow({ member, marker }: { member: RankedMember; marker?: "u
   return (
     <div className={classes}>
       <span className="rank-row__place">{member.rank}</span>
-      <Avatar id={member.user_id} />
+      <Avatar id={member.user_id} emoji={member.avatar} />
       <span className="rank-row__name">
         <strong>
           {member.nickname ? `@${member.nickname}` : t("market.anonymous")}{" "}

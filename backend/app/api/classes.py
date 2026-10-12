@@ -227,6 +227,7 @@ async def class_detail(
             ClassMemberOut(
                 user_id=u.id,
                 nickname=None if u.nickname_hidden else u.nickname,
+                avatar=u.avatar,
                 level_code=level_for(u.points_total).code,
                 points_week=points.get(u.id, 0),
                 points_total=u.points_total,
@@ -393,6 +394,7 @@ async def my_class_out(session: AsyncSession, user: User, school_class: SchoolCl
                 rank=i,
                 user_id=u.id,
                 nickname=None if u.nickname_hidden else u.nickname,
+                avatar=u.avatar,
                 level_code=level_for(u.points_total).code,
                 points=points.get(u.id, 0),
                 is_me=u.id == user.id,
