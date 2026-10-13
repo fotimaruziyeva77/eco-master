@@ -2554,7 +2554,7 @@ export interface components {
              * Kind
              * @enum {string}
              */
-            kind: "reminder" | "weekly" | "broadcast";
+            kind: "reminder" | "weekly" | "class_report" | "broadcast";
             /** Sent */
             sent: number;
             /** Opened */

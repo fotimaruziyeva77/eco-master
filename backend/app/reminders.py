@@ -20,11 +20,20 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.analytics import track
 from app.bot.handlers import open_app_keyboard
+from app.class_report import class_weeks, report_text
 from app.daily import current_streak, task_of_the_day
 from app.db import SessionLocal, engine
 from app.i18n import t
 from app.leagues import Standing, WeekResult, result_of
-from app.models import ActivityLog, DailyTask, LeagueMember, OnboardingStep, User
+from app.models import (
+    ActivityLog,
+    ClassMember,
+    DailyTask,
+    LeagueMember,
+    OnboardingStep,
+    SchoolClass,
+    User,
+)
 from app.timeutil import TASHKENT
 
 log = logging.getLogger(__name__)
@@ -72,24 +81,30 @@ async def due_users(session: AsyncSession, now: datetime) -> list[User]:
 
 
 async def weekly_due_users(session: AsyncSession, now: datetime) -> list[User]:
-    """On Monday: users who played last week (they are in a league group) and have no summary."""
+    """On Monday: users who played last week (they are in a league group) or teach a class with
+    pupils, and have had no Monday message yet."""
     local = now.astimezone(TASHKENT)
     today, clock = local.date(), local.time()
     if today.weekday() != 0 or not (QUIET_UNTIL <= clock < QUIET_FROM):
         return []
-    query = (
-        select(User)
-        .join(
-            LeagueMember,
-            and_(
-                LeagueMember.user_id == User.id,
-                LeagueMember.week_start == today - timedelta(days=7),
-            ),
-        )
+    played = (
+        select(LeagueMember.user_id)
         .where(
-            _may_message(clock),
-            or_(User.last_weekly_date.is_(None), User.last_weekly_date < today),
+            LeagueMember.user_id == User.id,
+            LeagueMember.week_start == today - timedelta(days=7),
         )
+        .exists()
+    )
+    teaches = (
+        select(SchoolClass.id)
+        .join(ClassMember, ClassMember.class_id == SchoolClass.id)
+        .where(SchoolClass.teacher_id == User.id)
+        .exists()
+    )
+    query = select(User).where(
+        _may_message(clock),
+        or_(User.last_weekly_date.is_(None), User.last_weekly_date < today),
+        or_(played, teaches),
     )
     return list((await session.scalars(query.order_by(User.id))).all())
 
@@ -174,15 +189,27 @@ async def _send_all(session: AsyncSession, bot: Bot, now: datetime, today: date)
     # Last week can not change any more: each group's standings are worked out once.
     tables: dict[int, list[Standing]] = {}
     for user in await weekly_due_users(session, now):
-        points = await week_points(session, user.id, last_monday)
-        if points > 0:
-            result = await result_of(session, user.id, last_monday, tables)
-            open_task = _task_text(task, user) if user.last_task_date != today else None
-            message = weekly_text(user, points, result, open_task)
-            if await _deliver(session, bot, user, message, start="weekly"):
+        message: str | None = None
+        start, event = "weekly", "weekly_sent"
+        weeks = await class_weeks(session, user.id, user.language, last_monday, today)
+        if weeks:
+            # A teacher gets their classes' week instead of their own.
+            message, start, event = (
+                report_text(user.language, weeks),
+                "classes",
+                "class_report_sent",
+            )
+        else:
+            points = await week_points(session, user.id, last_monday)
+            if points > 0:
+                result = await result_of(session, user.id, last_monday, tables)
+                open_task = _task_text(task, user) if user.last_task_date != today else None
+                message = weekly_text(user, points, result, open_task)
+        if message is not None:
+            if await _deliver(session, bot, user, message, start=start):
                 sent += 1
-                track(session, user, "weekly_sent")
-            # The summary takes the place of that day's reminder.
+                track(session, user, event)
+            # The Monday message takes the place of that day's reminder.
             user.last_reminder_date = today
         user.last_weekly_date = today
         await session.commit()

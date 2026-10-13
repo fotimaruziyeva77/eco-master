@@ -139,6 +139,44 @@ BOT_TEXTS.update(
             "ru": "🌱 Новая неделя началась — удачи!",
             "en": "🌱 A new week has begun — good luck!",
         },
+        # Monday report for teachers (app/class_report.py).
+        "class_report_title": {
+            "uz": "📋 <b>Sinflaringiz: o'tgan hafta</b>",
+            "ru": "📋 <b>Ваши классы: прошлая неделя</b>",
+            "en": "📋 <b>Your classes: last week</b>",
+        },
+        "class_report_class": {
+            "uz": "🏫 <b>{name}</b> — {members} o'quvchidan {active} tasi faol bo'ldi",
+            "ru": "🏫 <b>{name}</b> — активны {active} из {members}",
+            "en": "🏫 <b>{name}</b> — {active} of {members} pupils were active",
+        },
+        "class_report_top": {"uz": "🏆 {names}", "ru": "🏆 {names}", "en": "🏆 {names}"},
+        "class_report_quiet": {
+            "uz": "😴 Hech kim ball to'plamadi — sinfga yangi vazifa bering.",
+            "ru": "😴 Никто не набрал баллов — дайте классу новое задание.",
+            "en": "😴 Nobody earned points — give the class a new task.",
+        },
+        "class_report_task_open": {
+            "uz": "📌 «{title}»: {total} tadan {done} tasi bajardi",
+            "ru": "📌 «{title}»: сделали {done} из {total}",
+            "en": "📌 «{title}»: {done} of {total} done",
+        },
+        "class_report_task_late": {
+            "uz": "⏰ «{title}»: {total} tadan {done} tasi bajardi, muddat o'tdi",
+            "ru": "⏰ «{title}»: сделали {done} из {total}, срок прошёл",
+            "en": "⏰ «{title}»: {done} of {total} done, past due",
+        },
+        "class_report_task_done": {
+            "uz": "✅ «{title}»: hamma bajardi",
+            "ru": "✅ «{title}»: сделали все",
+            "en": "✅ «{title}»: everyone did it",
+        },
+        # A pupil whose nickname a moderator hid (as in the Mini App).
+        "anonymous": {
+            "uz": "Eco-Master a'zosi",
+            "ru": "Участник Eco-Master",
+            "en": "Eco-Master member",
+        },
         "league_tier_0": {"uz": "Bronza liga", "ru": "Бронзовая лига", "en": "Bronze league"},
         "league_tier_1": {"uz": "Kumush liga", "ru": "Серебряная лига", "en": "Silver league"},
         "league_tier_2": {"uz": "Oltin liga", "ru": "Золотая лига", "en": "Gold league"},

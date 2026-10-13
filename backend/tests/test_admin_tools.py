@@ -252,7 +252,7 @@ async def test_growth_statistics(client, session):
     assert len(stats.cohorts) == 8
     assert stats.cohorts[-1].size == 2
     assert stats.cohorts[-1].weeks == [None] * 7  # this week: nothing to look back on yet
-    assert [m.kind for m in stats.messages] == ["reminder", "weekly", "broadcast"]
+    assert [m.kind for m in stats.messages] == ["reminder", "weekly", "class_report", "broadcast"]
 
     response = await client.get("/api/admin/stats/growth")
     assert response.status_code == 401  # admins only

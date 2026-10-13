@@ -25,6 +25,7 @@ const SOURCE_LABEL: Record<string, string> = {
 const MESSAGE_LABEL: Record<string, string> = {
   reminder: "Kunlik eslatma",
   weekly: "Dushanba natijasi",
+  class_report: "O'qituvchiga sinf hisoboti",
   broadcast: "Jamoa xabari",
 };
 

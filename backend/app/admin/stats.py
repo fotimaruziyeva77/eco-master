@@ -510,6 +510,7 @@ COHORT_WEEKS = 8
 BOT_MESSAGES = (
     ("reminder", "reminder_sent", "reminder_open"),
     ("weekly", "weekly_sent", "weekly_open"),
+    ("class_report", "class_report_sent", "class_report_open"),
     ("broadcast", "broadcast_sent", "broadcast_open"),
 )
 
@@ -536,7 +537,7 @@ class CohortOut(BaseModel):
 
 
 class BotMessageOut(BaseModel):
-    kind: Literal["reminder", "weekly", "broadcast"]
+    kind: Literal["reminder", "weekly", "class_report", "broadcast"]
     sent: int
     opened: int
     rate: float | None
@@ -675,6 +676,7 @@ async def _bot_messages(session: AsyncSession, since: datetime) -> list[BotMessa
     message_of = {
         "reminder_open": cast(local, Date),
         "weekly_open": func.date_trunc("week", local),
+        "class_report_open": func.date_trunc("week", local),
         "broadcast_open": AnalyticsEvent.props["broadcast"].astext,
     }
     result = []

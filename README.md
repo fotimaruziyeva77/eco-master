@@ -138,7 +138,9 @@ authenticator app (Google Authenticator, Authy, 2FAS...); the app is connected o
   days.
 - **Bot messages.** One message a day at most, at the time the user chose, never 21:00–08:00. On
   Monday whoever earned points last week gets the week's result (points, league place, a new
-  league) instead of the reminder. After three days away the reminder says "we missed you";
+  league) instead of the reminder; a teacher whose classes have pupils gets the classes' week
+  instead (how many pupils were active, the top three, how far the class tasks got). After three
+  days away the reminder says "we missed you";
   after a week away it comes once a week; after five weeks it stops. All of it follows the one
   reminders switch in the settings.
 

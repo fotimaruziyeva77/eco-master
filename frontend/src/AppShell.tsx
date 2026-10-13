@@ -48,12 +48,14 @@ function Layout() {
   const navigate = useNavigate();
   useEffect(() => {
     // Opened from a market message of the bot (startapp=market): straight to "my listings";
-    // from a teacher's QR code (startapp=class_<code>): the class's join screen.
+    // from a teacher's QR code (startapp=class_<code>): the class's join screen; from the
+    // teachers' Monday report (startapp=classes): their classes.
     if (startHandled) return;
     startHandled = true;
     const start = startParam();
     if (start === "market") navigate("/market/mine");
     else if (start?.startsWith("class_")) navigate(`/join/${start.slice("class_".length)}`);
+    else if (start === "classes") navigate("/teachers");
   }, [navigate]);
   return (
     <Suspense fallback={<ScreenLoading />}>
