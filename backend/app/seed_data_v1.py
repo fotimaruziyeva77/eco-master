@@ -330,6 +330,331 @@ V1_PROJECTS = [
             "Wash your hands with soap after handling raw eggs.",
         ),
     },
+    # Projects for the short videos the team collected in October 2026; each video is
+    # uploaded to its project in the admin panel.
+    {
+        "slug": "bubble-wrap-butterfly",
+        "category": "plastic",
+        "difficulty": "medium",
+        "safety_level": "yellow",
+        "duration_min": 30,
+        "title": tr(
+            "Pufakchali plyonkadan kapalak",
+            "Бабочка из пузырчатой плёнки",
+            "Butterfly from bubble wrap",
+        ),
+        "materials": trl(
+            [
+                "Qadoqlashdan qolgan pufakchali plyonka",
+                "Qog'oz va qalam (shablon uchun)",
+                "Marker",
+                "Qaychi",
+                "Issiq yelim to'pponchasi (kattalar bilan)",
+                "Mo'ylovlar uchun ingichka sim",
+            ],
+            [
+                "Пузырчатая плёнка от упаковки",
+                "Бумага и карандаш (для шаблона)",
+                "Маркер",
+                "Ножницы",
+                "Клеевой пистолет (со взрослым)",
+                "Тонкая проволока для усиков",
+            ],
+            [
+                "Bubble wrap left over from a parcel",
+                "Paper and a pencil (for the template)",
+                "A marker",
+                "Scissors",
+                "A hot glue gun (with an adult)",
+                "Thin wire for the antennae",
+            ],
+        ),
+        "steps": trl(
+            [
+                "Qog'ozga kapalak qanotlarini chizib, qirqib oling — bu shablon.",
+                "Shablonni plyonkaga qo'yib, marker bilan aylantirib chizing.",
+                "Ikki juft qanotni qaychi bilan qirqib oling.",
+                "Kattalar yordamida qanotlarni o'rtasidan issiq yelim bilan yopishtiring.",
+                "Plyonka bo'lagini o'rab tanacha yasang va o'rtaga yopishtiring.",
+                "Simdan mo'ylov qo'shing va kapalakni gul tuvagiga qo'ying.",
+            ],
+            [
+                "Нарисуйте на бумаге крылья бабочки и вырежьте их — это шаблон.",
+                "Положите шаблон на плёнку и обведите его маркером.",
+                "Вырежьте ножницами две пары крыльев.",
+                "Вместе со взрослым склейте крылья посередине клеевым пистолетом.",
+                "Сверните полоску плёнки в тельце и приклейте его посередине.",
+                "Добавьте усики из проволоки и посадите бабочку на цветочный горшок.",
+            ],
+            [
+                "Draw butterfly wings on paper and cut them out — this is your template.",
+                "Lay the template on the bubble wrap and trace around it with a marker.",
+                "Cut out two pairs of wings with scissors.",
+                "With an adult, glue the wings together in the middle with the glue gun.",
+                "Roll a strip of bubble wrap into a body and glue it in the middle.",
+                "Add wire antennae and sit the butterfly on a flower pot.",
+            ],
+        ),
+        "safety_text": tr(
+            "Issiq yelim to'pponchasini faqat kattalar bilan ishlating: yelim va uchi kuydiradi. "
+            "Simning o'tkir uchini bukib qo'ying.",
+            "Клеевым пистолетом работайте только со взрослым: клей и носик обжигают. "
+            "Загните острый кончик проволоки.",
+            "Use the hot glue gun only with an adult: the glue and the tip can burn. "
+            "Bend over the sharp end of the wire.",
+        ),
+    },
+    {
+        "slug": "plastic-bag-pompom-flowers",
+        "category": "plastic",
+        "difficulty": "easy",
+        "safety_level": "green",
+        "duration_min": 15,
+        "title": tr(
+            "Paketdan pompon gullar",
+            "Цветы-помпоны из пакетов",
+            "Pom-pom flowers from plastic bags",
+        ),
+        "materials": trl(
+            [
+                "Rangli plastik paketlar",
+                "Qaychi",
+                "Ip yoki ingichka sim",
+                "Tayoqchalar yoki ichimlik naychalari",
+                "Vaza yoki bo'sh butilka",
+            ],
+            [
+                "Цветные пластиковые пакеты",
+                "Ножницы",
+                "Нитка или тонкая проволока",
+                "Палочки или трубочки для напитков",
+                "Ваза или пустая бутылка",
+            ],
+            [
+                "Coloured plastic bags",
+                "Scissors",
+                "Thread or thin wire",
+                "Sticks or drinking straws",
+                "A vase or an empty bottle",
+            ],
+        ),
+        "steps": trl(
+            [
+                "Paketni tekislab, undan to'rtburchak bo'lak qirqib oling.",
+                "Bo'lakni garmoshkadek buklang.",
+                "O'rtasidan ip yoki sim bilan mahkam bog'lang.",
+                "Ikki uchini aylana qilib qirqing va qatlamlarini ochib, pompon yasang.",
+                "Pomponni tayoqchaga bog'lang va guldastani vazaga qo'ying.",
+            ],
+            [
+                "Расправьте пакет и вырежьте из него прямоугольник.",
+                "Сложите его гармошкой.",
+                "Крепко перевяжите посередине ниткой или проволокой.",
+                "Закруглите концы ножницами и расправьте слои в помпон.",
+                "Привяжите помпон к палочке и поставьте букет в вазу.",
+            ],
+            [
+                "Smooth out a bag and cut a rectangle from it.",
+                "Fold it back and forth like a fan.",
+                "Tie it tightly in the middle with thread or wire.",
+                "Round off both ends with scissors and fluff the layers into a pom-pom.",
+                "Tie the pom-pom to a stick and put the bouquet in a vase.",
+            ],
+        ),
+    },
+    {
+        "slug": "plastic-bag-blossom-tree",
+        "category": "plastic",
+        "difficulty": "medium",
+        "safety_level": "green",
+        "duration_min": 40,
+        "title": tr(
+            "Paketlardan gullagan daraxt",
+            "Цветущее деревце из пакетов",
+            "Blossom tree from plastic bags",
+        ),
+        "materials": trl(
+            [
+                "Rangli axlat paketlari (1 o'ram)",
+                "Ingichka sim",
+                "Qaychi",
+                "Yashil yoki jigarrang lenta",
+                "Gul tuvagi yoki stakan",
+            ],
+            [
+                "Цветные мусорные пакеты (1 рулон)",
+                "Тонкая проволока",
+                "Ножницы",
+                "Зелёная или коричневая изолента",
+                "Цветочный горшок или стакан",
+            ],
+            [
+                "Coloured bin bags (1 roll)",
+                "Thin wire",
+                "Scissors",
+                "Green or brown tape",
+                "A flower pot or a cup",
+            ],
+        ),
+        "steps": trl(
+            [
+                "Paketlarni 4–5 sm enli uzun tasmalarga qirqing.",
+                "Tasmani bir necha marta buklab, o'rtasidan sim bilan bog'lang.",
+                "Ikki tomonidagi bukilgan joyini qirqib, qatlamlarini ochib gul yasang.",
+                "Ko'p gul yasang va simlarini birlashtirib shoxchalar qiling.",
+                "Shoxchalarni bitta tanaga birlashtirib, lenta bilan o'rang.",
+                "Daraxtni tuvakka o'rnating — xona bezagi tayyor!",
+            ],
+            [
+                "Нарежьте пакеты на длинные полоски шириной 4–5 см.",
+                "Сложите полоску несколько раз и перетяните посередине проволокой.",
+                "Разрежьте сгибы с обеих сторон и расправьте слои в цветок.",
+                "Сделайте много цветов и скрутите их проволочки в веточки.",
+                "Соедините веточки в ствол и обмотайте его изолентой.",
+                "Поставьте деревце в горшок — украшение для комнаты готово!",
+            ],
+            [
+                "Cut the bags into long strips 4–5 cm wide.",
+                "Fold a strip several times and twist wire around the middle.",
+                "Cut the folds on both sides and fluff the layers into a flower.",
+                "Make lots of flowers and twist their wires together into branches.",
+                "Join the branches into one trunk and wrap it with tape.",
+                "Stand the tree in a pot — your room decoration is ready!",
+            ],
+        ),
+    },
+    {
+        "slug": "cardboard-corn-sunflower",
+        "category": "paper",
+        "difficulty": "easy",
+        "safety_level": "yellow",
+        "duration_min": 20,
+        "title": tr(
+            "Karton va makkajo'xoridan kungaboqar",
+            "Подсолнух из картона и кукурузы",
+            "Sunflower from cardboard and corn",
+        ),
+        "materials": trl(
+            [
+                "Quti kartoni",
+                "Eski, ovqatga yaramaydigan makkajo'xori donlari",
+                "Kungaboqar urug'i yoki qora loviya (o'rtasi uchun)",
+                "Stakan (aylana chizish uchun) va qaychi",
+                "PVA yelim yoki issiq yelim to'pponchasi (kattalar bilan)",
+            ],
+            [
+                "Картон от коробки",
+                "Старые кукурузные зёрна, негодные в пищу",
+                "Семечки или чёрная фасоль (для серединки)",
+                "Стакан (обвести круг) и ножницы",
+                "Клей ПВА или клеевой пистолет (со взрослым)",
+            ],
+            [
+                "Cardboard from a box",
+                "Old corn kernels that are no good for eating",
+                "Sunflower seeds or black beans (for the middle)",
+                "A cup (to draw the circle) and scissors",
+                "PVA glue or a hot glue gun (with an adult)",
+            ],
+        ),
+        "steps": trl(
+            [
+                "Kartonga stakanni qo'yib aylana chizing va qirqib oling.",
+                "Aylananing chetiga yelim surting va donlarni uchi tashqariga qaratib yopishtiring.",
+                "Ichkariga yana bir-ikki qator don yopishtiring — bular gulbarglar.",
+                "O'rtasini kungaboqar urug'i yoki qora loviya bilan to'ldiring.",
+                "Orqasiga ip yoki magnit yopishtiring — sovg'a tayyor.",
+            ],
+            [
+                "Обведите стакан на картоне и вырежьте круг.",
+                "Нанесите клей по краю круга и приклейте зёрна острым концом наружу.",
+                "Приклейте внутри ещё один-два ряда — это лепестки.",
+                "Заполните серединку семечками или чёрной фасолью.",
+                "Приклейте сзади петельку или магнит — подарок готов.",
+            ],
+            [
+                "Trace a cup on the cardboard and cut out the circle.",
+                "Put glue along the edge and stick on the kernels, pointy ends out.",
+                "Glue one or two more rows inside — these are the petals.",
+                "Fill the middle with sunflower seeds or black beans.",
+                "Glue a loop or a magnet on the back — your gift is ready.",
+            ],
+        ),
+        "safety_text": tr(
+            "Issiq yelim to'pponchasini kattalar bilan ishlating yoki o'rniga PVA yelim oling. "
+            "Donlarni og'izga solmang.",
+            "Клеевым пистолетом работайте со взрослым или возьмите клей ПВА. "
+            "Не берите зёрна в рот.",
+            "Use the hot glue gun with an adult, or use PVA glue instead. "
+            "Don't put the kernels in your mouth.",
+        ),
+    },
+    {
+        "slug": "twig-and-dried-flower-picture",
+        "category": "organic",
+        "difficulty": "medium",
+        "safety_level": "yellow",
+        "duration_min": 45,
+        "title": tr(
+            "Shoxcha va quruq gullardan rasm",
+            "Картина из веточек и сухих цветов",
+            "Picture from twigs and dried flowers",
+        ),
+        "materials": trl(
+            [
+                "Qalin karton yoki eski rasm ramkasi",
+                "Yerga tushgan ingichka quruq shoxchalar",
+                "Quritilgan gullar va barglar",
+                "Qalam",
+                "Issiq yelim to'pponchasi (kattalar bilan)",
+            ],
+            [
+                "Плотный картон или старая рамка",
+                "Упавшие тонкие сухие веточки",
+                "Сухие цветы и листья",
+                "Карандаш",
+                "Клеевой пистолет (со взрослым)",
+            ],
+            [
+                "Thick cardboard or an old picture frame",
+                "Thin dry twigs that have fallen to the ground",
+                "Dried flowers and leaves",
+                "A pencil",
+                "A hot glue gun (with an adult)",
+            ],
+        ),
+        "steps": trl(
+            [
+                "Parkda yoki hovlida yerga tushgan quruq shoxcha va gullarni yig'ing.",
+                "Kartonga qalam bilan qiz, uy yoki daraxt rasmini chizing.",
+                "Shoxchalarni rasm bo'yicha qatorma-qator yopishtiring.",
+                "Quruq gullar va barglar bilan bezang.",
+                "Rasmni ramkaga soling yoki devorga osib qo'ying.",
+            ],
+            [
+                "Соберите в парке или во дворе упавшие сухие веточки и цветы.",
+                "Нарисуйте на картоне карандашом девочку, дом или дерево.",
+                "Приклеивайте веточки ряд за рядом по рисунку.",
+                "Украсьте картину сухими цветами и листьями.",
+                "Вставьте картину в рамку или повесьте на стену.",
+            ],
+            [
+                "Collect fallen dry twigs and flowers in a park or yard.",
+                "Draw a girl, a house or a tree on the cardboard in pencil.",
+                "Glue the twigs on row by row, following your drawing.",
+                "Decorate the picture with dried flowers and leaves.",
+                "Put the picture in a frame or hang it on the wall.",
+            ],
+        ),
+        "safety_text": tr(
+            "Issiq yelim to'pponchasini kattalar bilan ishlating. Faqat yerga tushgan "
+            "shoxchalarni oling — tirik daraxtni sindirmang.",
+            "Клеевым пистолетом работайте со взрослым. Берите только упавшие веточки — "
+            "не ломайте живые деревья.",
+            "Use the hot glue gun with an adult. Only take twigs that have fallen — "
+            "never break branches off living trees.",
+        ),
+    },
 ]
 
 
