@@ -289,6 +289,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/videos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Videos
+         * @description The home screen's video feed, for opening it on its own.
+         */
+        get: operations["videos_api_videos_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/categories": {
         parameters: {
             query?: never;
@@ -3285,6 +3305,11 @@ export interface components {
             categories: components["schemas"]["CategoryOut"][];
             featured?: components["schemas"]["ProjectSummaryOut"] | null;
             class_task?: components["schemas"]["HomeClassTaskOut"] | null;
+            /**
+             * Videos
+             * @default []
+             */
+            videos: components["schemas"]["VideoCardOut"][];
         };
         /** IssueOut */
         IssueOut: {
@@ -3956,6 +3981,10 @@ export interface components {
              * @default 0
              */
             done_count: number;
+            /** Step Times */
+            step_times?: (number | null)[] | null;
+            /** Step Pictures */
+            step_pictures?: (string | null)[] | null;
         };
         /** ProjectStatOut */
         ProjectStatOut: {
@@ -4392,6 +4421,34 @@ export interface components {
             input?: unknown;
             /** Context */
             ctx?: Record<string, never>;
+        };
+        /**
+         * VideoCardOut
+         * @description A project video for the home screen's feed.
+         */
+        VideoCardOut: {
+            /** Slug */
+            slug: string;
+            /** Category Code */
+            category_code: string;
+            /** Title */
+            title: {
+                [key: string]: unknown;
+            };
+            difficulty: components["schemas"]["Difficulty"];
+            safety_level: components["schemas"]["SafetyLevel"];
+            /** Duration Min */
+            duration_min: number;
+            /** Poster Url */
+            poster_url: string | null;
+            /** Has Video */
+            has_video: boolean;
+            /** Done */
+            done: boolean;
+            /** Video Url */
+            video_url: string;
+            /** Category Icon */
+            category_icon: string;
         };
         /** VideoOut */
         VideoOut: {
@@ -4911,6 +4968,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HomeOut"];
+                };
+            };
+        };
+    };
+    videos_api_videos_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VideoCardOut"][];
                 };
             };
         };

@@ -239,6 +239,7 @@ export function ContentEditPage() {
                 locked={spec.fixed && fixedLocked}
                 onChange={(v) => setValues((prev) => ({ ...prev, [spec.name]: v }))}
                 onExtra={(patch) => setValues((prev) => withUploads(prev, patch))}
+                values={values}
               />
             ))}
           </div>

@@ -22,6 +22,7 @@ from sqlalchemy import (
     func,
     text,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db import Base
@@ -189,6 +190,9 @@ class Project(ContentMixin, Base):
     safety_text: Mapped[I18n | None]
     video_url: Mapped[str | None] = mapped_column(String(512))
     poster_url: Mapped[str | None] = mapped_column(String(512))
+    # Second of the video where each step starts (same order as the steps); the Mini App plays
+    # the steps one by one, with a picture of each taken from the video.
+    step_times: Mapped[list[float | None] | None] = mapped_column(JSONB)
     tested_by: Mapped[str | None] = mapped_column(String(128))
     tested_at: Mapped[datetime | None]
 

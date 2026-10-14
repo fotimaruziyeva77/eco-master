@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 
 import type { FieldSpec, Values } from "./api";
 import { MediaField } from "./media";
+import { StepTimesEditor } from "./stepTimes";
 
 export const LANGS = ["uz", "ru", "en"] as const;
 export type Lang = (typeof LANGS)[number];
@@ -42,9 +43,11 @@ type Props = {
   onChange: (value: unknown) => void;
   /** Lets an upload fill other fields: the cover picture taken from a video. */
   onExtra?: (patch: Record<string, string>) => void;
+  /** The whole form, for fields that depend on others (step times: the video and the steps). */
+  values?: Values;
 };
 
-export function FieldEditor({ spec, value, lang, error, locked, onChange, onExtra }: Props) {
+export function FieldEditor({ spec, value, lang, error, locked, onChange, onExtra, values }: Props) {
   const id = `f-${spec.name}`;
   const localized = (value ?? {}) as Localized;
   const setLang = (v: unknown) => onChange({ ...localized, [lang]: v });
@@ -113,6 +116,17 @@ export function FieldEditor({ spec, value, lang, error, locked, onChange, onExtr
           {spec.help && <span className="a-help">{spec.help}</span>}
         </div>
       );
+    case "step_times":
+      input = (
+        <StepTimesEditor
+          value={(value as (number | null)[] | null) ?? null}
+          videoUrl={(values?.video_url as string | null) ?? null}
+          steps={((values?.steps as Localized | undefined)?.uz as string[] | undefined) ?? []}
+          invalid={Boolean(error)}
+          onChange={onChange}
+        />
+      );
+      break;
     case "video":
     case "image":
     case "item_image":

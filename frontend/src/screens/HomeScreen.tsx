@@ -9,6 +9,7 @@ import { Emoji } from "../components/Emoji";
 import { LevelProgress } from "../components/LevelProgress";
 import { PROJECT_POINTS } from "../components/ProjectCard";
 import { tint, TopBar } from "../components/ui";
+import { VideoRow } from "../components/VideoRow";
 import { useLoad } from "../hooks/useLoad";
 import { useTr } from "../i18n/tr";
 import { enqueue } from "../outbox";
@@ -49,9 +50,13 @@ export function HomeScreen() {
         {home.error !== undefined && !data && <InlineError error={home.error} onRetry={home.reload} />}
         {daily?.task && <DailyTaskCard daily={daily} onChange={setDaily} />}
         {data?.class_task && <ClassTaskCard task={data.class_task} />}
+        {data && data.videos.length > 0 && <VideoRow videos={data.videos} />}
         <PlayTiles />
         <LevelProgress user={user} />
-        {data?.featured && <FeaturedProject project={data.featured} categories={data.categories} />}
+        {/* Without videos yet: one project to try instead. */}
+        {data?.featured && data.videos.length === 0 && (
+          <FeaturedProject project={data.featured} categories={data.categories} />
+        )}
         {data && <Categories categories={data.categories} />}
         {data?.tip && <Tip text={data.tip.text} />}
       </div>

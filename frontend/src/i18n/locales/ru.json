@@ -101,7 +101,8 @@
     "streakDots_few": "{{count}} дня подряд. За 7 дней: +{{points}} баллов",
     "streakDots_many": "{{count}} дней подряд. За 7 дней: +{{points}} баллов",
     "streakDots_other": "{{count}} дня подряд. За 7 дней: +{{points}} баллов",
-    "classTask": "Задание класса {{name}}"
+    "classTask": "Задание класса {{name}}",
+    "videos": "Видео"
   },
   "learn": {
     "title": "Учиться",
@@ -140,7 +141,8 @@
     "doneCount_other": "Сделано {{count}} раза",
     "materials": "Понадобится",
     "steps": "Шаги",
-    "doneWait": "Можно нажать через {{count}} с"
+    "doneWait": "Можно нажать через {{count}} с",
+    "stepByStep": "По шагам"
   },
   "card": {
     "problem": "Проблема",
@@ -608,5 +610,18 @@
     "fruits_few": "{{count}} яблока",
     "fruits_many": "{{count}} яблок",
     "fruits_other": "{{count}} яблока"
+  },
+  "video": {
+    "howTo": "Как это сделать",
+    "soundOn": "Включить звук",
+    "soundOff": "Выключить звук",
+    "empty": "Видео пока нет."
+  },
+  "steps": {
+    "counter": "Шаг {{step}} из {{count}}",
+    "next": "Дальше",
+    "prev": "Предыдущий шаг",
+    "finish": "Готово!",
+    "none": "Шаги этого проекта в видео ещё не отмечены."
   }
 }

@@ -52,6 +52,7 @@ export type MyClass = Schemas["MyClassOut"];
 export type RankedMember = Schemas["RankedMemberOut"];
 export type League = Schemas["LeagueOut"];
 export type HomeClassTask = Schemas["HomeClassTaskOut"];
+export type VideoCard = Schemas["VideoCardOut"];
 export type AvatarChoice = Schemas["AvatarOut"];
 
 /** One language of a lesson body (TZ 8.9); the API types it as a free-form object. */
@@ -162,6 +163,7 @@ export const api = {
   categories: () => request<Category[]>("/categories"),
   category: (code: string) => request<CategoryDetail>(`/categories/${encodeURIComponent(code)}`),
   project: (slug: string) => request<ProjectDetail>(`/projects/${encodeURIComponent(slug)}`),
+  videos: () => request<VideoCard[]>("/videos"),
   projectDone: (slug: string, clientEventId: string) =>
     post<DoneResult>(`/projects/${encodeURIComponent(slug)}/done`, {
       client_event_id: clientEventId,

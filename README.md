@@ -104,6 +104,19 @@ authenticator app (Google Authenticator, Authy, 2FAS...); the app is connected o
 - The admin page is a separate build entry (`frontend/admin/index.html`), so the Mini App
   never loads its code. A web server must answer `/admin/*` with `dist/admin/index.html`.
 
+## Videos and step clips
+
+- **Home screen.** Published projects with an uploaded video file show as a row of videos;
+  a tap opens them full screen, one under another (swipe up for the next, muted until the sound
+  button, "Qanday yasaladi" opens the project). Without such videos the home screen shows one
+  project to try instead. Links to other sites (YouTube) stay on the project page only.
+- **Step clips.** In the admin panel, under a project's video, "Qadamlar videoda": play the
+  video and press "Shu yerdan" where each step starts (▶ jumps back to check). The Mini App then
+  offers "Qadamma-qadam": each step's part of the video plays over and over under its text, and
+  going through to the last step opens "Bajardim". When the times are saved the server takes a
+  picture of each step from the video (ffmpeg) for the step list. Every step needs a time before
+  publishing; times work on videos uploaded here only.
+
 ## Classes and weekly leagues
 
 - **Classes.** A user on the teacher path makes classes in the Mini App (O'qituvchilar uchun →

@@ -93,7 +93,8 @@
     "tipTitle": "Did you know?",
     "streakDots_one": "{{count}} day in a row. 7 days: +{{points}} points",
     "streakDots_other": "{{count}} days in a row. 7 days: +{{points}} points",
-    "classTask": "Task for {{name}}"
+    "classTask": "Task for {{name}}",
+    "videos": "Videos"
   },
   "learn": {
     "title": "Learn",
@@ -126,7 +127,8 @@
     "doneCount_other": "Made {{count}} times",
     "materials": "You will need",
     "steps": "Steps",
-    "doneWait": "Available in {{count}} s"
+    "doneWait": "Available in {{count}} s",
+    "stepByStep": "Step by step"
   },
   "card": {
     "problem": "Problem",
@@ -578,5 +580,18 @@
     "toNext_other": "{{count}} points to the next level",
     "fruits_one": "{{count}} apple",
     "fruits_other": "{{count}} apples"
+  },
+  "video": {
+    "howTo": "How to make it",
+    "soundOn": "Sound on",
+    "soundOff": "Sound off",
+    "empty": "No videos yet."
+  },
+  "steps": {
+    "counter": "Step {{step}} of {{count}}",
+    "next": "Next",
+    "prev": "Previous step",
+    "finish": "Done!",
+    "none": "This project's steps are not marked in the video yet."
   }
 }

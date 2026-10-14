@@ -18,6 +18,7 @@ import io
 import json
 import logging
 import os
+import re
 import shutil
 import subprocess
 import threading
@@ -235,22 +236,76 @@ def _file_hash(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _poster(ffmpeg: str, video: Path, seconds: float) -> bytes:
-    """A frame from the first seconds as a WebP cover picture."""
-    at = f"{min(1.0, seconds / 3):.2f}"
+def _frame(ffmpeg: str, video: Path, at: float) -> Image.Image:
     png = _run(
-        [ffmpeg, "-nostdin", "-hide_banner", "-loglevel", "error", "-ss", at, "-i", str(video),
-         "-frames:v", "1", "-f", "image2pipe", "-c:v", "png", "pipe:1"],
+        [ffmpeg, "-nostdin", "-hide_banner", "-loglevel", "error", "-ss", f"{at:.2f}",
+         "-i", str(video), "-frames:v", "1", "-f", "image2pipe", "-c:v", "png", "pipe:1"],
         PROBE_TIMEOUT,
     )  # fmt: skip
     try:
         with Image.open(io.BytesIO(png)) as frame:
-            image = frame.convert("RGB")
+            return frame.convert("RGB")
     except (UnidentifiedImageError, OSError, ValueError):
         raise MediaError("video_unreadable") from None
+
+
+def _poster(ffmpeg: str, video: Path, seconds: float) -> bytes:
+    """A frame from the first seconds as a WebP cover picture."""
+    image = _frame(ffmpeg, video, min(1.0, seconds / 3))
     out = io.BytesIO()
     image.save(out, "WEBP", quality=78, method=4)
     return out.getvalue()
+
+
+# ------------------------------------------------------------- step pictures
+
+STEP_PICTURE_SIDE = 360
+UPLOADED_VIDEO = re.compile(r"/media/v/([0-9a-f]{24})\.mp4")
+
+
+def step_picture_name(video_url: str | None, seconds: float) -> str | None:
+    """The file of a step's picture: videos uploaded here only, by tenths of a second."""
+    match = UPLOADED_VIDEO.fullmatch(video_url or "")
+    return f"{match[1]}-{round(seconds * 10)}.webp" if match else None
+
+
+def step_picture_urls(video_url: str | None, times: list[float | None]) -> list[str | None]:
+    """The pictures that were made (when the times were saved); None where there is none."""
+    folder = media_root() / "v"
+    urls: list[str | None] = []
+    for seconds in times:
+        name = step_picture_name(video_url, seconds) if seconds is not None else None
+        urls.append(f"{MEDIA_URL}/v/{name}" if name and (folder / name).is_file() else None)
+    return urls
+
+
+def make_step_pictures(video_url: str | None, times: list[float | None]) -> int:
+    """Take the missing step pictures from the video. Needs ffmpeg; returns how many were made."""
+    tools = video_tools()
+    match = UPLOADED_VIDEO.fullmatch(video_url or "")
+    if tools is None or not match:
+        return 0
+    video = media_root() / "v" / f"{match[1]}.mp4"
+    if not video.is_file():
+        return 0
+    made = 0
+    for seconds in times:
+        if seconds is None:
+            continue
+        target = media_folder("v") / step_picture_name(video_url, seconds)
+        if target.exists():
+            continue
+        try:
+            image = _frame(tools[0], video, seconds)
+        except MediaError:
+            log.warning("No picture at %ss of %s", seconds, video.name)
+            continue
+        image.thumbnail((STEP_PICTURE_SIDE, STEP_PICTURE_SIDE * 2))
+        out = io.BytesIO()
+        image.save(out, "WEBP", quality=75, method=4)
+        _write(target, out.getvalue())
+        made += 1
+    return made
 
 
 _convert_lock = threading.Lock()

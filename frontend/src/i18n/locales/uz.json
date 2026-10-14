@@ -93,7 +93,8 @@
     "tipTitle": "Bilasizmi?",
     "streakDots_one": "{{count}} kun ketma-ket. 7 kun to'lsa: +{{points}} ball",
     "streakDots_other": "{{count}} kun ketma-ket. 7 kun to'lsa: +{{points}} ball",
-    "classTask": "{{name}} sinfi vazifasi"
+    "classTask": "{{name}} sinfi vazifasi",
+    "videos": "Videolar"
   },
   "learn": {
     "title": "O'rganish",
@@ -126,7 +127,8 @@
     "doneCount_other": "{{count}} marta bajarildi",
     "materials": "Kerak bo'ladi",
     "steps": "Qadamlar",
-    "doneWait": "{{count}} soniyadan keyin bosish mumkin"
+    "doneWait": "{{count}} soniyadan keyin bosish mumkin",
+    "stepByStep": "Qadamma-qadam"
   },
   "card": {
     "problem": "Muammo",
@@ -578,5 +580,18 @@
     "toNext_other": "Keyingi darajagacha {{count}} ball",
     "fruits_one": "{{count}} ta olma",
     "fruits_other": "{{count}} ta olma"
+  },
+  "video": {
+    "howTo": "Qanday yasaladi",
+    "soundOn": "Ovozni yoqish",
+    "soundOff": "Ovozni o'chirish",
+    "empty": "Hali video yo'q."
+  },
+  "steps": {
+    "counter": "{{step}}/{{count}}-qadam",
+    "next": "Keyingi",
+    "prev": "Oldingi qadam",
+    "finish": "Tayyor!",
+    "none": "Bu loyihaning qadamlari videoda hali belgilanmagan."
   }
 }

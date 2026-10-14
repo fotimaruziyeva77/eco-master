@@ -1,5 +1,6 @@
 """Content in three languages: draft → review → published → archived (TZ 8.12, QM-14)."""
 
+import asyncio
 from typing import Annotated, Any
 
 from fastapi import APIRouter, HTTPException, Query, Response, status
@@ -32,6 +33,7 @@ from app.admin.schemas import (
     StatusIn,
 )
 from app.api.lessons import pdf_response, render
+from app.content_media import make_step_pictures
 from app.deps import SessionDep
 from app.models import ContentStatus, TeacherLesson
 from app.schemas import Language
@@ -214,6 +216,12 @@ async def save(session: AsyncSession, ctype: ContentType) -> None:
         raise HTTPException(status.HTTP_409_CONFLICT, {"code": "invalid", "errors": taken}) from exc
 
 
+async def step_pictures(ctype: ContentType, item: Any) -> None:
+    """A project's steps get pictures from its video (ffmpeg, a moment per step)."""
+    if ctype.key == "projects" and item.step_times:
+        await asyncio.to_thread(make_step_pictures, item.video_url, item.step_times)
+
+
 @router.post("/{type_key}", status_code=status.HTTP_201_CREATED)
 async def create_content(
     type_key: str, body: ContentValuesIn, admin: ContentStaff, session: SessionDep
@@ -231,6 +239,7 @@ async def create_content(
         item.status = ContentStatus.DRAFT
     session.add(item)
     await save(session, ctype)
+    await step_pictures(ctype, item)
     audit(session, admin, "content.create", ctype.key, item.id, title=ctype.row_title(values))
     await session.commit()
     await session.refresh(item)
@@ -268,6 +277,7 @@ async def update_content(
 
     write_values(ctype, item, values, ctx)
     await save(session, ctype)
+    await step_pictures(ctype, item)
     changed = sorted(f.name for f in ctype.fields if values[f.name] != before[f.name])
     if changed:
         audit(session, admin, "content.update", ctype.key, item.id, fields=changed)

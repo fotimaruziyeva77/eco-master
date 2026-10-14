@@ -21,6 +21,8 @@ const TermsScreen = named(() => import("./screens/PrivacyScreen"), "TermsScreen"
 const ProfileScreen = named(() => import("./screens/ProfileScreen"), "ProfileScreen");
 const SettingsScreen = named(() => import("./screens/SettingsScreen"), "SettingsScreen");
 const ProjectScreen = named(() => import("./screens/ProjectScreen"), "ProjectScreen");
+const ProjectStepsScreen = named(() => import("./screens/ProjectStepsScreen"), "ProjectStepsScreen");
+const VideoFeedScreen = named(() => import("./screens/VideoFeedScreen"), "VideoFeedScreen");
 const RatingScreen = named(() => import("./screens/RatingScreen"), "RatingScreen");
 const LessonScreen = named(() => import("./screens/teachers/LessonScreen"), "LessonScreen");
 const ListingFormScreen = named(() => import("./screens/market/ListingFormScreen"), "ListingFormScreen");
@@ -64,6 +66,8 @@ function Layout() {
         <Route path="/learn" element={<LearnScreen />} />
         <Route path="/learn/:code" element={<CategoryScreen />} />
         <Route path="/projects/:slug" element={<ProjectScreen />} />
+        <Route path="/projects/:slug/steps" element={<ProjectStepsScreen />} />
+        <Route path="/videos/:slug" element={<VideoFeedScreen />} />
         <Route path="/cards/:slug" element={<CardScreen />} />
         <Route path="/games" element={<GamesScreen />} />
         <Route path="/games/quiz" element={<QuizScreen />} />

@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.analytics import track
 from app.api.daily import daily_state
 from app.badges import award_badges, badges_out
+from app.content_media import step_picture_urls
 from app.daily import tip_of_the_day
 from app.deps import CurrentUser, SessionDep
 from app.models import (
@@ -35,6 +36,7 @@ from app.schemas import (
     ProjectSummaryOut,
     TipOut,
     UserOut,
+    VideoCardOut,
 )
 from app.timeutil import local_today
 
@@ -113,6 +115,33 @@ async def featured_project(
     return project_summary(project, category, done)
 
 
+# The feed plays files only: a link to another site (YouTube) can not run in it.
+FEED_SIZE = 30
+
+
+async def video_cards(session: AsyncSession, user_id: int) -> list[VideoCardOut]:
+    """Published projects with a video file, the ones not made yet first."""
+    done = await done_project_ids(session, user_id)
+    rows = (
+        await session.execute(
+            select(Project, Category)
+            .join(Category, Category.id == Project.category_id)
+            .where(Project.status == PUBLISHED, Project.video_url.ilike("%.mp4"))
+            .order_by(Project.sort_order, Project.id)
+        )
+    ).all()
+    cards = [
+        VideoCardOut(
+            **project_summary(p, c, done).model_dump(),
+            video_url=p.video_url,
+            category_icon=c.icon,
+        )
+        for p, c in rows
+    ]
+    cards.sort(key=lambda card: card.done)  # stable: keeps the editors' order within each part
+    return cards[:FEED_SIZE]
+
+
 async def class_task(session: AsyncSession, user_id: int, today: date) -> HomeClassTaskOut | None:
     """The class task due soonest that the pupil has not done; overdue ones are left out."""
     done = await done_project_ids(session, user_id)
@@ -153,7 +182,14 @@ async def home(user: CurrentUser, session: SessionDep) -> HomeOut:
         categories=categories,
         featured=await featured_project(session, user.id, today),
         class_task=await class_task(session, user.id, today),
+        videos=await video_cards(session, user.id),
     )
+
+
+@router.get("/videos")
+async def videos(user: CurrentUser, session: SessionDep) -> list[VideoCardOut]:
+    """The home screen's video feed, for opening it on its own."""
+    return await video_cards(session, user.id)
 
 
 @router.get("/categories")
@@ -228,6 +264,10 @@ async def project_detail(slug: str, user: CurrentUser, session: SessionDep) -> P
         safety_text=project.safety_text,
         video_url=project.video_url,
         done_count=done_count,
+        step_times=project.step_times,
+        step_pictures=(
+            step_picture_urls(project.video_url, project.step_times) if project.step_times else None
+        ),
     )
 
 

@@ -181,6 +181,16 @@ class ProjectDetailOut(ProjectSummaryOut):
     safety_text: I18nText | None
     video_url: str | None
     done_count: int = 0
+    # Where each step starts in the video (seconds), and its picture from the video.
+    step_times: list[float | None] | None = None
+    step_pictures: list[str | None] | None = None
+
+
+class VideoCardOut(ProjectSummaryOut):
+    """A project video for the home screen's feed."""
+
+    video_url: str
+    category_icon: str
 
 
 class CategoryDetailOut(BaseModel):
@@ -266,6 +276,7 @@ class HomeOut(BaseModel):
     categories: list[CategoryOut]
     featured: ProjectSummaryOut | None = None
     class_task: HomeClassTaskOut | None = None
+    videos: list[VideoCardOut] = []
 
 
 # ---------------------------------------------------------------- profile, rating

@@ -11,6 +11,7 @@ import re
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import date, datetime, time
+from itertools import pairwise
 from typing import Any, Literal
 
 from sqlalchemy import Enum, select
@@ -51,6 +52,7 @@ Kind = Literal[
     "i18n_textarea",
     "i18n_list",
     "i18n_plan",
+    "step_times",
 ]
 I18N_KINDS = {"i18n_text", "i18n_textarea", "i18n_list", "i18n_plan"}
 
@@ -208,6 +210,25 @@ def _plan(value: Any, f: Field) -> list[dict[str, Any]]:
     return steps
 
 
+def _step_times(value: Any) -> list[float | None] | None:
+    """Seconds where the steps start, rising, to a tenth of a second. A step not marked yet is
+    None (the editor marks them one by one); publishing needs them all (project_checks)."""
+    if not isinstance(value, list) or len(value) > MAX_LIST_ITEMS:
+        raise ValueError("vaqtlar ro'yxati")
+    times: list[float | None] = []
+    for raw in value:
+        if raw is None:
+            times.append(None)
+            continue
+        if isinstance(raw, bool) or not isinstance(raw, (int, float)) or not 0 <= raw <= 600:
+            raise ValueError("har qadamga 0:00–10:00 oralig'ida vaqt yozing")
+        times.append(round(float(raw), 1))
+    marked = [t for t in times if t is not None]
+    if any(later <= earlier for earlier, later in pairwise(marked)):
+        raise ValueError("har qadam oldingisidan keyin boshlansin")
+    return times if marked else None
+
+
 def clean(f: Field, value: Any, ctx: Ctx) -> Any:
     """Normalised value of one field, or ValueError with a message for the editor."""
     kind = f.kind
@@ -266,6 +287,8 @@ def clean(f: Field, value: Any, ctx: Ctx) -> Any:
         if value not in {v for v, _ in f.options}:
             raise ValueError("ro'yxatdan tanlang")
         return value
+    if kind == "step_times":
+        return _step_times(value)
     if kind == "category":
         category = ctx.by_code(value) if isinstance(value, str) else None
         if category is None or f.category_filter and not getattr(category, f.category_filter):
@@ -449,6 +472,28 @@ def project_checks(values: dict, ctx: Ctx) -> list[Issue]:
                 "tested_by",
             )
         )
+    times = values.get("step_times") or []
+    steps = (values.get("steps") or {}).get("uz") or []
+    if times and len(times) != len(steps):
+        issues.append(
+            Issue(
+                "error",
+                f"Qadam vaqtlari {len(times)} ta, qadamlar {len(steps)} ta: vaqtlarni yangilang "
+                "yoki tozalang",
+                "step_times",
+            )
+        )
+    elif None in times:
+        missing = ", ".join(str(i) for i, t in enumerate(times, start=1) if t is None)
+        issues.append(Issue("error", f"Videoda belgilanmagan qadamlar: {missing}", "step_times"))
+    if times and not MEDIA_FILE.fullmatch(values.get("video_url") or ""):
+        issues.append(
+            Issue(
+                "warning",
+                "Qadam vaqtlari faqat shu yerga yuklangan videoda ishlaydi",
+                "step_times",
+            )
+        )
     if not values.get("video_url"):
         issues.append(
             Issue("warning", "Video yuklanmagan: ilovada «Video tez orada» ko'rinadi", "video_url")
@@ -571,6 +616,13 @@ CONTENT_TYPES: dict[str, ContentType] = {
                     "Muqova rasmi",
                     "image",
                     help="Video yuklansa, muqova undan avtomatik olinadi.",
+                ),
+                Field(
+                    "step_times",
+                    "Qadamlar videoda",
+                    "step_times",
+                    help="Har qadam videoning qayeridan boshlanadi: videoni qo'yib, «⏱» ni bosing. "
+                    "Ilovada qadamlar videodan bo'lak-bo'lak ko'rsatiladi.",
                 ),
                 Field(
                     "tested_by",

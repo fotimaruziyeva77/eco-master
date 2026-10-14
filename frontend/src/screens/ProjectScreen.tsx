@@ -1,7 +1,7 @@
-import { Check, ShieldAlert, ShieldCheck } from "lucide-react";
+import { Check, Play, ShieldAlert, ShieldCheck } from "lucide-react";
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 import { api, ApiError } from "../api/client";
 import { InlineError, InlineLoading } from "../components/common";
@@ -16,6 +16,7 @@ import { useTr } from "../i18n/tr";
 import { trackVideo } from "../analytics";
 import { enqueue } from "../outbox";
 import { useCelebrate } from "../state/celebration";
+import { stepTimes, stepsWatched } from "../steps";
 import { useUser } from "../state/user";
 import { haptic } from "../telegram";
 
@@ -31,9 +32,11 @@ export function ProjectScreen() {
   const data = useLoad(() => api.project(slug), [slug]);
   const project = data.data;
   const back = useBack(project ? `/learn/${project.category_code}` : "/learn");
+  const navigate = useNavigate();
 
   const [secondsLeft, setSecondsLeft] = useState(UNLOCK_SECONDS);
-  const [videoEnded, setVideoEnded] = useState(false);
+  // Going through the steps to the end counts like watching the whole video.
+  const [videoEnded, setVideoEnded] = useState(() => stepsWatched.has(slug));
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
   const [checked, setChecked] = useState<Set<number>>(new Set());
@@ -51,6 +54,13 @@ export function ProjectScreen() {
   const unlocked = videoEnded || secondsLeft <= 0;
   const materials = tr<string[]>(project?.materials) ?? [];
   const steps = tr<string[]>(project?.steps) ?? [];
+  const times = stepTimes(project, steps.length);
+  const pictures = project?.step_pictures ?? [];
+
+  function openSteps(step: number) {
+    haptic.tap();
+    navigate(`/projects/${slug}/steps`, { state: { project, step } });
+  }
 
   async function markDone() {
     if (!project || saving) return;
@@ -167,13 +177,32 @@ export function ProjectScreen() {
           </section>
 
           <section className="stack">
-            <h3>{t("project.steps")}</h3>
-            {steps.map((step, i) => (
-              <div key={step} className="card step-card">
-                <span className="step-card__num">{i + 1}</span>
-                <p>{step}</p>
-              </div>
-            ))}
+            <div className="row row--between">
+              <h3>{t("project.steps")}</h3>
+              {times && (
+                <button type="button" className="btn btn--soft btn--sm" onClick={() => openSteps(0)}>
+                  <Play size={16} fill="currentColor" aria-hidden="true" /> {t("project.stepByStep")}
+                </button>
+              )}
+            </div>
+            {steps.map((step, i) =>
+              times ? (
+                // Each step opens its own part of the video.
+                <button key={step} type="button" className="card step-card step-card--clip" onClick={() => openSteps(i)}>
+                  <span className="step-card__picture" aria-hidden="true">
+                    {pictures[i] && <img src={pictures[i] ?? undefined} alt="" loading="lazy" />}
+                    <span className="step-card__num">{i + 1}</span>
+                  </span>
+                  <p>{step}</p>
+                  <Play size={16} fill="currentColor" className="step-card__play" aria-hidden="true" />
+                </button>
+              ) : (
+                <div key={step} className="card step-card">
+                  <span className="step-card__num">{i + 1}</span>
+                  <p>{step}</p>
+                </div>
+              ),
+            )}
           </section>
         </article>
       )}
